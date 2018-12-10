@@ -1,0 +1,35 @@
+{
+  "name": "photo_app",
+  "version": "1.0.0",
+  "description": "An app where you can upload and share photos",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --exec babel-node server.js",
+    "build": "babel server.js --out-dir build",
+    "serve": "node build/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jgroenke24/photo_app.git"
+  },
+  "author": "Jorge Groenke",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jgroenke24/photo_app/issues"
+  },
+  "homepage": "https://github.com/jgroenke24/photo_app#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.2.0",
+    "@babel/core": "^7.2.0",
+    "@babel/node": "^7.2.0",
+    "@babel/preset-env": "^7.2.0",
+    "nodemon": "^1.18.7"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.0.0",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "pg": "^7.7.1"
+  }
+}
