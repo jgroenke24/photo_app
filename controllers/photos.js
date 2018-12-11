@@ -6,12 +6,12 @@ const Photos = {
   // Create a photo
   async create(req, res) {
     const text = `INSERT INTO
-      photos(id, photo_url, likes)
+      photos(id, url, likes)
       VALUES($1, $2, $3)
       returning *`;
     const values = [
       uuidv4(),
-      req.body.photo_url,
+      req.body.url,
       1
     ];
     
@@ -19,6 +19,7 @@ const Photos = {
       const { rows } = await db.query(text, values);
       return res.status(200).send(rows[0]);
     } catch (error) {
+      console.log(error);
       return res.status(400).send(error);
     }
   },
@@ -57,14 +58,14 @@ const Photos = {
   async update(req, res) {
     const findOneQuery = 'SELECT * FROM photos WHERE id = $1';
     const updateOneQuery = `UPDATE photos
-      SET photo_url = $1, likes = $2
+      SET url = $1, likes = $2
       WHERE id = $3
       returning *`;
       
     try {
       
       // First, get the correct row to update from the database
-      const { rows } = await db.query(findOneQuery);
+      const { rows } = await db.query(findOneQuery, [ req.params.id ]);
       
       // If nothing comes back from the database, send 404 not found
       if (!rows[0]) {
@@ -72,7 +73,7 @@ const Photos = {
       }
       
       const values = [
-        req.body.photo_url || rows[0].photo_url,
+        req.body.url || rows[0].url,
         req.body.likes || rows[0].likes,
         req.params.id
       ];
