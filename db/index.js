@@ -5,13 +5,22 @@ dotenv.config();
 
 // Connect to database
 const pool = new Pool({
-  connectionString: process.end.DATABASE_URL
+  connectionString: process.env.DATABASE_URL,
+  ssl: true
 });
 
 export default {
   
   // Export database query.  Should return a promise to use with async/await
   query(text, params) {
-    pool.query(text, params);
+    return new Promise((resolve, reject) => {
+      pool.query(text, params)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+    });
   }
 };
