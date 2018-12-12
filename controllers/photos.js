@@ -1,27 +1,35 @@
 import uuidv4 from 'uuid/v4';
 import db from '../db';
+import cloudinary from 'cloudinary';
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 const Photos = {
   
   // Create a photo
   async create(req, res) {
-    const text = `INSERT INTO
-      photos(id, url, likes)
-      VALUES($1, $2, $3)
-      returning *`;
-    const values = [
-      uuidv4(),
-      req.body.url,
-      1
-    ];
     
     try {
+      const result = await cloudinary.v2.uploader.upload(req.file.path);
+      const text = `INSERT INTO
+      photos(id, name, url, created, likes)
+      VALUES($1, $2, $3, $4, $5)
+      returning *`;
+      const values = [
+        result.public_id,
+        result.original_filename,
+        result.secure_url,
+        result.created_at,
+        1
+      ];
       const { rows } = await db.query(text, values);
       // return res.status(200).send(rows[0]);
-      console.log(rows, 'created!');
       return res.redirect('/photos');
     } catch (error) {
-      console.log(error);
       return res.status(400).send(error);
     }
   },
@@ -33,7 +41,6 @@ const Photos = {
     try {
       const { rows, rowCount } = await db.query(findAllQuery);
       // return res.status(200).send({ rows, rowCount });
-      console.log(rows);
       res.render('photos/index', { photos: rows });
     } catch (error) {
       return res.status(400).send(error);
@@ -53,7 +60,6 @@ const Photos = {
       }
       
       // return res.status(200).send(rows[0]);
-      console.log(rows[0]);
       return res.render('photos/show', { photo: rows[0] });
     } catch (error) {
       return res.status(400).send(error);
@@ -98,6 +104,7 @@ const Photos = {
     const deleteQuery = 'DELETE FROM photos WHERE id = $1 returning *';
     
     try {
+      await cloudinary.v2.uploader.destroy(req.params.id);
       const { rows } = await db.query(deleteQuery, [ req.params.id ]);
       
       // If nothing comes back from the database, send 404 not found
@@ -106,7 +113,6 @@ const Photos = {
       }
       
       // return res.status(204).send({ message: 'Photo deleted' });
-      console.log('deleted');
       return res.redirect('/photos');
     } catch (error) {
       return res.status(400).send(error);
