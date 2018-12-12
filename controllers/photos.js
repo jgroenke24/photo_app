@@ -17,7 +17,9 @@ const Photos = {
     
     try {
       const { rows } = await db.query(text, values);
-      return res.status(200).send(rows[0]);
+      // return res.status(200).send(rows[0]);
+      console.log(rows, 'created!');
+      return res.redirect('/photos');
     } catch (error) {
       console.log(error);
       return res.status(400).send(error);
@@ -30,7 +32,9 @@ const Photos = {
     
     try {
       const { rows, rowCount } = await db.query(findAllQuery);
-      return res.status(200).send({ rows, rowCount });
+      // return res.status(200).send({ rows, rowCount });
+      console.log(rows);
+      res.render('photos/index', { photos: rows });
     } catch (error) {
       return res.status(400).send(error);
     }
@@ -48,7 +52,9 @@ const Photos = {
         return res.status(404).send({ message: 'Photo not found' });
       }
       
-      return res.status(200).send(rows[0]);
+      // return res.status(200).send(rows[0]);
+      console.log(rows[0]);
+      return res.render('photos/show', { photo: rows[0] });
     } catch (error) {
       return res.status(400).send(error);
     }
@@ -80,7 +86,8 @@ const Photos = {
       
       // Update the row in the database with the new data in the values array
       const response = await db.query(updateOneQuery, values);
-      return res.status(200).send(response.rows[0]);
+      // return res.status(200).send(response.rows[0]);
+      return res.redirect('/photos/' + req.params.id);
     } catch (error) {
       return res.status(400).send(error);
     }
@@ -98,7 +105,9 @@ const Photos = {
         return res.status(404).send({ message: 'Photo not found' });
       }
       
-      return res.status(204).send({ message: 'Photo deleted' });
+      // return res.status(204).send({ message: 'Photo deleted' });
+      console.log('deleted');
+      return res.redirect('/photos');
     } catch (error) {
       return res.status(400).send(error);
     }

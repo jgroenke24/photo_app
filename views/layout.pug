@@ -8,19 +8,16 @@ html(lang='en')
   body
     header
       nav(class='navbar navbar-expand-lg navbar-light bg-light')
-        a(class='navbar-brand', href='#') PicShareApp
+        a(class='navbar-brand', href='/photos') PicShareApp
         button(class='navbar-toggler', type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
           span.navbar-toggler-icon
         #navbarSupportedContent.collapse.navbar-collapse
           ul.navbar-nav.mr-auto
             li.nav-item.active
-              a(class='nav-link', href='#')
+              a(class='nav-link', href='/photos')
                 | Home
                 span.sr-only
                   | (current)
-            li.nav-item.active
-              a(class='nav-link', href='#')
-                | Link
     main
       block content
       

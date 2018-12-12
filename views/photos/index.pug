@@ -1,0 +1,21 @@
+extends ../layout
+
+block content
+  section.container
+    h1.text-center PHOTOS
+    .row
+      .col-12.col-md-8.col-lg-10.mx-auto
+        form(class='form-inline justify-content-center', action='/photos' method='post')
+          label(class='sr-only', for='picUrl') Url
+          input(type='text', name='url', class='form-control mb-2 mr-sm-2', id='picUrl', placeholder='Photo Url')
+          button(type='submit', class='btn btn-primary mb-2') Submit
+          
+    .row
+      each photo in photos
+        .col-12.col-md-4.col-lg-3.card
+          img(class='card-img-top', src=photo.url, alt=photo.id)
+          .card-body.d-flex.justify-content-between
+            a(href='/photos/' + photo.id, class='btn btn-primary') More Info
+            button(type='button', class='btn btn-primary')
+              | Likes
+              span.badge.badge-light= photo.likes

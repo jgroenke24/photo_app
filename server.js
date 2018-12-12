@@ -1,7 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import '@babel/polyfill';
 import path from 'path';
+import bodyParser from 'body-parser';
+import methodOverride from 'method-override';
+import '@babel/polyfill';
 
 import photosRouter from './routes/photo';
 
@@ -13,12 +15,15 @@ const app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(methodOverride('_method'));
 
 // Route handlers
 app.use('/photos', photosRouter);
 
 app.get('/', (req, res) => {
+//   return res.status(200).send({ message: 'The endpoint worked!' });
   return res.render('index');
 });
 
