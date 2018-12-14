@@ -5,7 +5,7 @@ block content
     h1.text-center PHOTOS
     .row
       .col-12.col-md-8.col-lg-10.mx-auto
-        form(class='form-inline justify-content-center', action='/photos' method='post' enctype='multipart/form-data')
+        form(class='form-inline justify-content-center', action='/api/photos' method='post' enctype='multipart/form-data')
           label(class='sr-only', for='picUrl') Url
           input(type='file', name='image', accept='image/*', required, class='form-control mb-2 mr-sm-2', id='picUrl')
           button(type='submit', class='btn btn-primary mb-2') Submit

@@ -6,8 +6,6 @@
   "scripts": {
     "start": "webpack-dev-server --port $PORT --host $IP --content-base build/"
   },
-  "proxy": "$IP:8081"
-  ,
   "author": "Jorge Groenke",
   "license": "ISC",
   "dependencies": {

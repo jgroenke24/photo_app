@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import bodyParser from 'body-parser';
 import methodOverride from 'method-override';
+import cors from 'cors';
 import '@babel/polyfill';
 
 import photosRouter from './routes/photo';
@@ -18,6 +19,7 @@ app.set('view engine', 'pug');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
+app.use(cors());
 
 // Route handlers
 app.use('/api/photos', photosRouter);

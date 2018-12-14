@@ -28,7 +28,7 @@ const Photos = {
       ];
       const { rows } = await db.query(text, values);
       // return res.status(200).send(rows[0]);
-      return res.redirect('/photos');
+      return res.redirect('/api/photos');
     } catch (error) {
       return res.status(400).send(error);
     }
@@ -40,8 +40,8 @@ const Photos = {
     
     try {
       const { rows, rowCount } = await db.query(findAllQuery);
-      // return res.status(200).send({ rows, rowCount });
-      res.render('photos/index', { photos: rows });
+      return res.status(200).json({ rows, rowCount });
+      // res.render('photos/index', { photos: rows });
     } catch (error) {
       return res.status(400).send(error);
     }
@@ -59,8 +59,8 @@ const Photos = {
         return res.status(404).send({ message: 'Photo not found' });
       }
       
-      // return res.status(200).send(rows[0]);
-      return res.render('photos/show', { photo: rows[0] });
+      return res.status(200).json(rows[0]);
+      // return res.render('photos/show', { photo: rows[0] });
     } catch (error) {
       return res.status(400).send(error);
     }
