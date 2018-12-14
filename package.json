@@ -4,10 +4,12 @@
   "description": "An app where you can upload and share photos",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "client-install": "npm install --prefix client",
     "start": "nodemon --exec babel-node server.js",
     "build": "babel server.js --out-dir build",
-    "serve": "node build/server.js"
+    "serve": "node build/server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run start\" \"npm run client\""
   },
   "repository": {
     "type": "git",
@@ -24,6 +26,7 @@
     "@babel/core": "^7.2.0",
     "@babel/node": "^7.2.0",
     "@babel/preset-env": "^7.2.0",
+    "concurrently": "^4.1.0",
     "nodemon": "^1.18.7"
   },
   "dependencies": {

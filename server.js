@@ -20,11 +20,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
 // Route handlers
-app.use('/photos', photosRouter);
+app.use('/api/photos', photosRouter);
 
 app.get('/', (req, res) => {
 //   return res.status(200).send({ message: 'The endpoint worked!' });
   return res.render('index');
 });
 
-app.listen(process.env.PORT, process.env.IP,() => console.log("photo app Server Started"));
+app.listen(8081, process.env.IP, () => console.log("photo app Server Started"));
