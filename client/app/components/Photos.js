@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 class Photos extends Component {
   constructor(props) {
@@ -7,17 +8,62 @@ class Photos extends Component {
     
     this.state = {
       photos: null,
+      file: null,
+      loaded: 0,
     };
+    
+    this.handleFile = this.handleFile.bind(this);
+    this.handleUpload = this.handleUpload.bind(this);
   }
   
   async componentDidMount() {
     try {
-      const response = await fetch('https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos');
-      console.log(response);
-      const result = await response.json();
-      console.log(result);
+      
+      // Get all photos from server
+      const response = await axios('https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos');
+      const result = response.data;
+      
+      // Update state with returned array of photos
       this.setState({
         photos: result.rows
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  
+  handleFile(event) {
+    this.setState({
+      file: event.target.files[0]
+    });
+  }
+  
+  async handleUpload(event) {
+    
+    try {
+      event.preventDefault();
+    
+      // Create a form data object with the photo to be uploaded
+      const data = new FormData();
+      data.append('image', this.state.file, this.state.file.name);
+      
+      // Upload photo to cloudinary and save to database
+      await axios
+        .post('https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos', data, {
+          onUploadProgress: ProgressEvent => {
+            this.setState({
+              loaded: (ProgressEvent.loaded / ProgressEvent.total * 100)
+            });
+          }
+        });
+        
+      // Get all photos from server to refresh list
+      const response = await axios('https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos');
+      const result = response.data;
+      this.setState({
+        photos: result.rows,
+        file: null,
+        loaded: 0
       });
     } catch (error) {
       console.error(error);
@@ -30,6 +76,16 @@ class Photos extends Component {
       <React.Fragment>
         <h1>Photos will go here</h1>
         <div className='container'>
+          <form>
+            <div className='form-group'>
+              <label htmlFor='picFile'>
+                Upload a pic!
+              </label>
+              <input type='file' name='image' accept='image/*' required className='form-control-file' id='picFile' onChange={this.handleFile} />
+              <input type='submit' onClick={this.handleUpload} />
+              <small> {this.state.loaded} %</small>
+            </div>
+          </form>
           <div className='row'>
             {!photos && <p>Loading photos...</p>}
         

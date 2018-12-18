@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 class Photo extends Component {
   constructor(props) {
@@ -11,8 +12,8 @@ class Photo extends Component {
   
   async componentDidMount() {
     try {
-      const response = await fetch(`https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos/${this.props.match.params.photoId}`);
-      const photo = await response.json();
+      const response = await axios(`https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos/${this.props.match.params.photoId}`);
+      const photo = response.data;
     
       this.setState({
         photo,

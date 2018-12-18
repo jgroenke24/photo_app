@@ -27,8 +27,8 @@ const Photos = {
         1
       ];
       const { rows } = await db.query(text, values);
-      // return res.status(200).send(rows[0]);
-      return res.redirect('/api/photos');
+      return res.status(200).json(rows[0]);
+      // return res.redirect('/api/photos');
     } catch (error) {
       return res.status(400).send(error);
     }
