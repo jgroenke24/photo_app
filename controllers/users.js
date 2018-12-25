@@ -28,10 +28,20 @@ const Users = {
         }
         
         // Sign the jwt
-        const token = jwt.sign({ id: user.email }, process.env.JWT_SECRET);
+        const token = jwt.sign({ id: user.email }, process.env.JWT_SECRET, {
+          expiresIn: '24h',
+        });
         
         // Send the token to the user
-        return res.json({ token });
+        return res.status(200)
+          .cookie('jwt', token, {
+            httpOnly: true,
+            secure: true,
+          })
+          .json({ 
+          message: 'Login successful',
+          success: true,
+        });
       });
     })(req, res, next);
   }

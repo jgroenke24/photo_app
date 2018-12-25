@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
-import { Strategy as JWTstrategy, ExtractJwt } from 'passport-jwt';
+import { Strategy as JWTstrategy } from 'passport-jwt';
 import db from '../db';
 
 const ROUNDS = 12;
@@ -79,7 +79,7 @@ passport.use(
   'jwt',
   new JWTstrategy(
     {
-      jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('JWT'),
+      jwtFromRequest: req => req.cookies.jwt,
       secretOrKey: process.env.JWT_SECRET,
     },
     async (jwt_payload, done) => {

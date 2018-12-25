@@ -9,4 +9,16 @@ router.post('/signup', passport.authenticate('register', { session: false }), Us
 // Register user route
 router.post('/login', Users.login);
 
+// test authorization route
+router.get('/dashboard',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    console.log(req);
+    
+    res.json({
+      message: 'It worked!',
+    });
+  }
+);
+
 export default router;
