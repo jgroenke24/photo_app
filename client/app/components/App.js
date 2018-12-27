@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom';
 import Navbar from './Navbar';
 import Photos from './Photos';
 import Photo from './Photo';
+import Login from './Login';
 
 class App extends Component {
   render() {
@@ -11,6 +12,7 @@ class App extends Component {
         <Navbar />
         <Route exact path='/' component={Photos} />
         <Route path='/photos/:photoId' component={Photo} />
+        <Route path='/login' component={Login} />
       </Fragment>
     );
   }
