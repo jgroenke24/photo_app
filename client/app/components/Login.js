@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 class Login extends Component {
   constructor(props) {
@@ -10,6 +11,7 @@ class Login extends Component {
     };
     
     this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
   
   handleChange(event) {
@@ -18,10 +20,28 @@ class Login extends Component {
     });
   }
   
+  async handleSubmit(event) {
+    event.preventDefault();
+    const { email, password } = this.state;
+    try {
+      const response = await axios.post(
+        'https://webdevbootcamp-jorge-groenke.c9users.io:8081/login',
+        {
+          email: email,
+          password: password,
+        }
+      );
+      console.log(response);
+      alert('submitted form');
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  
   render() {
     return (
       <div className='container'>
-        <form>
+        <form onSubmit={this.handleSubmit}>
           <div className='form-group'>
             <label htmlFor='email'>Email:</label>
             <input 
