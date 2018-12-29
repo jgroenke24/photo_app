@@ -23,6 +23,16 @@ class Navbar extends Component {
                   </span>
                 </NavLink>
               </li>
+              <li className='nav-item'>
+                <NavLink className='nav-link' to='/dashboard'>
+                  Dashboard
+                </NavLink>
+              </li>
+              <li className='nav-item'>
+                <NavLink className='nav-link' to='/login'>
+                  Login
+                </NavLink>
+              </li>
             </ul>
           </div>
         </nav>
