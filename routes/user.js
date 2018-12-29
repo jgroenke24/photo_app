@@ -4,10 +4,10 @@ import Users from '../controllers/users';
 const router = new Router();
 
 // Register user route
-router.post('/signup', passport.authenticate('register', { session: false }), Users.register);
+router.post('/signup', Users.auth('register'));
 
 // Register user route
-router.post('/login', Users.login);
+router.post('/login', Users.auth('login'));
 
 // test authorization route
 router.get('/dashboard',

@@ -3,47 +3,51 @@ import jwt from 'jsonwebtoken';
 
 const Users = {
   
-  // Register a user
-  async register(req, res, next) {
-    return res.json({
-      message: 'Signup successful!',
-      user: req.user,
-    });
-  },
-  
-  // Login a user
-  login(req, res, next) {
-    passport.authenticate('login', { session: false }, (err, user, info) => {
-      if (err) {
-        return next(err);
-      }
-      
-      if (!user) {
-        return next(info);
-      }
-      
-      req.logIn(user, { session: false }, (err) => {
+  // Login or register a user
+  auth(action) {
+    return (req, res) => {
+      passport.authenticate(action, { session: false }, (err, user, info) => {
+        
         if (err) {
-          return next(err);
+          return res.status(500)
+            .json({
+              error: 'Internal error. Please try again.',
+            });
         }
         
-        // Sign the jwt
-        const token = jwt.sign({ id: user.email }, process.env.JWT_SECRET, {
-          expiresIn: '24h',
-        });
+        if (info) {
+          return res.status(401)
+            .json({
+              error: info.message,
+            });
+        }
         
-        // Send the token to the user
-        return res.status(200)
-          .cookie('jwt', token, {
-            httpOnly: true,
-            secure: true,
-          })
-          .json({ 
-          message: 'Login successful',
-          success: true,
+        req.logIn(user, { session: false }, (err) => {
+          if (err) {
+            return res.status(500)
+              .json({
+                error: 'Internal error. Please try again.',
+              });
+          }
+          
+          // Sign the jwt
+          const token = jwt.sign({ id: user.email }, process.env.JWT_SECRET, {
+            expiresIn: '24h',
+          });
+          
+          // Send the token to the user
+          return res.status(200)
+            .cookie('jwt', token, {
+              httpOnly: true,
+              secure: true,
+            })
+            .json({ 
+              ...action === 'login' ? {message: 'Login successful'} : {message: 'Registered successfully! You are now logged in!'},
+              success: true,
+            });
         });
-      });
-    })(req, res, next);
+      })(req, res);
+    };
   }
 };
 

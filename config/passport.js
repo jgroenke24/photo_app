@@ -32,7 +32,7 @@ passport.use(
         // Add the user to the database
         const { rows: dbNewUserRows } = await db.query(createUserQueryText, [ username, hashedPassword ]);
         const newUser = dbNewUserRows[0];
-        return done(null, newUser, { message: 'User registered!'});
+        return done(null, newUser);
       } catch (err) {
         done(err);
       }
@@ -64,7 +64,7 @@ passport.use(
         const passwordsMatch = await bcrypt.compare(password, user.password);
         
         if (passwordsMatch) {
-          return done(null, user, { message: 'Log in successful!' });
+          return done(null, user);
         } else {
           return done(null, false, { message: 'Passwords do not match' });
         }
