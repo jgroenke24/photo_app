@@ -33,7 +33,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
 // Allow CORS requests
-app.use(cors());
+app.use(cors(
+  {
+    credentials: true,
+    origin: 'https://webdevbootcamp-jorge-groenke.c9users.io'
+  }
+));
 
 // Log HTTP requests
 app.use(morgan('combined'));

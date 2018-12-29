@@ -57,7 +57,7 @@ passport.use(
         
         // If a user is not found, return the message that no user was found
         if (!user) {
-          return done(null, false, { message: 'Could not find user' });
+          return done(null, false, { message: 'User not found' });
         }
         
         // Use bcrypt to check if password matches hashed password
@@ -66,7 +66,7 @@ passport.use(
         if (passwordsMatch) {
           return done(null, user);
         } else {
-          return done(null, false, { message: 'Passwords do not match' });
+          return done(null, false, { message: 'Incorrect password' });
         }
       } catch (err) {
         done(err);
@@ -75,11 +75,19 @@ passport.use(
   )
 );
 
+const cookieExtractor = (req) => {
+  let token = null;
+  if (req && req.cookies) {
+    token = req.cookies.jwt;
+  }
+  return token;
+};
+
 passport.use(
   'jwt',
   new JWTstrategy(
     {
-      jwtFromRequest: req => req.cookies.jwt,
+      jwtFromRequest: cookieExtractor,
       secretOrKey: process.env.JWT_SECRET,
     },
     async (jwt_payload, done) => {

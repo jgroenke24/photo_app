@@ -13,10 +13,8 @@ router.post('/login', Users.auth('login'));
 router.get('/dashboard',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-    console.log(req);
-    
     res.json({
-      message: 'It worked!',
+      message: 'This is authorized information',
     });
   }
 );

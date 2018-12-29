@@ -1,6 +1,21 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+// Add a response interceptor
+// axios.interceptors.response.use(
+
+//   // Do something with response data
+//   response => response,
+//   error => {
+
+//     // Do something with response error
+//     const { status } = error.response;
+//     if (status === 401) {
+//       console.log('inside interceptor', error.response);
+//     }
+//     return Promise.reject(error);
+//   });
+
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -29,12 +44,15 @@ class Login extends Component {
         {
           email: email,
           password: password,
+        },
+        {
+          withCredentials: true,
         }
       );
       console.log(response);
       alert('submitted form');
     } catch (err) {
-      console.log(err);
+      console.log('inside catch', err.response.data);
     }
   }
   
@@ -51,6 +69,7 @@ class Login extends Component {
               className='form-control' 
               value={this.state.email}
               onChange={this.handleChange}
+              required
             />
           </div>
           <div className='form-group'>
@@ -62,6 +81,7 @@ class Login extends Component {
               className='form-control' 
               value={this.state.password}
               onChange={this.handleChange}
+              required
             />
           </div>
           <button 
