@@ -17,7 +17,14 @@ class Photos extends Component {
   }
   
   async componentDidMount() {
+    await this.refreshPhotos();
+  }
+  
+  async refreshPhotos() {
     try {
+      
+      // Clear file input
+      document.querySelector('[type="file"]').value = '';
       
       // Get all photos from server
       const response = await axios('https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos');
@@ -25,7 +32,9 @@ class Photos extends Component {
       
       // Update state with returned array of photos
       this.setState({
-        photos: result.rows
+        photos: result.rows,
+        file: null,
+        loaded: 0,
       });
     } catch (error) {
       console.error(error);
@@ -52,26 +61,20 @@ class Photos extends Component {
         .post('https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos', data, {
           onUploadProgress: ProgressEvent => {
             this.setState({
-              loaded: (ProgressEvent.loaded / ProgressEvent.total * 100)
+              loaded: Math.floor((ProgressEvent.loaded / ProgressEvent.total * 100))
             });
           }
         });
         
-      // Get all photos from server to refresh list
-      const response = await axios('https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos');
-      const result = response.data;
-      this.setState({
-        photos: result.rows,
-        file: null,
-        loaded: 0
-      });
+      // Refresh photos
+      this.refreshPhotos();
     } catch (error) {
       console.error(error);
     }
   }
   
   render() {
-    const { photos } = this.state;
+    const { photos, loaded } = this.state;
     return (
       <React.Fragment>
         <h1>Photos will go here</h1>
@@ -81,9 +84,9 @@ class Photos extends Component {
               <label htmlFor='picFile'>
                 Upload a pic!
               </label>
-              <input type='file' name='image' accept='image/*' required className='form-control-file' id='picFile' onChange={this.handleFile} />
+              <input type='file' name='image' accept='image/*' className='form-control-file' id='picFile' onChange={this.handleFile} />
               <input type='submit' onClick={this.handleUpload} />
-              <small> {this.state.loaded} %</small>
+              <small> {loaded} %</small>
             </div>
           </form>
           <div className='row'>

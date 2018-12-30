@@ -16,7 +16,7 @@ import axios from 'axios';
 //     return Promise.reject(error);
 //   });
 
-class Login extends Component {
+class Signup extends Component {
   constructor(props) {
     super(props);
     
@@ -27,7 +27,8 @@ class Login extends Component {
       errors: [],
       emailIsValid: false,
       passwordIsValid: false,
-      loginError: null,
+      passwordCheckIsValid: false,
+      signupError: null,
     };
     
     this.handleChange = this.handleChange.bind(this);
@@ -66,6 +67,24 @@ class Login extends Component {
         this.showValidationError('email', 'You must enter a proper email');
         return;
       }
+    } else if (element === 'password') {
+      
+      /*
+        Check if password meets criteria: 8 or more characters, at least 1 uppercase, lowercase, number and symbol.
+        from https://stackoverflow.com/a/21456918
+      */
+      const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+      if(!re.test(password)) {
+        this.showValidationError('password', 'Password must be at least 8 characters long and include at least one uppercase, lowercase, number and symbol.');
+        return;
+      }
+    } else if (element === 'passwordCheck') {
+      
+      // Check if both passwords match
+      if (passwordCheck !== password) {
+        this.showValidationError('passwordCheck', 'Passwords must match.');
+        return;
+      }
     }
     
     this.setState({
@@ -91,7 +110,7 @@ class Login extends Component {
     const { email, password } = this.state;
     try {
       const response = await axios.post(
-        'https://webdevbootcamp-jorge-groenke.c9users.io:8081/login',
+        'https://webdevbootcamp-jorge-groenke.c9users.io:8081/signup',
         {
           email: email,
           password: password,
@@ -105,16 +124,17 @@ class Login extends Component {
     } catch (err) {
       console.log('inside catch', err.response.data);
       this.setState({
-        loginError: err.response.data.error,
+        signupError: err.response.data.error,
       });
     }
   }
   
   render() {
     
-    const { errors, email, password, emailIsValid, passwordIsValid, loginError } = this.state;
+    const { errors, email, password, passwordCheck, emailIsValid, passwordIsValid, passwordCheckIsValid, signupError } = this.state;
     let emailError = '';
     let passwordError = '';
+    let passwordCheckError = '';
     
     errors.forEach(error => {
       if (error.element === 'email') {
@@ -123,15 +143,19 @@ class Login extends Component {
       if (error.element === 'password') {
         passwordError = error.message;
       }
+      
+      if (error.element === 'passwordCheck') {
+        passwordCheckError = error.message;
+      }
     });
     
     return (
       <div className='container'>
-        <h1 className='text-center'>Login</h1>
+        <h1 className='text-center'>Sign Up!</h1>
         
-        {loginError &&
+        {signupError &&
           <div className='alert alert-danger' role='alert'>
-            {loginError}
+            {signupError}
           </div>
         }
         
@@ -175,17 +199,37 @@ class Login extends Component {
             {passwordError}
           </small>
         </div>
+        <div className='form-group'>
+          <label htmlFor='passwordCheck'>Verify Password:</label>
+          <input 
+            id='passwordCheck' 
+            name='passwordCheck' 
+            type='password' 
+            className='form-control' 
+            value={passwordCheck}
+            onFocus={this.handleFocus}
+            onChange={this.handleChange}
+            onBlur={this.handleBlur}
+            aria-describedby='passwordCheckHelpBlock'
+          />
+          <small
+            id='passwordCheckHelpBlock'
+            className='form-text text-danger'
+          >
+            {passwordCheckError}
+          </small>
+        </div>
         <button 
           type='submit' 
           className='btn btn-primary'
-          disabled={!emailIsValid || !passwordIsValid}
+          disabled={!emailIsValid || !passwordIsValid || !passwordCheckIsValid}
           onClick={this.handleSubmit}
         >
-          Login
+          Signup
         </button>
       </div>
     );
   }
 }
 
-export default Login;
+export default Signup;
