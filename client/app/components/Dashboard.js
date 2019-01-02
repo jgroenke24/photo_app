@@ -21,11 +21,17 @@ class Dashboard extends Component {
         }
       );
       const { message } = response.data;
-      this.setState({ message });
+      this.setState(() => { 
+        return {
+          message 
+        };
+      });
     } catch (err) {
       console.log(err.response);
-      this.setState({
-        message: 'Unauthorized',
+      this.setState(() => {
+        return {
+          message: 'Unauthorized',
+        };
       });
     }
   }

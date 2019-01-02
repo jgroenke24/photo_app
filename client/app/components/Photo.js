@@ -15,8 +15,10 @@ class Photo extends Component {
       const response = await axios(`https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos/${this.props.match.params.photoId}`);
       const photo = response.data;
     
-      this.setState({
-        photo,
+      this.setState(() => {
+        return {
+          photo,
+        };
       });
     } catch (error) {
       console.error(error);

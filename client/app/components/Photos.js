@@ -31,10 +31,12 @@ class Photos extends Component {
       const result = response.data;
       
       // Update state with returned array of photos
-      this.setState({
-        photos: result.rows,
-        file: null,
-        loaded: 0,
+      this.setState(() => {
+        return {
+          photos: result.rows,
+          file: null,
+          loaded: 0,
+        };
       });
     } catch (error) {
       console.error(error);
@@ -43,7 +45,7 @@ class Photos extends Component {
   
   handleFile(event) {
     this.setState({
-      file: event.target.files[0]
+      file: event.target.files[0],
     });
   }
   
@@ -60,8 +62,10 @@ class Photos extends Component {
       await axios
         .post('https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos', data, {
           onUploadProgress: ProgressEvent => {
-            this.setState({
-              loaded: Math.floor((ProgressEvent.loaded / ProgressEvent.total * 100))
+            this.setState(() => {
+              return {
+                loaded: Math.floor((ProgressEvent.loaded / ProgressEvent.total * 100))
+              };
             });
           }
         });

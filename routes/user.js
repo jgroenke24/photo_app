@@ -45,7 +45,10 @@ const validateMiddleware = (req, res, next) => {
   const errorFormatter = ({ location, msg, param, value, nestedErrors }) => {
     
     // Return just the message part of the error
-    return msg;
+    return {
+      element: param,
+      message: msg,
+    };
   };
   
   const errors = validationResult(req).formatWith(errorFormatter);

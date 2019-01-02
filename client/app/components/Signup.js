@@ -45,8 +45,10 @@ class Signup extends Component {
   
   clearValidationError(element) {
     const { errors } = this.state;
-    this.setState({
-      errors: errors.filter(error => error.element !== element)
+    this.setState(() => {
+      return {
+        errors: errors.filter(error => error.element !== element)
+      };
     });
   }
   
@@ -87,8 +89,10 @@ class Signup extends Component {
       }
     }
     
-    this.setState({
-      [element + 'IsValid']: true,
+    this.setState(() => {
+      return {
+        [element + 'IsValid']: true,
+      };
     });
   }
   
@@ -101,31 +105,49 @@ class Signup extends Component {
   }
   
   handleChange(event) {
-    this.setState({
-      [event.target.id]: event.target.value,
+    const { id, value } = event.target;
+    this.setState(() => {
+      return {
+        [id]: value,
+      };
     });
   }
   
   async handleSubmit(event) {
-    const { email, password } = this.state;
+    const { email, password, passwordCheck } = this.state;
     try {
       const response = await axios.post(
         'https://webdevbootcamp-jorge-groenke.c9users.io:8081/signup',
         {
           email: email,
           password: password,
+          passwordCheck: passwordCheck,
         },
         {
           withCredentials: true,
         }
       );
       console.log(response);
-      alert('submitted form');
+      alert('you are signed up!');
     } catch (err) {
-      console.log('inside catch', err.response.data);
-      this.setState({
-        signupError: err.response.data.error,
-      });
+      
+      // If the err response comes from the form validator on the server
+      if (err.response.status === 400) {
+        const { errors } = err.response.data;
+        this.setState(() => {
+          return {
+            errors,
+          };
+        });
+      } else {
+        
+        // The error comes from failed authentication
+        this.setState(() => {
+          return {
+            loginError: err.response.data.error,
+          };
+        });
+      }
     }
   }
   
