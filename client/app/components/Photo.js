@@ -30,7 +30,7 @@ class Photo extends Component {
     
     return (
       <React.Fragment>
-        <div className='container'>
+        <section className='container'>
           <div className='row'>
             {!photo && <p>Loading photo...</p>}
         
@@ -47,7 +47,7 @@ class Photo extends Component {
               </div>
             }
           </div>
-        </div>
+        </section>
       </React.Fragment>
     );
   }

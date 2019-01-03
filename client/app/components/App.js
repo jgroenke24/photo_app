@@ -6,6 +6,7 @@ import Photo from './Photo';
 import Login from './Login';
 import Signup from './Signup';
 import Dashboard from './Dashboard';
+import Upload from './Upload';
 
 class App extends Component {
   render() {
@@ -17,6 +18,7 @@ class App extends Component {
         <Route path='/signup' component={Signup} />
         <Route path='/login' component={Login} />
         <Route path='/dashboard' component={Dashboard} />
+        <Route path='/upload' component={Upload} />
       </Fragment>
     );
   }

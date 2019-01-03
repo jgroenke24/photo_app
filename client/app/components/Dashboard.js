@@ -38,10 +38,10 @@ class Dashboard extends Component {
     
   render() {
     return (
-      <div className='container'>
-        <h1>Dashboard</h1>
+      <section className='container'>
+        <h1 className='text-center'>Dashboard</h1>
         <p>{this.state.message}</p>
-      </div>
+      </section>
     );
   }
 }

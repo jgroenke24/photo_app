@@ -24,6 +24,11 @@ class Navbar extends Component {
                 </NavLink>
               </li>
               <li className='nav-item'>
+                <NavLink className='nav-link' to='/upload'>
+                  Upload
+                </NavLink>
+              </li>
+              <li className='nav-item'>
                 <NavLink className='nav-link' to='/dashboard'>
                   Dashboard
                 </NavLink>

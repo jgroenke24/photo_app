@@ -129,11 +129,11 @@ class Signup extends Component {
       );
       console.log(response);
       alert('you are signed up!');
-    } catch (err) {
+    } catch (error) {
       
       // If the err response comes from the form validator on the server
-      if (err.response.status === 400) {
-        const { errors } = err.response.data;
+      if (error.response.status === 400) {
+        const { errors } = error.response.data;
         this.setState(() => {
           return {
             errors,
@@ -144,7 +144,7 @@ class Signup extends Component {
         // The error comes from failed authentication
         this.setState(() => {
           return {
-            loginError: err.response.data.error,
+            loginError: error.response.data.error,
           };
         });
       }
@@ -172,7 +172,7 @@ class Signup extends Component {
     });
     
     return (
-      <div className='container'>
+      <section className='container'>
         <h1 className='text-center'>Sign Up!</h1>
         
         {signupError &&
@@ -249,7 +249,7 @@ class Signup extends Component {
         >
           Signup
         </button>
-      </div>
+      </section>
     );
   }
 }

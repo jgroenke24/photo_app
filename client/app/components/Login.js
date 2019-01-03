@@ -108,11 +108,11 @@ class Login extends Component {
       );
       console.log(response);
       alert('you are logged in');
-    } catch (err) {
+    } catch (error) {
 
       // If the err response comes from the form validator on the server
-      if (err.response.status === 400) {
-        const { errors } = err.response.data;
+      if (error.response.status === 400) {
+        const { errors } = error.response.data;
         this.setState(() => {
           return {
             errors,
@@ -123,7 +123,7 @@ class Login extends Component {
         // The error comes from failed authentication
         this.setState(() => {
           return {
-            loginError: err.response.data.error,
+            loginError: error.response.data.error,
           };
         });
       }
@@ -146,7 +146,7 @@ class Login extends Component {
     });
     
     return (
-      <div className='container'>
+      <section className='container'>
         <h1 className='text-center'>Login</h1>
         
         {loginError &&
@@ -203,7 +203,7 @@ class Login extends Component {
         >
           Login
         </button>
-      </div>
+      </section>
     );
   }
 }
