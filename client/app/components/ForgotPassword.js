@@ -66,16 +66,12 @@ class ForgotPassword extends Component {
     // Send reset password email
     const { email } = this.state;
     try {
-      const response = await axios.post(
+      await axios.post(
         'https://webdevbootcamp-jorge-groenke.c9users.io:8081/forgotpassword',
         {
           email: email,
-        },
-        {
-          withCredentials: true,
         }
       );
-      console.log(response);
       this.setState(() => {
         return {
           showEmailError: false,

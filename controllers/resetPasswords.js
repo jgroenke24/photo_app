@@ -1,6 +1,9 @@
 import db from '../db';
 import crypto from 'crypto';
+import bcrypt from 'bcrypt';
 import nodemailer from 'nodemailer';
+
+const ROUNDS = 12;
 
 const ResetPassword = {
   
@@ -61,20 +64,20 @@ const ResetPassword = {
       const mailerResponse = await transporter.sendMail(mailOptions);
       console.log('response from mailer', mailerResponse);
       
-      return res.status(200).send('recovery email sent');
+      res.status(200).send('recovery email sent');
     } catch (error) {
-      return res.status(400).json({ error });
+      res.status(400).json({ error });
     }
   },
   
   // Reset password form
   async verifyToken(req, res) {
     const token = req.params.token;
-    const findUserWithTokenQuery = 'SELECT * FROM users WHERE reset_token = $1 AND token_expiration > $2';
 
     try {
       
       // Find user with token from url parameter and only if the token has not expired
+      const findUserWithTokenQuery = 'SELECT * FROM users WHERE reset_token = $1 AND token_expiration > $2';
       const { rows: dbUserRows } = await db.query(findUserWithTokenQuery, [ token, Date.now() ]);
       const user = dbUserRows[0];
       
@@ -84,94 +87,49 @@ const ResetPassword = {
       }
       
       // The token was valid
-      return res.status(200).json({ user: user.email, message: 'Password reset link was valid!' });
+      res.status(200).json({ user: user.email, message: 'Password reset link was valid!' });
     } catch (error) {
       res.status(400).json({ error });
     }
   },
   
-  // Get all photos
-  async getAll(req, res) {
-    const findAllQuery = 'SELECT * FROM photos';
-    
+  // Reset password
+  async reset(req, res) {
+    const token = req.params.token;
+    const { password } = req.body;
+
     try {
-      const { rows, rowCount } = await db.query(findAllQuery);
-      return res.status(200).json({ rows, rowCount });
-      // res.render('photos/index', { photos: rows });
-    } catch (error) {
-      return res.status(400).send(error);
-    }
-  },
-  
-  // Get a photo
-  async getOne(req, res) {
-    const text = 'SELECT * FROM photos WHERE id = $1';
-    
-    try {
-      const { rows } = await db.query(text, [ req.params.id ]);
       
-      // If nothing comes back from the database, send 404 not found
-      if (!rows[0]) {
-        return res.status(404).send({ message: 'Photo not found' });
+      // Find user with token from url parameter and only if the token has not expired
+      const findUserWithTokenQuery = 'SELECT * FROM users WHERE reset_token = $1 AND token_expiration > $2';
+      const { rows: dbUserRows } = await db.query(findUserWithTokenQuery, [ token, Date.now() ]);
+      const user = dbUserRows[0];
+      
+      // If the token was not found or the token has expired
+      if (!user) {
+        return res.status(404).json({ error: 'Password reset link in invalid or has expired' });
       }
       
-      return res.status(200).json(rows[0]);
-      // return res.render('photos/show', { photo: rows[0] });
-    } catch (error) {
-      return res.status(400).send(error);
-    }
-  },
-  
-  // Update a photo
-  async update(req, res) {
-    const findOneQuery = 'SELECT * FROM photos WHERE id = $1';
-    const updateOneQuery = `UPDATE photos
-      SET url = $1, likes = $2
-      WHERE id = $3
-      returning *`;
+      // The token was valid so hash the new password with bcrypt
+      const hashedPassword = await bcrypt.hash(password, ROUNDS);
       
-    try {
-      
-      // First, get the correct row to update from the database
-      const { rows } = await db.query(findOneQuery, [ req.params.id ]);
-      
-      // If nothing comes back from the database, send 404 not found
-      if (!rows[0]) {
-        return res.status(404).send({ message: 'Photo not found' });
-      }
-      
+      // Update the user in the database with the new password
+      const updateUserPasswordQuery = `UPDATE users
+        SET password = $1, reset_token = $2, token_expiration = $3
+        WHERE email = $4
+        returning *`;
       const values = [
-        req.body.url || rows[0].url,
-        req.body.likes || rows[0].likes,
-        req.params.id
+        hashedPassword,
+        null,
+        null,
+        user.email
       ];
-      
-      // Update the row in the database with the new data in the values array
-      const response = await db.query(updateOneQuery, values);
-      // return res.status(200).send(response.rows[0]);
-      return res.redirect('/photos/' + req.params.id);
+      const { rows: dbUpdatedUser } = await db.query(updateUserPasswordQuery, values);
+      const updatedUser = dbUpdatedUser[0];
+      console.log(updatedUser);
+      res.status(200).json({ message: 'Password updated!' });
     } catch (error) {
-      return res.status(400).send(error);
-    }
-  },
-  
-  // Delete a photo
-  async delete(req, res) {
-    const deleteQuery = 'DELETE FROM photos WHERE id = $1 returning *';
-    
-    try {
-      await cloudinary.v2.uploader.destroy(req.params.id);
-      const { rows } = await db.query(deleteQuery, [ req.params.id ]);
-      
-      // If nothing comes back from the database, send 404 not found
-      if (!rows[0]) {
-        return res.status(404).send({ message: 'Photo not found' });
-      }
-      
-      // return res.status(204).send({ message: 'Photo deleted' });
-      return res.redirect('/photos');
-    } catch (error) {
-      return res.status(400).send(error);
+      res.status(400).json({ error });
     }
   }
 };

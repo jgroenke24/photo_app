@@ -15,7 +15,7 @@ class ResetPassword extends Component {
       passwordIsValid: false,
       passwordCheckIsValid: false,
       resetError: false,
-      success: true,
+      success: false,
     };
     
     this.handleChange = this.handleChange.bind(this);
@@ -118,18 +118,18 @@ class ResetPassword extends Component {
   async handleSubmit(event) {
     const { password, passwordCheck } = this.state;
     try {
-      const response = await axios.post(
+      await axios.post(
         `https://webdevbootcamp-jorge-groenke.c9users.io:8081/resetpassword/${this.props.match.params.token}`,
         {
           password: password,
           passwordCheck: passwordCheck,
-        },
-        {
-          withCredentials: true,
         }
       );
-      console.log(response);
-      alert('you are signed up!');
+      this.setState(() => {
+        return {
+          success: true,
+        };
+      });
     } catch (error) {
       
       // If the err response comes from the form validator on the server
@@ -142,10 +142,10 @@ class ResetPassword extends Component {
         });
       } else {
         
-        // The error comes from failed authentication
+        // The error comes from server, db or other
         this.setState(() => {
           return {
-            loginError: error.response.data.error,
+            resetError: true,
           };
         });
       }

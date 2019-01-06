@@ -46,6 +46,21 @@ const validationChains = (action) => {
           .normalizeEmail()
       ];
     }
+    
+    case 'resetpassword': {
+      return [
+        check('password')
+          .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/)
+          .withMessage('Password must be at least 8 characters and at least 1 of the following: uppercase, lowercase, number and symbol')
+          .custom((value, {req, loc, path}) => {
+            if (value !== req.body.passwordCheck) {
+              return false;
+            }
+            return value;
+          })
+          .withMessage('Passwords must match')
+      ];
+    }
   }
 };
 
@@ -88,5 +103,8 @@ router.post('/forgotpassword', validationChains('forgotpassword'), validateMiddl
 
 // reset password route
 router.get('/resetpassword/:token', ResetPassword.verifyToken);
+
+// reset password on server
+router.post('/resetpassword/:token', validationChains('resetpassword'), validateMiddleware, ResetPassword.reset);
 
 export default router;
