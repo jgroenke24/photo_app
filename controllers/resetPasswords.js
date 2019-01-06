@@ -67,6 +67,29 @@ const ResetPassword = {
     }
   },
   
+  // Reset password form
+  async verifyToken(req, res) {
+    const token = req.params.token;
+    const findUserWithTokenQuery = 'SELECT * FROM users WHERE reset_token = $1 AND token_expiration > $2';
+    
+    try {
+      
+      // Find user with token from url parameter and only if the token has not expired
+      const { rows: dbUserRows } = await db.query(findUserWithTokenQuery, [ token, Date.now() ]);
+      const user = dbUserRows[0];
+      
+      // If the token was not found or the token has expired
+      if (!user) {
+        return res.status(404).json({ error: 'Password reset link in invalid or has expired' });
+      }
+      
+      // The token was valid
+      return res.status(200).json({ message: 'Password reset link was valid!' });
+    } catch (error) {
+      res.status(400).json( { error });
+    }
+  },
+  
   // Get all photos
   async getAll(req, res) {
     const findAllQuery = 'SELECT * FROM photos';

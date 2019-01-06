@@ -83,7 +83,10 @@ router.get('/dashboard',
   }
 );
 
-// reset password route
+// forgot password route
 router.post('/forgotpassword', validationChains('forgotpassword'), validateMiddleware, ResetPassword.sendEmail);
+
+// reset password route
+router.get('/resetpassword/:token', ResetPassword.verifyToken);
 
 export default router;
