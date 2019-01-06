@@ -71,7 +71,7 @@ const ResetPassword = {
   async verifyToken(req, res) {
     const token = req.params.token;
     const findUserWithTokenQuery = 'SELECT * FROM users WHERE reset_token = $1 AND token_expiration > $2';
-    
+
     try {
       
       // Find user with token from url parameter and only if the token has not expired
@@ -84,9 +84,9 @@ const ResetPassword = {
       }
       
       // The token was valid
-      return res.status(200).json({ message: 'Password reset link was valid!' });
+      return res.status(200).json({ user: user.email, message: 'Password reset link was valid!' });
     } catch (error) {
-      res.status(400).json( { error });
+      res.status(400).json({ error });
     }
   },
   
