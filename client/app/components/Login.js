@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 // Add a response interceptor
@@ -195,6 +196,9 @@ class Login extends Component {
             {passwordError}
           </small>
         </div>
+        <Link to='/forgotpassword'>
+          <p>Forgot Password?</p>
+        </Link>
         <button 
           type='submit' 
           className='btn btn-primary'

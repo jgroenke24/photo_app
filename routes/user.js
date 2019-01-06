@@ -1,6 +1,7 @@
 import Router from 'express-promise-router';
 import passport from 'passport';
 import Users from '../controllers/users';
+import ResetPassword from '../controllers/resetPasswords';
 import { check, validationResult } from 'express-validator/check';
 const router = new Router();
 
@@ -35,6 +36,14 @@ const validationChains = (action) => {
         check('password')
           .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/)
           .withMessage('Invalid password')
+      ];
+    }
+    
+    case 'forgotpassword': {
+      return [
+        check('email')
+          .isEmail().withMessage('You must enter a proper email')
+          .normalizeEmail()
       ];
     }
   }
@@ -73,5 +82,8 @@ router.get('/dashboard',
     });
   }
 );
+
+// reset password route
+router.post('/forgotpassword', validationChains('forgotpassword'), validateMiddleware, ResetPassword.sendEmail);
 
 export default router;
