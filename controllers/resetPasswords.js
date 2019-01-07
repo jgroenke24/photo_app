@@ -127,6 +127,24 @@ const ResetPassword = {
       const { rows: dbUpdatedUser } = await db.query(updateUserPasswordQuery, values);
       const updatedUser = dbUpdatedUser[0];
       console.log(updatedUser);
+      
+      // Send confirmation email with nodemailer
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.EMAIL_ADDRESS,
+          pass: process.env.EMAIL_PASSWORD,
+        },
+      });
+      const mailOptions = {
+        from: process.env.EMAIL_ADDRESS,
+        to: user.email,
+        subject: 'PicShare Password Change',
+        text: `This is a confimation that the password for your account (${user.email}) has just been changed.\n\n`,
+      };
+      const mailerResponse = await transporter.sendMail(mailOptions);
+      console.log('response from mailer', mailerResponse);
+      
       res.status(200).json({ message: 'Password updated!' });
     } catch (error) {
       res.status(400).json({ error });
