@@ -70,8 +70,8 @@ const ResetPassword = {
     }
   },
   
-  // Reset password form
-  async verifyToken(req, res) {
+  // Verify the token in the url
+  async verifyToken(req, res, next) {
     const token = req.params.token;
 
     try {
@@ -86,8 +86,12 @@ const ResetPassword = {
         return res.status(404).json({ error: 'Password reset link in invalid or has expired' });
       }
       
-      // The token was valid
-      res.status(200).json({ user: user.email, message: 'Password reset link was valid!' });
+      // The token was valid, if method is GET then return. If not, use as middleware and call the next handler
+      if (req.method === 'GET') {
+        return res.status(200).json({ user: user.email, message: 'Password reset link was valid!' });
+      }
+      res.locals.user = user;
+      next();
     } catch (error) {
       res.status(400).json({ error });
     }
@@ -95,20 +99,10 @@ const ResetPassword = {
   
   // Reset password
   async reset(req, res) {
-    const token = req.params.token;
     const { password } = req.body;
+    const { user } = res.locals;
 
     try {
-      
-      // Find user with token from url parameter and only if the token has not expired
-      const findUserWithTokenQuery = 'SELECT * FROM users WHERE reset_token = $1 AND token_expiration > $2';
-      const { rows: dbUserRows } = await db.query(findUserWithTokenQuery, [ token, Date.now() ]);
-      const user = dbUserRows[0];
-      
-      // If the token was not found or the token has expired
-      if (!user) {
-        return res.status(404).json({ error: 'Password reset link in invalid or has expired' });
-      }
       
       // The token was valid so hash the new password with bcrypt
       const hashedPassword = await bcrypt.hash(password, ROUNDS);

@@ -105,6 +105,6 @@ router.post('/forgotpassword', validationChains('forgotpassword'), validateMiddl
 router.get('/resetpassword/:token', ResetPassword.verifyToken);
 
 // reset password on server
-router.post('/resetpassword/:token', validationChains('resetpassword'), validateMiddleware, ResetPassword.reset);
+router.post('/resetpassword/:token', validationChains('resetpassword'), validateMiddleware, ResetPassword.verifyToken, ResetPassword.reset);
 
 export default router;
