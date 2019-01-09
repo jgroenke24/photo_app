@@ -94,7 +94,8 @@ passport.use(
       try {
         
         // Search database for a user with the username (email) in the jwt
-        const user = await db.query(findOneQueryText, [ jwt_payload.id ]);
+        const { rows: dbUser } = await db.query(findOneQueryText, [ jwt_payload.id ]);
+        const user = dbUser[0];
         
         if (!user) {
           return done(null, false);

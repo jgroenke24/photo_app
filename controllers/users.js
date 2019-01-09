@@ -48,6 +48,24 @@ const Users = {
         });
       })(req, res);
     };
+  },
+  
+  // Authenticate the json web token
+  jwt() {
+    return (req, res, next) => {
+      passport.authenticate('jwt', { session: false }, (err, user, info) => {
+        if (err) {
+          return next(err);
+        }
+        
+        // If a user is authenticated, pass user data in req.user
+        if (user) {
+          req.user = user.email;
+        }
+        
+        next();
+      })(req, res, next);
+    };
   }
 };
 

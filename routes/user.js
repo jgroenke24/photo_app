@@ -89,14 +89,13 @@ router.post('/signup', validationChains('signup'), validateMiddleware, Users.aut
 router.post('/login', validationChains('login'), validateMiddleware, Users.auth('login'));
 
 // test authorization route
-router.get('/dashboard',
-  passport.authenticate('jwt', { session: false }),
-  (req, res) => {
-    res.json({
-      message: 'This is authorized information',
-    });
+router.get('/dashboard', Users.jwt(), (req, res) => {
+  if (req.user) {
+    return res.json({ message: 'A user is signed in' });
   }
-);
+  
+  return res.json({ message: 'Unauthorized' });
+});
 
 // forgot password route
 router.post('/forgotpassword', validationChains('forgotpassword'), validateMiddleware, ResetPassword.sendEmail);
