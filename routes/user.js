@@ -15,6 +15,9 @@ const validationChains = (action) => {
         check('email')
           .isEmail().withMessage('You must enter a proper email')
           .normalizeEmail(),
+        check('username')
+          .matches(/^\w+$/)
+          .withMessage('Username can only contain letters, numbers and underscores'),
         check('password')
           .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/)
           .withMessage('Password must be at least 8 characters and at least 1 of the following: uppercase, lowercase, number and symbol')

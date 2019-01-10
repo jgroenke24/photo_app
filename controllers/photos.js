@@ -16,7 +16,7 @@ const Photos = {
     try {
       const result = await cloudinary.v2.uploader.upload(req.file.path);
       const text = `INSERT INTO
-      photos(id, name, url, created, likes)
+      photos(id, filename, url, created, creator)
       VALUES($1, $2, $3, $4, $5)
       returning *`;
       const values = [
@@ -24,11 +24,10 @@ const Photos = {
         result.original_filename,
         result.secure_url,
         result.created_at,
-        1
+        'admin'
       ];
       const { rows } = await db.query(text, values);
       return res.status(200).json(rows[0]);
-      // return res.redirect('/api/photos');
     } catch (error) {
       return res.status(400).send(error);
     }
@@ -111,7 +110,7 @@ const Photos = {
         return res.status(404).send('Photo not found');
       }
       
-      return res.status(204);
+      return res.status(204).send('Photo deleted');
     } catch (error) {
       return res.status(400).send(error);
     }

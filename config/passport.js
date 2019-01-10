@@ -6,7 +6,7 @@ import db from '../db';
 
 const ROUNDS = 12;
 const findOneQueryText = 'SELECT * FROM users WHERE email = $1';
-const createUserQueryText = 'INSERT INTO users(email, password) VALUES($1, $2) returning *';
+const createUserQueryText = 'INSERT INTO users(email, username, password) VALUES($1, $2, $3) returning *';
 
 passport.use(
   'register',
@@ -14,9 +14,10 @@ passport.use(
     {
       usernameField: 'email',
       passwordField: 'password',
+      passReqToCallback: true,
       session: false,
     },
-    async (username, password, done) => {
+    async (req, username, password, done) => {
       try {
         
         // Search database for a user with the username (email) provided
@@ -30,7 +31,7 @@ passport.use(
         const hashedPassword = await bcrypt.hash(password, ROUNDS);
         
         // Add the user to the database
-        const { rows: dbNewUserRows } = await db.query(createUserQueryText, [ username, hashedPassword ]);
+        const { rows: dbNewUserRows } = await db.query(createUserQueryText, [ username, req.body.username, hashedPassword ]);
         const newUser = dbNewUserRows[0];
         return done(null, newUser);
       } catch (err) {

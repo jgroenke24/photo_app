@@ -80,10 +80,10 @@ class Photo extends Component {
             {photo &&
               <div className='col-6'>
                 <div className='card'>
-                  <img className='card-img-top' src={photo.url} alt={photo.name}/>
+                  <img className='card-img-top' src={photo.url} alt={photo.filename}/>
                   <div className='card-body'>
                     <h5 className='card-title'>
-                      {photo.name}
+                      {photo.filename}
                     </h5>
                     <button className='btn btn-danger' onClick={this.handleDelete}>Delete</button>
                   </div>

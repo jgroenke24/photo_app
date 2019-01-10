@@ -22,10 +22,12 @@ class Signup extends Component {
     
     this.state = {
       email: '',
+      username: '',
       password: '',
       passwordCheck: '',
       errors: [],
       emailIsValid: false,
+      usernameIsValid: false,
       passwordIsValid: false,
       passwordCheckIsValid: false,
       signupError: null,
@@ -53,7 +55,7 @@ class Signup extends Component {
   }
   
   inputIsValid(element) {
-    const { email, password, passwordCheck } = this.state;
+    const { email, username, password, passwordCheck } = this.state;
     
     if (this.state[element] === '') {
       this.showValidationError(element, `${element} can't be empty`);
@@ -67,6 +69,14 @@ class Signup extends Component {
       const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       if (!re.test(email)) {
         this.showValidationError('email', 'You must enter a proper email');
+        return;
+      }
+    } else if (element === 'username') {
+      
+      // Check if username is only letters, numbers or underscores
+      const re = /^\w+$/;
+      if (!re.test(username)) {
+        this.showValidationError('username', 'Username can only contain letters, numbers and underscores');
         return;
       }
     } else if (element === 'password') {
@@ -114,14 +124,15 @@ class Signup extends Component {
   }
   
   async handleSubmit(event) {
-    const { email, password, passwordCheck } = this.state;
+    const { email, username, password, passwordCheck } = this.state;
     try {
       const response = await axios.post(
         'https://webdevbootcamp-jorge-groenke.c9users.io:8081/signup',
         {
-          email: email,
-          password: password,
-          passwordCheck: passwordCheck,
+          email,
+          username,
+          password,
+          passwordCheck,
         },
         {
           withCredentials: true,
@@ -144,7 +155,7 @@ class Signup extends Component {
         // The error comes from failed authentication
         this.setState(() => {
           return {
-            loginError: error.response.data.error,
+            signupError: error.response.data.error,
           };
         });
       }
@@ -153,8 +164,9 @@ class Signup extends Component {
   
   render() {
     
-    const { errors, email, password, passwordCheck, emailIsValid, passwordIsValid, passwordCheckIsValid, signupError } = this.state;
+    const { errors, email, username, password, passwordCheck, emailIsValid, usernameIsValid, passwordIsValid, passwordCheckIsValid, signupError } = this.state;
     let emailError = '';
+    let usernameError = '';
     let passwordError = '';
     let passwordCheckError = '';
     
@@ -162,10 +174,12 @@ class Signup extends Component {
       if (error.element === 'email') {
         emailError = error.message;
       }
+      if (error.element === 'username') {
+        usernameError = error.message;
+      }
       if (error.element === 'password') {
         passwordError = error.message;
       }
-      
       if (error.element === 'passwordCheck') {
         passwordCheckError = error.message;
       }
@@ -199,6 +213,26 @@ class Signup extends Component {
             className='form-text text-danger'
           >
             {emailError}
+          </small>
+        </div>
+        <div className='form-group'>
+          <label htmlFor='username'>Username:</label>
+          <input 
+            id='username' 
+            name='username' 
+            type='text' 
+            className='form-control' 
+            value={username}
+            onFocus={this.handleFocus}
+            onChange={this.handleChange}
+            onBlur={this.handleBlur}
+            aria-describedby='usernameHelpBlock'
+          />
+          <small
+            id='usernameHelpBlock'
+            className='form-text text-danger'
+          >
+            {usernameError}
           </small>
         </div>
         <div className='form-group'>
@@ -244,7 +278,7 @@ class Signup extends Component {
         <button 
           type='submit' 
           className='btn btn-primary'
-          disabled={!emailIsValid || !passwordIsValid || !passwordCheckIsValid}
+          disabled={!emailIsValid || !usernameIsValid || !passwordIsValid || !passwordCheckIsValid}
           onClick={this.handleSubmit}
         >
           Signup

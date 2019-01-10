@@ -60,10 +60,10 @@ class Photos extends Component {
                 <div key={photo.id} className='col-sm-12 col-md-3 col-lg-4'>
                   <Link to={`/photos/${photo.id}`}>
                     <div className='card'>
-                      <img className='card-img-top' src={photo.url} alt={photo.name}/>
+                      <img className='card-img-top' src={photo.url} alt={photo.filename}/>
                       <div className='card-body'>
                         <h5 className='card-title'>
-                          {photo.name}
+                          {photo.filename}
                         </h5>
                       </div>
                     </div>
