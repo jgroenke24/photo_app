@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link, withRouter } from 'react-router-dom';
 import axios from 'axios';
 
 class Photo extends Component {
@@ -7,7 +8,11 @@ class Photo extends Component {
     
     this.state = {
       photo: null,
+      showError: false,
+      showSubmissionError: false,
     };
+    
+    this.handleDelete = this.handleDelete.bind(this);
   }
   
   async componentDidMount() {
@@ -21,19 +26,57 @@ class Photo extends Component {
         };
       });
     } catch (error) {
-      console.error(error);
+      console.log(error);
+      this.setState(() => {
+        return {
+          showError: true,
+        };
+      });
+    }
+  }
+  
+  async handleDelete() {
+    try {
+      await axios.delete(`https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos/${this.props.match.params.photoId}`);
+      this.props.history.push('/');
+    } catch (error) {
+      console.log(error);
+      this.setState(() => {
+        return {
+          showSubmissionError: true,
+        };
+      });
     }
   }
   
   render() {
-    const { photo } = this.state;
+    const { photo, showError, showSubmissionError } = this.state;
+    
+    if (showError) {
+      return (
+        <React.Fragment>
+        <section className='container'>
+          <p>An error occurred. Please try again</p>
+          <Link to='/'>
+            Home
+          </Link>
+        </section>
+      </React.Fragment>
+      );
+    }
     
     return (
       <React.Fragment>
         <section className='container'>
+          {showSubmissionError &&
+            <div className='alert alert-danger' role='alert'>
+              Something went wrong with your request. Please try again.
+            </div>
+          }
+          
           <div className='row'>
             {!photo && <p>Loading photo...</p>}
-        
+            
             {photo &&
               <div className='col-6'>
                 <div className='card'>
@@ -42,6 +85,7 @@ class Photo extends Component {
                     <h5 className='card-title'>
                       {photo.name}
                     </h5>
+                    <button className='btn btn-danger' onClick={this.handleDelete}>Delete</button>
                   </div>
                 </div>
               </div>
@@ -53,4 +97,4 @@ class Photo extends Component {
   }
 }
 
-export default Photo;
+export default withRouter(Photo);

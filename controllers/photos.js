@@ -60,7 +60,6 @@ const Photos = {
       }
       
       return res.status(200).json(rows[0]);
-      // return res.render('photos/show', { photo: rows[0] });
     } catch (error) {
       return res.status(400).send(error);
     }
@@ -109,11 +108,10 @@ const Photos = {
       
       // If nothing comes back from the database, send 404 not found
       if (!rows[0]) {
-        return res.status(404).send({ message: 'Photo not found' });
+        return res.status(404).send('Photo not found');
       }
       
-      // return res.status(204).send({ message: 'Photo deleted' });
-      return res.redirect('/photos');
+      return res.status(204);
     } catch (error) {
       return res.status(400).send(error);
     }
