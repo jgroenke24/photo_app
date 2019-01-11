@@ -1,0 +1,25 @@
+CREATE TABLE users (
+id SERIAL PRIMARY KEY,
+email TEXT NOT NULL,
+username TEXT NOT NULL,
+password TEXT NOT NULL,
+joined TIMESTAMP DEFAULT NOW(),
+reset_token TEXT,
+reset_expiration BIGINT,
+UNIQUE (email, username, password)
+);
+
+CREATE TABLE photos (
+id TEXT PRIMARY KEY,
+filename TEXT,
+url TEXT NOT NULL,
+created TIMESTAMP NOT NULL,
+description TEXT,
+userid INTEGER NOT NULL REFERENCES users(id)
+);
+
+CREATE TABLE likes (
+photoid TEXT NOT NULL,
+userid INTEGER NOT NULL,
+PRIMARY KEY(photoid, userid)
+);

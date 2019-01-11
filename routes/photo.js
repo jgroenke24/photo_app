@@ -34,4 +34,7 @@ router.put('/:id', Photos.update);
 // Destroy route - delete photo
 router.delete('/:id', Photos.delete);
 
+// Update likes
+router.put('/:id/like', Photos.like);
+
 export default router;

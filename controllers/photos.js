@@ -16,7 +16,7 @@ const Photos = {
     try {
       const result = await cloudinary.v2.uploader.upload(req.file.path);
       const text = `INSERT INTO
-      photos(id, filename, url, created, creator)
+      photos(id, filename, url, created, userid)
       VALUES($1, $2, $3, $4, $5)
       returning *`;
       const values = [
@@ -24,7 +24,7 @@ const Photos = {
         result.original_filename,
         result.secure_url,
         result.created_at,
-        'admin'
+        1
       ];
       const { rows } = await db.query(text, values);
       return res.status(200).json(rows[0]);
@@ -111,6 +111,36 @@ const Photos = {
       }
       
       return res.status(204).send('Photo deleted');
+    } catch (error) {
+      return res.status(400).send(error);
+    }
+  },
+  
+  // Like a photo
+  async like(req, res) {
+    const findLikeQuery = 'SELECT * FROM likes WHERE userid = $1';
+    
+    try {
+      
+      // See if the user has already liked the photo
+      const { rows } = await db.query(findLikeQuery, [ 2 ]);
+      console.log(req.params.id);
+      console.log(rows[0]);
+      
+      // If a user was returned, remove the like
+      if (rows[0]) {
+        const removeLikeQuery = 'DELETE FROM likes WHERE userid = $1 returning *';
+        const { rows: likeResponse } = await db.query(removeLikeQuery, [ 2 ]);
+        console.log('like removed', likeResponse);
+      } else {
+        
+        // No user was found so add a like
+        console.log('in else');
+        const addLikeQuery = 'INSERT INTO likes(photoid, userid) VALUES($1, $2) returning *';
+        const { rows: likeResponse } = await db.query(addLikeQuery, [ req.params.id, 2 ]);
+        console.log('like added', likeResponse);
+      }
+      return res.send('done');
     } catch (error) {
       return res.status(400).send(error);
     }
