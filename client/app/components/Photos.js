@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { AppContext } from './AppContext';
 
 class Photos extends Component {
   state = {
@@ -8,21 +9,30 @@ class Photos extends Component {
     refreshError: null,
   };
   
-  async componentDidMount() {
-    await this.refreshPhotos();
-  }
+  static contextType = AppContext;
   
-  async refreshPhotos() {
+  async componentDidMount() {
     try {
       
       // Get all photos from server
-      const response = await axios('https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos');
-      const result = response.data;
+      const response = await axios
+        .get(
+          'https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos',
+          {
+            withCredentials: true,
+          }
+        );
+        
+      const { photos, user } = response.data;
+      
+      if (user) {
+        this.context.changeToLoggedIn();
+      }
       
       // Update state with returned array of photos
       this.setState(() => {
         return {
-          photos: result.rows,
+          photos,
         };
       });
     } catch (error) {

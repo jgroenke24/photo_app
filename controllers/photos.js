@@ -38,9 +38,18 @@ const Photos = {
     const findAllQuery = 'SELECT * FROM photos';
     
     try {
-      const { rows, rowCount } = await db.query(findAllQuery);
-      return res.status(200).json({ rows, rowCount });
-      // res.render('photos/index', { photos: rows });
+      const { rows } = await db.query(findAllQuery);
+      
+      // A user is signed in (from jwt authentication)
+      if (req.user) {
+        return res.status(200).json({
+          user: req.user,
+          photos: rows,
+        });
+      }
+      
+      // User is not signed is so just return the photos
+      return res.status(200).json({ photos: rows });
     } catch (error) {
       return res.status(400).send(error);
     }

@@ -1,5 +1,6 @@
 import Router from 'express-promise-router';
 import Photos from '../controllers/photos';
+import Users from '../controllers/users';
 import multer from 'multer';
 const router = new Router();
 
@@ -20,7 +21,7 @@ const imageFilter = (req, file, cb) => {
 const upload = multer({ storage: storage, fileFilter: imageFilter});
 
 // Index route - show all photos
-router.get('/', Photos.getAll);
+router.get('/', Users.jwt(), Photos.getAll);
 
 // Create route - add new photo
 router.post('/', upload.single('image'), Photos.create);

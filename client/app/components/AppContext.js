@@ -10,7 +10,17 @@ class AppProvider extends Component {
   render() {
     return (
       <AppContext.Provider value={{
-        state: this.state,
+        isLoggedIn: this.state.isLoggedIn,
+        changeToLoggedIn: () => this.setState(() => {
+          return {
+            isLoggedIn: true,
+          };
+        }),
+        changeToLoggedOut: () => this.setState(() => {
+          return {
+            isLoggedIn: false,
+          };
+        }),
       }}>
         {this.props.children}
       </AppContext.Provider>
@@ -18,4 +28,6 @@ class AppProvider extends Component {
   }
 }
 
-export default AppProvider;
+const AppConsumer = AppContext.Consumer;
+
+export { AppContext, AppProvider, AppConsumer };

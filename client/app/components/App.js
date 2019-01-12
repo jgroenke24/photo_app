@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import AppProvider from './AppContext';
+import { AppProvider } from './AppContext';
 import Navbar from './Navbar';
 import Photos from './Photos';
 import Photo from './Photo';

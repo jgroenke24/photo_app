@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import axios from 'axios';
 
 // Add a response interceptor
@@ -94,8 +94,8 @@ class Login extends Component {
           withCredentials: true,
         }
       );
-      console.log(response);
-      alert('you are logged in');
+      console.log(response.data.message);
+      this.props.history.push('/');
     } catch (error) {
 
       // If the err response comes from the form validator on the server
@@ -199,4 +199,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default withRouter(Login);
