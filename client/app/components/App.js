@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { AppProvider } from './AppContext';
+import Header from './Header';
 import Navbar from './Navbar';
 import Photos from './Photos';
 import Photo from './Photo';
@@ -17,7 +18,7 @@ class App extends Component {
       <Fragment>
         <Router>
           <AppProvider>
-            <Navbar />
+            <Header />
             <Switch>
               <Route exact path='/' component={Photos} />
               <Route path='/photos/:photoId' component={Photo} />
