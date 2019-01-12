@@ -17,27 +17,18 @@ import axios from 'axios';
 //   });
 
 class Signup extends Component {
-  constructor(props) {
-    super(props);
-    
-    this.state = {
-      email: '',
-      username: '',
-      password: '',
-      passwordCheck: '',
-      errors: [],
-      emailIsValid: false,
-      usernameIsValid: false,
-      passwordIsValid: false,
-      passwordCheckIsValid: false,
-      signupError: null,
-    };
-    
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleBlur = this.handleBlur.bind(this);
-    this.handleFocus = this.handleFocus.bind(this);
-  }
+  state = {
+    email: '',
+    username: '',
+    password: '',
+    passwordCheck: '',
+    errors: [],
+    emailIsValid: false,
+    usernameIsValid: false,
+    passwordIsValid: false,
+    passwordCheckIsValid: false,
+    signupError: null,
+  };
   
   showValidationError(element, message) {
     this.setState((prevState) => ({
@@ -106,15 +97,11 @@ class Signup extends Component {
     });
   }
   
-  handleBlur(event) {
-    this.inputIsValid(event.target.id);
-  }
+  handleBlur = (event) => this.inputIsValid(event.target.id);
   
-  handleFocus(event) {
-    this.clearValidationError(event.target.id);
-  }
+  handleFocus = (event) => this.clearValidationError(event.target.id);
   
-  handleChange(event) {
+  handleChange = (event) => {
     const { id, value } = event.target;
     this.setState(() => {
       return {
@@ -123,7 +110,7 @@ class Signup extends Component {
     });
   }
   
-  async handleSubmit(event) {
+  handleSubmit = async (event) => {
     const { email, username, password, passwordCheck } = this.state;
     try {
       const response = await axios.post(

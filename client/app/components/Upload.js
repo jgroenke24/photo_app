@@ -3,26 +3,19 @@ import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 
 class Upload extends Component {
-  constructor(props) {
-    super(props);
-    
-    this.state = {
-      file: null,
-      loaded: 0,
-      uploadError: null,
-    };
-    
-    this.handleFile = this.handleFile.bind(this);
-    this.handleUpload = this.handleUpload.bind(this);
-  }
+  state = {
+    file: null,
+    loaded: 0,
+    uploadError: null,
+  };
   
-  handleFile(event) {
+  handleFile = (event) => {
     this.setState({
       file: event.target.files[0],
     });
   }
   
-  async handleUpload(event) {
+  handleUpload = async (event) => {
     
     try {
       event.preventDefault();
@@ -73,28 +66,26 @@ class Upload extends Component {
   render() {
     const { loaded, uploadError } = this.state;
     return (
-      <React.Fragment>
-        <section className='container'>
-          <h1 className='text-center'>Upload a picture!</h1>
-          
-          {uploadError &&
-            <div className='alert alert-danger' role='alert'>
-              {uploadError}
-            </div>
-          }
-          
-          <form>
-            <div className='form-group'>
-              <label htmlFor='picFile'>
-                Upload a pic!
-              </label>
-              <input type='file' name='image' accept='image/*' className='form-control-file' id='picFile' onChange={this.handleFile} />
-              <input type='submit' onClick={this.handleUpload} />
-              <small> {loaded} %</small>
-            </div>
-          </form>
-        </section>
-      </React.Fragment>
+      <section className='container'>
+        <h1 className='text-center'>Upload a picture!</h1>
+        
+        {uploadError &&
+          <div className='alert alert-danger' role='alert'>
+            {uploadError}
+          </div>
+        }
+        
+        <form>
+          <div className='form-group'>
+            <label htmlFor='picFile'>
+              Upload a pic!
+            </label>
+            <input type='file' name='image' accept='image/*' className='form-control-file' id='picFile' onChange={this.handleFile} />
+            <input type='submit' onClick={this.handleUpload} />
+            <small> {loaded} %</small>
+          </div>
+        </form>
+      </section>
     );
   }
 }

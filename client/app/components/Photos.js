@@ -3,14 +3,10 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 class Photos extends Component {
-  constructor(props) {
-    super(props);
-    
-    this.state = {
-      photos: null,
-      refreshError: null,
-    };
-  }
+  state = {
+    photos: null,
+    refreshError: null,
+  };
   
   async componentDidMount() {
     await this.refreshPhotos();
@@ -41,39 +37,37 @@ class Photos extends Component {
   render() {
     const { photos, refreshError } = this.state;
     return (
-      <React.Fragment>
-        <section className='container'>
-          <h1 className='text-center'>Photos</h1>
-          
-          {refreshError &&
-            <div className='alert alert-danger' role='alert'>
-              {refreshError}
-            </div>
-          }
-          
-          <div className='row'>
-            {!photos && <p className='text-center'>Loading photos...</p>}
+      <section className='container'>
+        <h1 className='text-center'>Photos</h1>
         
-            {photos &&
-              photos.map(photo => {
-              return (
-                <div key={photo.id} className='col-sm-12 col-md-3 col-lg-4'>
-                  <Link to={`/photos/${photo.id}`}>
-                    <div className='card'>
-                      <img className='card-img-top' src={photo.url} alt={photo.filename}/>
-                      <div className='card-body'>
-                        <h5 className='card-title'>
-                          {photo.filename}
-                        </h5>
-                      </div>
-                    </div>
-                  </Link>
-                </div>
-              )})
-            }
+        {refreshError &&
+          <div className='alert alert-danger' role='alert'>
+            {refreshError}
           </div>
-        </section>
-      </React.Fragment>
+        }
+        
+        <div className='row'>
+          {!photos && <p className='text-center'>Loading photos...</p>}
+      
+          {photos &&
+            photos.map(photo => {
+            return (
+              <div key={photo.id} className='col-sm-12 col-md-3 col-lg-4'>
+                <Link to={`/photos/${photo.id}`}>
+                  <div className='card'>
+                    <img className='card-img-top' src={photo.url} alt={photo.filename}/>
+                    <div className='card-body'>
+                      <h5 className='card-title'>
+                        {photo.filename}
+                      </h5>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            )})
+          }
+        </div>
+      </section>
     );
   }
 }
