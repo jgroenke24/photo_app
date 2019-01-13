@@ -16,25 +16,31 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  min-height: 60px;
   width: 100%;
   background: gray;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
 }
 
 .mobilenav {
   width: 100%;
+  min-height: 60px;
   
   &__links {
+    height: 100%;
     display: flex;
     justify-content: space-around;
+    align-items: center;
   }
 }
 
 .navbar {
-  
   &__links {
     display: flex;
     justify-content: space-around;
@@ -45,3 +51,8 @@ body {
   }
 }
 
+.authbar {
+  &__btn {
+    margin: 0 15px;
+  }
+}

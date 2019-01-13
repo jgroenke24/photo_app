@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import MediaQuery from 'react-responsive';
 import MobileNavbar from './MobileNavbar';
+import UnderBar from './UnderBar';
 
 const Header = (props) => (
   <header className='header'>
@@ -16,7 +17,12 @@ const Header = (props) => (
                 {props.children}
             </Fragment>
           )
-        : <MobileNavbar />;
+        : (
+          <Fragment>
+            <MobileNavbar />
+            <UnderBar />
+          </Fragment>
+        );
       }}
     </MediaQuery>
   </header>
