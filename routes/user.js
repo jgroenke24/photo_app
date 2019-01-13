@@ -109,4 +109,11 @@ router.get('/resetpassword/:token', ResetPassword.verifyToken);
 // reset password on server
 router.post('/resetpassword/:token', validationChains('resetpassword'), validateMiddleware, ResetPassword.verifyToken, ResetPassword.reset);
 
+router.get('/', Users.jwt(), (req, res) => {
+  if (req.user) {
+    return res.status(200).json({ user: req.user });
+  }
+  return res.status(200).send('welcome');
+});
+
 export default router;

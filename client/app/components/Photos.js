@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { AppContext } from './AppContext';
 
 class Photos extends Component {
   state = {
     photos: null,
     refreshError: null,
   };
-  
-  static contextType = AppContext;
-  
+
   async componentDidMount() {
     try {
       
@@ -23,11 +20,7 @@ class Photos extends Component {
           }
         );
         
-      const { photos, user } = response.data;
-      
-      if (user) {
-        this.context.changeToLoggedIn();
-      }
+      const { photos } = response.data;
       
       // Update state with returned array of photos
       this.setState(() => {
