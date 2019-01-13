@@ -20,6 +20,7 @@ body {
   width: 100%;
   background: gray;
   display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -30,9 +31,17 @@ body {
     display: flex;
     justify-content: space-around;
   }
+}
+
+.navbar {
   
-  &__icon {
-    width: 30px;
+  &__links {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  &__item {
+    margin: 0 15px;
   }
 }
 
