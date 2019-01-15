@@ -1,14 +1,24 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import { Link } from 'react-router-dom';
+import { AppConsumer } from './AppContext';
 
 const UnderBar = (props) => (
-  <div className='authbar'>
-    <button className='authbar__btn'>
-      Login
-    </button>
-    <button className='authbar__btn'>
-      Signup
-    </button>
-  </div>
+  <AppConsumer>
+    {({ isLoggedIn }) => (
+      <Fragment>
+        {isLoggedIn ? null : (
+          <div className='authbar'>
+            <Link className='authbar__btn' to='/login'>
+              Login
+            </Link>
+            <Link className='authbar__btn authbar__btn--green' to='/signup'>
+              Signup
+            </Link>
+          </div>
+        )}
+      </Fragment>
+    )}
+  </AppConsumer>
 );
 
 export default UnderBar;

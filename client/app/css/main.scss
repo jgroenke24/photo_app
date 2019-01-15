@@ -1,7 +1,35 @@
+$white: #fff;
+$gray-100: #d1d2d7;
+$gray-200: #babcc3;
+$gray-300: #a3a6af;
+$gray-400: #8c909b;
+$gray-500: #767a87;
+$gray-600: #5f6473;
+$gray-700: #484e5f;
+$gray-800: #31384b;
+$gray-900: #1a2237;
+$black: #040c24;
+
+$blue: #3a4c7a;
+$cyan: #247ba0;
+$teal: #0e7c7b;
+$green: #53dd6c;
+$pink: #ed254e;
+$red: #e63946;
+$orange: #fc7753;
+$yellow: #f9dc5c;
+$teal: #0e7c7b;
+$purple: #320e3b;
+
+
 @import 'reset';
 
 html {
   box-sizing: border-box;
+  font-family: sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  height: 100%;
 }
 
 *, *:before, *:after {
@@ -9,31 +37,42 @@ html {
 }
 
 body {
-  margin-top: 100px;
+  margin-top: 60px;
+  font-size: 1.5rem;
+  line-height: 1.5;
+  background-color: $white;
+  color: $black;
 }
 
 .header {
-  position: fixed;
-  top: 0;
-  left: 0;
+  background-color: $white;
   width: 100%;
-  background: gray;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
   
   @media (min-width: 768px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    min-height: 60px;  
+    display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
 }
 
 .mobilenav {
-  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
   min-height: 60px;
+  width: 100%;
+  background-color: $white;
   
   &__links {
-    height: 100%;
+    width: 100%;
+    min-height: 60px;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -41,18 +80,37 @@ body {
 }
 
 .navbar {
+  
   &__links {
     display: flex;
     justify-content: space-around;
   }
   
   &__item {
-    margin: 0 15px;
+    margin: 0 1.5rem;
   }
 }
 
 .authbar {
+  width: 100%;
+  padding: 1.5rem 0;
+  display: flex;
+  justify-content: space-around;
+  box-shadow: inset 0px -2px 2px -1px rgba(0,0,0,0.1);
+  
   &__btn {
-    margin: 0 15px;
+    width: 45%;
+    flex: 0 1 auto;
+    padding: .5rem;
+    border-radius: 5px;
+    border: 1px $gray-400 solid;
+    color: $gray-400;
+    text-align: center;
+  }
+  
+  &__btn--green {
+    background-color: $green;
+    color: $white;
+    border: none;
   }
 }
