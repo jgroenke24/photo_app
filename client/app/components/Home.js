@@ -7,6 +7,7 @@ import Photos from './Photos';
 import Photo from './Photo';
 import Upload from './Upload';
 import Dashboard from './Dashboard';
+import Hero from './Hero';
 import { AppContext } from './AppContext';
 
 class Home extends Component {
@@ -18,6 +19,7 @@ class Home extends Component {
         </Header>
         
         <main>
+          <Hero />
           <Switch>
             <Route
               exact

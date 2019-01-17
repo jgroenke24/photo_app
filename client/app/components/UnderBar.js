@@ -11,7 +11,7 @@ const UnderBar = (props) => (
             <Link className='authbar__btn' to='/login'>
               Login
             </Link>
-            <Link className='authbar__btn authbar__btn--green' to='/signup'>
+            <Link className='authbar__btn authbar__btn--primary' to='/signup'>
               Signup
             </Link>
           </div>
