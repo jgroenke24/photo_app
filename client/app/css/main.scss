@@ -167,3 +167,29 @@ body {
     }
   }
 }
+
+.photos {
+
+}
+
+.photocard {
+
+  &__creator {
+    
+  }
+  
+  &__link {
+    display: block;
+    min-height: 0;
+  }
+  
+  &__img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  
+  &__likes {
+    
+  }
+}

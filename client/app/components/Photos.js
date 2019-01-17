@@ -1,6 +1,41 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import MediaQuery from 'react-responsive';
 import axios from 'axios';
+
+const MultipleColumnPhotos = ({ photos }) => (
+  <Fragment>
+    {photos.map(photo => {
+      return (
+        <div key={photo.id} className='photo'>
+          <Link to={`/photos/${photo.id}`} className='photo__link'>
+            <img src={photo.url} alt={photo.tags.replace(/,/g, ' ')} className='photo__img' />
+          </Link>
+        </div>
+      );
+    })}
+  </Fragment>
+);
+
+const OneColumnPhotos = ({ photos }) => (
+  <Fragment>
+    {photos.map(photo => {
+      return (
+        <div key={photo.id} className='photocard'>
+          <div className='photocard__creator'>
+            <h2>{photo.userid}</h2>
+          </div>
+          <Link to={`/photos/${photo.id}`} className='photocard__link'>
+            <img src={photo.url} alt={photo.tags.replace(/,/g, ' ')} className='photocard__img' />
+          </Link>
+          <div className='photocard__likes'>
+            <p>likes: 0</p>
+          </div>
+        </div>
+      );
+    })}
+  </Fragment>
+);
 
 class Photos extends Component {
   state = {
@@ -40,36 +75,17 @@ class Photos extends Component {
   render() {
     const { photos, refreshError } = this.state;
     return (
-      <section className='container'>
-        <h1 className='text-center'>Photos</h1>
+      <section className='photos'>
+      
+        {!photos && <p className='text-center'>Loading photos...</p>}
+        
+        {photos && <OneColumnPhotos photos={photos} />}
         
         {refreshError &&
           <div className='alert alert-danger' role='alert'>
             {refreshError}
           </div>
         }
-        
-        <div className='row'>
-          {!photos && <p className='text-center'>Loading photos...</p>}
-      
-          {photos &&
-            photos.map(photo => {
-            return (
-              <div key={photo.id} className='col-sm-12 col-md-3 col-lg-4'>
-                <Link to={`/photos/${photo.id}`}>
-                  <div className='card'>
-                    <img className='card-img-top' src={photo.url} alt={photo.filename}/>
-                    <div className='card-body'>
-                      <h5 className='card-title'>
-                        {photo.filename}
-                      </h5>
-                    </div>
-                  </div>
-                </Link>
-              </div>
-            )})
-          }
-        </div>
       </section>
     );
   }

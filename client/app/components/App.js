@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import axios from 'axios';
 import { AppProvider, AppContext } from './AppContext';
 import Home from './Home';
+import Upload from './Upload';
 import Login from './Login';
 import Signup from './Signup';
 import ForgotPassword from './ForgotPassword';
@@ -32,6 +33,7 @@ class App extends Component {
         <Router>
           <Switch>
             <Route exact path='/' component={Home} />
+            <Route path='/upload' component={Upload} />
             <Route path='/signup' component={Signup} />
             <Route path='/login' component={Login} />
             <Route path='/forgotpassword' component={ForgotPassword} />

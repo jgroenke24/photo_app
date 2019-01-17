@@ -43,7 +43,7 @@ class Upload extends Component {
       this.props.history.push('/');
       
     } catch (error) {
-      
+
       // If the error comes from the server, update the error in state
       if (error.response) {
         this.setState(() => {

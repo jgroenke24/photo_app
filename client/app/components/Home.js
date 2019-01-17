@@ -5,7 +5,6 @@ import Header from './Header';
 import Navbar from './Navbar';
 import Photos from './Photos';
 import Photo from './Photo';
-import Upload from './Upload';
 import Dashboard from './Dashboard';
 import Hero from './Hero';
 import { AppContext } from './AppContext';
@@ -27,7 +26,6 @@ class Home extends Component {
               render={() => <Photos/>}
             />
             <Route path='/photos/:photoId' component={Photo} />
-            <Route path='/upload' component={Upload} />
             <Route path='/dashboard' component={Dashboard} />
           </Switch>
         </main>
