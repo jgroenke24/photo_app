@@ -14,16 +14,25 @@ const Photos = {
   async create(req, res) {
     
     try {
-      const result = await cloudinary.v2.uploader.upload(req.file.path);
+      const result = await cloudinary.v2.uploader.upload(
+        req.file.path,
+        { 
+          categorization: "google_tagging", 
+          auto_tagging: 0.85,
+        }
+      );
       const text = `INSERT INTO
-      photos(id, filename, url, created, userid)
-      VALUES($1, $2, $3, $4, $5)
+      photos(id, filename, url, created, width, height, tags, userid)
+      VALUES($1, $2, $3, $4, $5, $6, $7, $8)
       returning *`;
       const values = [
         result.public_id,
         result.original_filename,
         result.secure_url,
         result.created_at,
+        result.width,
+        result.height,
+        result.tags.join(','),
         1
       ];
       const { rows } = await db.query(text, values);
