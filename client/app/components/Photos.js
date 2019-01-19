@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
 import axios from 'axios';
 
@@ -10,12 +11,20 @@ const MultipleColumnPhotos = ({ photos }) => (
         <div key={photo.id} className='photo'>
           <Link to={`/photos/${photo.id}`} className='photo__link'>
             <img src={photo.url} alt={photo.tags.replace(/,/g, ' ')} className='photo__img' />
+            <div className='photo__overlay'>
+              <button className='btn photo__btn'>Like</button>
+              <h2 className='photo__creator'>{photo.userid}</h2>
+            </div>
           </Link>
         </div>
       );
     })}
   </Fragment>
 );
+
+MultipleColumnPhotos.propTypes = {
+  photos: PropTypes.array.isRequired,
+};
 
 const OneColumnPhotos = ({ photos }) => (
   <Fragment>
@@ -36,6 +45,10 @@ const OneColumnPhotos = ({ photos }) => (
     })}
   </Fragment>
 );
+
+OneColumnPhotos.propTypes = {
+  photos: PropTypes.array.isRequired,
+};
 
 class Photos extends Component {
   state = {
@@ -76,10 +89,20 @@ class Photos extends Component {
     const { photos, refreshError } = this.state;
     return (
       <section className='photos'>
-      
         {!photos && <p className='text-center'>Loading photos...</p>}
         
-        {photos && <OneColumnPhotos photos={photos} />}
+        {photos &&
+          <MediaQuery minWidth={768}>
+            {matches => {
+              return matches
+              ?  (
+                <MultipleColumnPhotos photos={photos} />
+              ) : (
+                <OneColumnPhotos photos={photos} />
+              );
+            }}
+          </MediaQuery>
+        }
         
         {refreshError &&
           <div className='alert alert-danger' role='alert'>

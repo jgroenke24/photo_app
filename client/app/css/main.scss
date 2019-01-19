@@ -43,6 +43,17 @@ body {
   color: $black;
 }
 
+.btn {
+  padding: 0 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+  border-radius: 0.25rem;
+}
+
 .header {
   background-color: $white;
   width: 100%;
@@ -87,6 +98,10 @@ body {
   
   &__item {
     margin: 0 1rem;
+    
+    &:last-of-type {
+      margin-right: 0;
+    }
   }
 }
 
@@ -169,7 +184,16 @@ body {
 }
 
 .photos {
-
+  @media (min-width: 768px) {
+    width: 100%;
+    padding: 0 0.75rem;
+    column-count: 2;
+    column-gap: 1.5rem;
+  }
+  
+  @media (min-width: 1000px) {
+    column-count: 3;
+  }
 }
 
 .photocard {
@@ -191,5 +215,57 @@ body {
   
   &__likes {
     
+  }
+}
+
+.photo {
+  margin-bottom: 0.75rem;
+  
+  &__link {
+    display: block;
+    position: relative;
+    cursor: zoom-in;
+  }
+  
+  &__img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    
+    &:hover {
+      opacity: 1;
+    }
+  }
+  
+  &__btn {
+    background: $gray-100;
+    border: none;
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    cursor: pointer;
+    color: $gray-700;
+    
+    &:hover {
+      background: $white;
+    }
+  }
+  
+  &__creator {
+    position: absolute;
+    bottom: 2rem;
+    left: 2rem;
+    color: $gray-100;
   }
 }
