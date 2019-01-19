@@ -12,17 +12,12 @@ class Navbar extends Component {
             <nav className='navbar' >
               <ul className='navbar__links'>
                 <li className='navbar__item'>
-                  <NavLink to='/'>
-                    Home
-                  </NavLink>
-                </li>
-                <li className='navbar__item'>
-                  <NavLink to='/upload'>
+                  <NavLink to='/upload' className='navbar__link'>
                     Upload
                   </NavLink>
                 </li>
                 <li className='navbar__item'>
-                  <NavLink to='/dashboard'>
+                  <NavLink to='/dashboard' className='navbar__link'>
                     Dashboard
                   </NavLink>
                 </li>
@@ -30,7 +25,7 @@ class Navbar extends Component {
                 {isLoggedIn ? (
                   <Fragment>
                     <li className='navbar__item'>
-                      <NavLink to='/user'>
+                      <NavLink to='/user' className='navbar__link'>
                         User Profile
                       </NavLink>
                     </li>
@@ -38,12 +33,12 @@ class Navbar extends Component {
                 ) : (
                   <Fragment>
                     <li className='navbar__item'>
-                      <NavLink to='/login'>
+                      <NavLink to='/login' className='navbar__link'>
                         Login
                       </NavLink>
                     </li>
                     <li className='navbar__item'>
-                      <NavLink to='/signup'>
+                      <NavLink to='/signup' className='btn navbar__btn--primary'>
                         Signup
                       </NavLink>
                     </li>

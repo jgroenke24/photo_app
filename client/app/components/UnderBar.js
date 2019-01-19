@@ -8,10 +8,10 @@ const UnderBar = (props) => (
       <Fragment>
         {isLoggedIn ? null : (
           <div className='authbar'>
-            <Link className='authbar__btn' to='/login'>
+            <Link className='btn authbar__btn' to='/login'>
               Login
             </Link>
-            <Link className='authbar__btn authbar__btn--primary' to='/signup'>
+            <Link className='btn authbar__btn authbar__btn--primary' to='/signup'>
               Signup
             </Link>
           </div>
