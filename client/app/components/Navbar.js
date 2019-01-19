@@ -12,7 +12,13 @@ class Navbar extends Component {
             <nav className='navbar' >
               <ul className='navbar__links'>
                 <li className='navbar__item'>
-                  <NavLink to='/upload' className='navbar__link'>
+                  <NavLink
+                    to={{
+                      pathname: '/upload',
+                      state: { modal: true },
+                    }}
+                    className='navbar__link'
+                  >
                     Upload
                   </NavLink>
                 </li>
@@ -33,12 +39,24 @@ class Navbar extends Component {
                 ) : (
                   <Fragment>
                     <li className='navbar__item'>
-                      <NavLink to='/login' className='navbar__link'>
+                      <NavLink
+                        to={{
+                          pathname: '/login',
+                          state: { modal: true },
+                        }}
+                        className='navbar__link'
+                      >
                         Login
                       </NavLink>
                     </li>
                     <li className='navbar__item'>
-                      <NavLink to='/signup' className='btn navbar__btn--primary'>
+                      <NavLink
+                        to={{
+                          pathname: '/signup',
+                          state: { modal: true },
+                        }}
+                        className='btn navbar__btn--primary'
+                      >
                         Signup
                       </NavLink>
                     </li>
