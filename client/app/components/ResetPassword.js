@@ -3,26 +3,17 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 class ResetPassword extends Component {
-  constructor(props) {
-    super(props);
-    
-    this.state = {
-      loading: true,
-      email: '',
-      password: '',
-      passwordCheck: '',
-      errors: [],
-      passwordIsValid: false,
-      passwordCheckIsValid: false,
-      resetError: false,
-      success: false,
-    };
-    
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleBlur = this.handleBlur.bind(this);
-    this.handleFocus = this.handleFocus.bind(this);
-  }
+  state = {
+    loading: true,
+    username: '',
+    password: '',
+    passwordCheck: '',
+    errors: [],
+    passwordIsValid: false,
+    passwordCheckIsValid: false,
+    resetError: false,
+    success: false,
+  };
   
   showValidationError(element, message) {
     this.setState((prevState) => ({
@@ -53,7 +44,7 @@ class ResetPassword extends Component {
       */
       const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
       if(!re.test(password)) {
-        this.showValidationError('password', 'Password must be at least 8 characters long and include at least one uppercase, lowercase, number and symbol.');
+        this.showValidationError('password', 'Min 8 char & 1 of each: uppercase, lowercase, number, symbol');
         return;
       }
     } else if (element === 'passwordCheck') {
@@ -77,15 +68,11 @@ class ResetPassword extends Component {
     });
   }
   
-  handleBlur(event) {
-    this.inputIsValid(event.target.id);
-  }
+  handleBlur = (event) => this.inputIsValid(event.target.id);
   
-  handleFocus(event) {
-    this.clearValidationError(event.target.id);
-  }
+  handleFocus = (event) => this.clearValidationError(event.target.id);
   
-  handleChange(event) {
+  handleChange = (event) => {
     const { id, value } = event.target;
     this.setState(() => {
       return {
@@ -101,7 +88,7 @@ class ResetPassword extends Component {
         
       this.setState(() => {
         return {
-          email: response.data.user,
+          username: response.data.user,
           loading: false,
         };
       });
@@ -115,7 +102,7 @@ class ResetPassword extends Component {
     }
   }
   
-  async handleSubmit(event) {
+  handleSubmit = async (event) => {
     const { password, passwordCheck } = this.state;
     try {
       await axios.post(
@@ -133,7 +120,7 @@ class ResetPassword extends Component {
     } catch (error) {
       
       // If the err response comes from the form validator on the server
-      if (error.response.status === 400) {
+      if (error.response.data.errors) {
         const { errors } = error.response.data;
         this.setState(() => {
           return {
@@ -154,7 +141,7 @@ class ResetPassword extends Component {
   
   render() {
     
-    const { loading, success, errors, email, password, passwordCheck, passwordIsValid, passwordCheckIsValid, resetError } = this.state;
+    const { loading, success, errors, username, password, passwordCheck, passwordIsValid, passwordCheckIsValid, resetError } = this.state;
     let passwordError = '';
     let passwordCheckError = '';
     
@@ -170,75 +157,83 @@ class ResetPassword extends Component {
     
     if (loading) {
       return (
-        <section className='container'>
-          <div>
-            <p>Loading...</p>
-          </div>
+        <section className='form'>
+          <Link to='/' className='logo form__logo'>
+            PicShareApp
+          </Link>
+          <p className='form__message'>Loading...</p>
         </section>
       );
     }
     
     if (resetError) {
       return (
-        <section className='container'>
-          <div>
-            <p>There was a problem resetting your password. Please send another reset link</p>
-            <Link to='/'>
-              Home
-            </Link>
-            <Link to='/forgotpassword'>
-              Forgot Password
-            </Link>
-          </div>
+        <section className='form'>
+          <Link to='/' className='logo form__logo'>
+            PicShareApp
+          </Link>
+          <p className='form__message'>There was a problem resetting your password. Please send another reset link</p>
+          <Link to='/' className='form_link'>
+            Home
+          </Link>
+          <Link to='/forgotpassword' className='form_link'>
+            Forgot Password
+          </Link>
         </section>
       );
     }
     
     if (success) {
       return (
-        <section className='container'>
-          <div>
-            <p>Your password was successfully reset. Try logging in again.</p>
-            <Link to='/login'>
-              Login
-            </Link>
-          </div>
+        <section className='form'>
+          <Link to='/' className='logo form__logo'>
+            PicShareApp
+          </Link>
+          <p className='form__message'>Your password was successfully reset. Try logging in again.</p>
+          <Link to='/login' className='form_link'>
+            Login
+          </Link>
         </section>
       );
     }
     
     return (
-      <section className='container'>
+      <section className='form'>
       
-        <h1 className='text-center'>Reset Password for {email}</h1>
+        <Link to='/' className='logo form__logo'>
+            PicShareApp
+        </Link>
+      
+        <h1 className='form__header'>Reset Password for {username}</h1>
         
-        <div className='form-group'>
-          <label htmlFor='password'>Password:</label>
+        <div className='form__group'>
+          <label htmlFor='password' className='form__label'>Password</label>
           <input 
             id='password' 
             name='password' 
             type='password' 
-            className='form-control' 
+            className='form__input'
             value={password}
             onFocus={this.handleFocus}
             onChange={this.handleChange}
             onBlur={this.handleBlur}
             aria-describedby='passwordHelpBlock'
+            autoFocus={true}
           />
           <small
             id='passwordHelpBlock'
-            className='form-text text-danger'
+            className='form__text form__text--danger'
           >
             {passwordError}
           </small>
         </div>
-        <div className='form-group'>
-          <label htmlFor='passwordCheck'>Verify Password:</label>
+        <div className='form__group'>
+          <label htmlFor='passwordCheck' className='form__label'>Verify Password</label>
           <input 
-            id='passwordCheck' 
-            name='passwordCheck' 
-            type='password' 
-            className='form-control' 
+            id='passwordCheck'
+            name='passwordCheck'
+            type='password'
+            className='form__input'
             value={passwordCheck}
             onFocus={this.handleFocus}
             onChange={this.handleChange}
@@ -247,21 +242,21 @@ class ResetPassword extends Component {
           />
           <small
             id='passwordCheckHelpBlock'
-            className='form-text text-danger'
+            className='form__text form__text--danger'
           >
             {passwordCheckError}
           </small>
         </div>
         <button 
           type='submit' 
-          className='btn btn-primary'
+          className='btn form__btn'
           disabled={!passwordIsValid || !passwordCheckIsValid}
           onClick={this.handleSubmit}
         >
           Reset Password
         </button>
-        <Link to='/'>
-          Home
+        <Link to='/' className='form__link'>
+          Go to Homepage
         </Link>
       </section>
     );

@@ -77,8 +77,8 @@ class ForgotPassword extends Component {
     } catch (error) {
 
       // If the err response comes from the form validator on the server
-      if (error.response.status === 400) {
-        const { validatorErrors } = error.response.data;
+      if (error.response.data.errors) {
+        const { errors: validatorErrors } = error.response.data;
         this.setState(() => {
           return {
             formError: validatorErrors[0].message,
@@ -97,7 +97,7 @@ class ForgotPassword extends Component {
         // The error comes from nodemailer or other
         this.setState(() => {
           return {
-            responseError: error.response.data.error,
+            responseError: 'Something went wrong. Please try again.',
           };
         });
       }

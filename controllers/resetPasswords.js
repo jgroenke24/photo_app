@@ -17,7 +17,6 @@ const ResetPassword = {
       const findUserQuery = 'SELECT * FROM users WHERE email = $1';
       const { rows: dbUserRows } = await db.query(findUserQuery, [ email ]);
       const user = dbUserRows[0];
-      console.log('user that was found', user);
       
       // If nothing comes back from the database, send 404 not found
       if (!user) {
@@ -26,11 +25,10 @@ const ResetPassword = {
       
       // Create a reset password token
       const token = crypto.randomBytes(20).toString('hex');
-      console.log('token was created', token);
-      
+
       // Update user info in database with reset token and reset token expiration (1hr from creation)
       const updateUserQuery = `UPDATE users
-        SET reset_token = $1, token_expiration = $2
+        SET reset_token = $1, reset_expiration = $2
         WHERE email = $3
         returning *`;
       const values = [
@@ -38,8 +36,8 @@ const ResetPassword = {
         Date.now() + 3600000,
         email
       ];
+
       const { rows: dbUpdatedUserRows } = await db.query(updateUserQuery, values);
-      console.log('updated user', dbUpdatedUserRows);
       
       // Set up email to send
       const transporter = nodemailer.createTransport({
@@ -77,7 +75,7 @@ const ResetPassword = {
     try {
       
       // Find user with token from url parameter and only if the token has not expired
-      const findUserWithTokenQuery = 'SELECT * FROM users WHERE reset_token = $1 AND token_expiration > $2';
+      const findUserWithTokenQuery = 'SELECT * FROM users WHERE reset_token = $1 AND reset_expiration > $2';
       const { rows: dbUserRows } = await db.query(findUserWithTokenQuery, [ token, Date.now() ]);
       const user = dbUserRows[0];
       
@@ -88,7 +86,7 @@ const ResetPassword = {
       
       // The token was valid, if method is GET then return. If not, use as middleware and call the next handler
       if (req.method === 'GET') {
-        return res.status(200).json({ user: user.email, message: 'Password reset link was valid!' });
+        return res.status(200).json({ user: user.username, message: 'Password reset link was valid!' });
       }
       res.locals.user = user;
       next();
@@ -109,7 +107,7 @@ const ResetPassword = {
       
       // Update the user in the database with the new password
       const updateUserPasswordQuery = `UPDATE users
-        SET password = $1, reset_token = $2, token_expiration = $3
+        SET password = $1, reset_token = $2, reset_expiration = $3
         WHERE email = $4
         returning *`;
       const values = [
@@ -120,7 +118,6 @@ const ResetPassword = {
       ];
       const { rows: dbUpdatedUser } = await db.query(updateUserPasswordQuery, values);
       const updatedUser = dbUpdatedUser[0];
-      console.log(updatedUser);
       
       // Send confirmation email with nodemailer
       const transporter = nodemailer.createTransport({
