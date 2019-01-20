@@ -94,7 +94,6 @@ class Login extends Component {
           withCredentials: true,
         }
       );
-      console.log(response.data.message);
       this.props.history.push('/');
     } catch (error) {
 

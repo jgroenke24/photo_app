@@ -6,6 +6,7 @@ import db from '../db';
 
 const ROUNDS = 12;
 const findOneQueryText = 'SELECT * FROM users WHERE email = $1';
+const findOneQueryText2 = 'SELECT * FROM users WHERE email = $1 OR username = $2';
 const createUserQueryText = 'INSERT INTO users(email, username, password) VALUES($1, $2, $3) returning *';
 
 passport.use(
@@ -20,11 +21,14 @@ passport.use(
     async (req, username, password, done) => {
       try {
         
-        // Search database for a user with the username (email) provided
-        const { rows: dbUserRows } = await db.query(findOneQueryText, [ username ]);
+        // Search database for a user with the username (email) or username provided
+        const { rows: dbUserRows } = await db.query(findOneQueryText2, [ username, req.body.username ]);
         const user = dbUserRows[0];
-        if (user) {
+        if (user.email === username) {
           return done(null, false, { message: 'That email has been used to register an account already!' });
+        }
+        if (user.username === req.body.username) {
+          return done(null, false, { message: 'That username is being used already!' });
         }
         
         // Use bcrypt to hash the password for the new user

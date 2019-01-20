@@ -126,8 +126,7 @@ class Signup extends Component {
           withCredentials: true,
         }
       );
-      console.log(response);
-      alert('you are signed up!');
+      this.props.history.push('/');
     } catch (error) {
       
       // If the err response comes from the form validator on the server
@@ -280,4 +279,4 @@ class Signup extends Component {
   }
 }
 
-export default Signup;
+export default withRouter(Signup);
