@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter, Link } from 'react-router-dom';
 import axios from 'axios';
 
 // Add a response interceptor
@@ -78,7 +79,7 @@ class Signup extends Component {
       */
       const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
       if(!re.test(password)) {
-        this.showValidationError('password', 'Password must be at least 8 characters long and include at least one uppercase, lowercase, number and symbol.');
+        this.showValidationError('password', 'Min 8 char & 1 of each: uppercase, lowercase, number, symbol');
         return;
       }
     } else if (element === 'passwordCheck') {
@@ -173,22 +174,26 @@ class Signup extends Component {
     });
     
     return (
-      <section className='container'>
-        <h1 className='text-center'>Sign Up!</h1>
+      <section className='form'>
+      
+        <h1 className='form__header'>Signup to PicShareApp</h1>
+        <Link to='/login' className='form__link form__link--center'>
+          Already have an account? Login
+        </Link>
         
         {signupError &&
-          <div className='alert alert-danger' role='alert'>
+          <div className='form__alert form__alert--danger' role='alert'>
             {signupError}
           </div>
         }
         
-        <div className='form-group'>
-          <label htmlFor='email'>Email:</label>
+        <div className='form__group'>
+          <label htmlFor='email' className='form__label'>Email</label>
           <input 
             id='email' 
             name='email' 
             type='email' 
-            className='form-control' 
+            className='form__input'
             value={email}
             onFocus={this.handleFocus}
             onChange={this.handleChange}
@@ -197,18 +202,18 @@ class Signup extends Component {
           />
           <small
             id='emailHelpBlock'
-            className='form-text text-danger'
+            className='form__text form__text--danger'
           >
             {emailError}
           </small>
         </div>
-        <div className='form-group'>
-          <label htmlFor='username'>Username:</label>
+        <div className='form__group'>
+          <label htmlFor='username' className='form__label'>Username</label>
           <input 
             id='username' 
             name='username' 
             type='text' 
-            className='form-control' 
+            className='form__input'
             value={username}
             onFocus={this.handleFocus}
             onChange={this.handleChange}
@@ -217,18 +222,18 @@ class Signup extends Component {
           />
           <small
             id='usernameHelpBlock'
-            className='form-text text-danger'
+            className='form__text form__text--danger'
           >
             {usernameError}
           </small>
         </div>
-        <div className='form-group'>
-          <label htmlFor='password'>Password:</label>
+        <div className='form__group'>
+          <label htmlFor='password' className='form__label'>Password</label>
           <input 
             id='password' 
             name='password' 
             type='password' 
-            className='form-control' 
+            className='form__input'
             value={password}
             onFocus={this.handleFocus}
             onChange={this.handleChange}
@@ -237,18 +242,18 @@ class Signup extends Component {
           />
           <small
             id='passwordHelpBlock'
-            className='form-text text-danger'
+            className='form__text form__text--danger'
           >
             {passwordError}
           </small>
         </div>
-        <div className='form-group'>
-          <label htmlFor='passwordCheck'>Verify Password:</label>
+        <div className='form__group'>
+          <label htmlFor='passwordCheck' className='form_label'>Verify Password</label>
           <input 
             id='passwordCheck' 
             name='passwordCheck' 
             type='password' 
-            className='form-control' 
+            className='form__input'
             value={passwordCheck}
             onFocus={this.handleFocus}
             onChange={this.handleChange}
@@ -257,14 +262,14 @@ class Signup extends Component {
           />
           <small
             id='passwordCheckHelpBlock'
-            className='form-text text-danger'
+            className='form__text form__text--danger'
           >
             {passwordCheckError}
           </small>
         </div>
         <button 
           type='submit' 
-          className='btn btn-primary'
+          className='btn form__btn'
           disabled={!emailIsValid || !usernameIsValid || !passwordIsValid || !passwordCheckIsValid}
           onClick={this.handleSubmit}
         >

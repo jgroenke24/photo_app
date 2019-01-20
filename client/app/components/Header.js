@@ -11,7 +11,7 @@ const Header = (props) => (
         return matches
         ? (
             <Fragment>
-              <Link to='/'>
+              <Link to='/' className='logo'>
                 PicShareApp
               </Link>
                 {props.children}

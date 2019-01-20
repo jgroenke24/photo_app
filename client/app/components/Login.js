@@ -134,42 +134,48 @@ class Login extends Component {
     });
     
     return (
-      <section className='container'>
-        <h1 className='text-center'>Login</h1>
+      <section className='form'>
+      
+        <Link to='/' className='logo form__logo'>
+          PicShareApp
+        </Link>
+        
+        <h1 className='form__header'>Login</h1>
         
         {loginError &&
-          <div className='alert alert-danger' role='alert'>
+          <div className='form__alert form__alert--danger' role='alert'>
             {loginError}
           </div>
         }
         
-        <div className='form-group'>
-          <label htmlFor='email'>Email:</label>
+        <div className='form__group'>
+          <label className='form__label' htmlFor='email'>Email</label>
           <input 
             id='email' 
             name='email' 
             type='email' 
-            className='form-control' 
+            className='form__input'
             value={email}
             onFocus={this.handleFocus}
             onChange={this.handleChange}
             onBlur={this.handleBlur}
             aria-describedby='emailHelpBlock'
+            autofocus='true'
           />
           <small
             id='emailHelpBlock'
-            className='form-text text-danger'
+            className='form__text form__text--danger'
           >
             {emailError}
           </small>
         </div>
-        <div className='form-group'>
-          <label htmlFor='password'>Password:</label>
+        <div className='form__group'>
+          <label className='form__label' htmlFor='password'>Password</label>
           <input 
             id='password' 
             name='password' 
             type='password' 
-            className='form-control' 
+            className='form__input'
             value={password}
             onFocus={this.handleFocus}
             onChange={this.handleChange}
@@ -178,22 +184,25 @@ class Login extends Component {
           />
           <small
             id='passwordHelpBlock'
-            className='form-text text-danger'
+            className='form__text form__text--danger'
           >
             {passwordError}
           </small>
         </div>
-        <Link to='/forgotpassword'>
-          <p>Forgot Password?</p>
-        </Link>
         <button 
           type='submit' 
-          className='btn btn-primary'
+          className='btn form__btn'
           disabled={!emailIsValid || !passwordIsValid}
           onClick={this.handleSubmit}
         >
           Login
         </button>
+        <Link to='/forgotpassword' className='form__link'>
+          Forgot Password?
+        </Link>
+        <Link to='/signup' className='form__link'>
+          Don't have an account? Sign up!
+        </Link>
       </section>
     );
   }

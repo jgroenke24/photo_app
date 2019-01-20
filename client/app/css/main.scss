@@ -48,6 +48,12 @@ body {
   color: $black;
 }
 
+.logo {
+  color: $black;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
 .btn {
   padding: 0 0.75rem;
   font-size: 1rem;
@@ -301,5 +307,109 @@ body {
     bottom: 2rem;
     left: 2rem;
     color: $gray-200;
+  }
+}
+
+.form {
+  width: 50%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 60px;
+  
+  &__logo {
+    font-size: 2rem;
+  }
+  
+  &__header {
+    color: $black;
+    margin: 0.5rem 0;
+    font-size: 2rem;
+  }
+  
+  &__subheader {
+    margin: 0 0.25rem;
+  }
+  
+  &__alert {
+    width: 75%;
+    margin: 1rem auto;
+    border-radius: 0.25rem;
+    border: 1px solid $gray-400;
+    color: $gray-900;
+    padding: 0.5rem;
+    text-align: center;
+    
+    &--danger {
+      border-color: $red;
+      color: $red;
+      background-color: rgba($red, 0.2);
+    }
+  }
+  
+  &__group {
+    display: flex;
+    flex-direction: column;
+    width: 75%;
+    margin: 0 auto;
+    margin-bottom: 0.5rem;
+  }
+  
+  &__label {
+    color: $black;
+    margin-bottom: 0.5rem;
+  }
+  
+  &__input {
+    background: inherit;
+    border: 1px solid $gray-400;
+    border-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+    color: $gray-900;
+    transition: border 0.2s ease;
+    margin-bottom: 0.25rem;
+    
+    &:focus {
+      border: 1px solid $gray-900;
+    }
+  }
+  
+  &__text {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    height: 1.125rem;
+    
+    &--danger {
+      color: $red;
+    }
+  }
+  
+  &__link {
+    width: 75%;
+    margin: 0 auto;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    
+    &--center {
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+    }
+  }
+  
+  &__btn {
+    width: 75%;
+    height: 2.25rem;
+    background: $black;
+    border: none;
+    color: $white;
+    cursor: pointer;
+    
+    &:disabled {
+      background: $gray-600;
+      color: $gray-100;
+      cursor: default;
+    }
   }
 }
