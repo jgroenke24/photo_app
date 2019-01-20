@@ -1,67 +1,63 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 class ForgotPassword extends Component {
-  constructor(props) {
-    super(props);
-    
-    this.state = {
-      email: '',
-      emailIsValid: false,
-      formError: null,
-      showEmailError: false,
-      responseError: null,
-      showSuccess: false,
-    };
-    
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+  state = {
+    email: '',
+    emailIsValid: false,
+    formError: null,
+    showEmailError: false,
+    responseError: null,
+    showSuccess: false,
+  };
   
-  showValidationError(error) {
-    this.setState(() => {
-      return {
-        formError: error,
-      };
-    });
-  }
-  
-  inputIsValid(element) {
+  inputIsValid() {
     const { email } = this.state;
     
-    if (element === 'email') {
-      
-      /*
-        Check if the email is an accepted form of email.
-        from https://emailregex.com/
-      */
-      const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      if (!re.test(email)) {
-        this.showValidationError('You must enter a proper email');
-        return;
-      }
+    /*
+      Check if the email is an accepted form of email.
+      from https://emailregex.com/
+    */
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!re.test(email)) {
+      this.setState(() => {
+        return {
+          formError: 'You must enter a proper email',
+        };
+      });
+      return;
+    } else {
+      this.setState(() => {
+        return {
+          formError: null,
+          emailIsValid: true,
+        };
+      });
     }
-    
-    this.setState(() => {
-      return {
-        error: null,
-        [element + 'IsValid']: true,
-      };
-    });
   }
   
-  handleChange(event) {
+  handleChange = (event) => {
     const { id, value } = event.target;
     this.setState(() => {
       return {
         [id]: value,
       };
     });
-    this.inputIsValid(id);
+    this.inputIsValid();
   }
   
-  async handleSubmit(event) {
+  handleFocus = (event) => {
+    this.setState(() => {
+      return {
+        formError: null,
+      };
+    });
+  }
+  
+  handleBlur = (event) => this.inputIsValid();
+  
+  handleSubmit = async (event) => {
     
     // Send reset password email
     const { email } = this.state;
@@ -109,39 +105,47 @@ class ForgotPassword extends Component {
   }
   
   render() {
-    const { email, error, emailIsValid, showEmailError, showSuccess, responseError } = this.state;
+    const { email, formError, emailIsValid, showEmailError, showSuccess, responseError } = this.state;
     
     return (
-      <section className='container'>
-        <h1 className='text-center'>Forgot Password?</h1>
+      <section className='form'>
+        
+        <Link to='/' className='logo form__logo'>
+          PicShareApp
+        </Link>
+          
+        <h1 className='form__header'>Forgot Password?</h1>
         
         {responseError && (
-          <div className='alert alert-danger' role='alert'>
+          <div className='form__alert form__alert--danger' role='alert'>
             {responseError}
           </div>
         )}
         
-        <div className='form-group'>
-          <label htmlFor='email'>Email:</label>
+        <div className='form__group'>
+          <label htmlFor='email' className='form__label'>Email:</label>
           <input 
             id='email' 
             name='email' 
             type='email' 
-            className='form-control' 
+            className='form__input'
             value={email}
+            onFocus={this.handleFocus}
             onChange={this.handleChange}
+            onBlur={this.handleBlur}
             aria-describedby='emailHelpBlock'
+            autoFocus={true}
           />
           <small
             id='emailHelpBlock'
-            className='form-text text-danger'
+            className='form__text form__text--danger'
           >
-            {error}
+            {formError}
           </small>
         </div>
         <button 
           type='submit' 
-          className='btn btn-primary'
+          className='btn form__btn'
           onClick={this.handleSubmit}
           disabled={!emailIsValid}
         >
@@ -149,25 +153,20 @@ class ForgotPassword extends Component {
         </button>
         
         {showEmailError && (
-          <div>
-            <p>
-              Email address not found.  Please try again or signup a new account.
-            </p>
-            <Link to='/signup'>
-              Signup
-            </Link>
-          </div>
+          <p className='form__message'>
+            Email address not found.  Please try again or <Link to='/signup'>signup</Link> a new account.
+          </p>
         )}
         
         {showSuccess && (
-          <div>
-            <p>
+          <Fragment>
+            <p className='form__message'>
               Password reset email sent.  Check your inbox!
             </p>
             <Link to='/'>
-              Home
+              Go to Homepage
             </Link>
-          </div>
+          </Fragment>
         )}
       </section>
     );

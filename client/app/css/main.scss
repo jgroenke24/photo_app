@@ -48,6 +48,15 @@ body {
   color: $black;
 }
 
+a {
+  transition: all 0.2s ease;
+  color: $gray-400;
+  
+  &:hover {
+    color: $gray-900;
+  }
+}
+
 .logo {
   color: $black;
   font-size: 1.5rem;
@@ -118,15 +127,6 @@ body {
     
     &:last-of-type {
       margin-right: 0;
-    }
-  }
-  
-  &__link {
-    color: $gray-400;
-    transition: all 0.2s ease;
-    
-    &:hover {
-      color: $gray-900;
     }
   }
   
@@ -411,5 +411,11 @@ body {
       color: $gray-100;
       cursor: default;
     }
+  }
+  
+  &__message {
+    color: $black;
+    margin: 1rem;
+    margin-bottom: 0.5rem;
   }
 }

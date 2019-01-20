@@ -159,7 +159,7 @@ class Login extends Component {
             onChange={this.handleChange}
             onBlur={this.handleBlur}
             aria-describedby='emailHelpBlock'
-            autofocus='true'
+            autoFocus={true}
           />
           <small
             id='emailHelpBlock'

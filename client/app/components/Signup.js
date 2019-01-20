@@ -198,6 +198,7 @@ class Signup extends Component {
             onChange={this.handleChange}
             onBlur={this.handleBlur}
             aria-describedby='emailHelpBlock'
+            autoFocus={true}
           />
           <small
             id='emailHelpBlock'
