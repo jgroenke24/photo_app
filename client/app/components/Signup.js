@@ -175,7 +175,11 @@ class Signup extends Component {
     return (
       <section className='form'>
       
-        <h1 className='form__header'>Signup to PicShareApp</h1>
+        <Link to='/' className='logo form__logo'>
+          PicShareApp
+        </Link>
+      
+        <h1 className='form__header'>Signup</h1>
         <Link to='/login' className='form__link form__link--center'>
           Already have an account? Login
         </Link>
@@ -248,7 +252,7 @@ class Signup extends Component {
           </small>
         </div>
         <div className='form__group'>
-          <label htmlFor='passwordCheck' className='form_label'>Verify Password</label>
+          <label htmlFor='passwordCheck' className='form__label'>Verify Password</label>
           <input 
             id='passwordCheck' 
             name='passwordCheck' 

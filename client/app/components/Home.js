@@ -11,6 +11,7 @@ import { AppContext } from './AppContext';
 
 class Home extends Component {
   render() {
+    const { match } = this.props;
     return (
       <Fragment>
         <Header>
@@ -18,15 +19,21 @@ class Home extends Component {
         </Header>
         
         <main>
-          <Hero />
+          
           <Switch>
             <Route
               exact
-              path={this.props.match.path}
-              render={() => <Photos/>}
+              path={match.path}
+              render={() => (
+                <Fragment>
+                  <Hero />
+                  <Photos/>
+                </Fragment>
+              )}
             />
-            <Route path='/photos/:photoId' component={Photo} />
+            <Route path={`${match.path}photos/:photoId`} component={Photo} />
             <Route path='/dashboard' component={Dashboard} />
+            <Route render={() => <div>NOT FOUND</div>} />
           </Switch>
         </main>
       </Fragment>

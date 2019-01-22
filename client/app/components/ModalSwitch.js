@@ -7,6 +7,7 @@ import Signup from './Signup';
 import ForgotPassword from './ForgotPassword';
 import ResetPassword from './ResetPassword';
 import Modal from './Modal';
+import Photo from './Photo';
 
 class ModalSwitch extends Component {
   // We can pass a location to <Switch/> that will tell it to
@@ -47,16 +48,17 @@ class ModalSwitch extends Component {
     return (
       <Fragment>
         <Switch location={isModal ? this.previousLocation : location}>
-          <Route exact path='/' component={Home} />
           <Route path='/upload' component={Upload} />
           <Route path='/signup' component={Signup} />
           <Route path='/login' component={Login} />
           <Route path='/forgotpassword' component={ForgotPassword} />
           <Route path='/resetpassword/:token' component={ResetPassword} />
+          <Route path='/' component={Home} />
         </Switch>
         {isModal ? <Route path='/upload' render={(props) => <Modal {...props} modalIsOpen={true} children={<Upload />} />} /> : null}
         {isModal ? <Route path='/signup' render={(props) => <Modal {...props} modalIsOpen={true} children={<Signup />} />} /> : null}
         {isModal ? <Route path='/login' render={(props) => <Modal {...props} modalIsOpen={true} children={<Login />} />} /> : null}
+        {isModal ? <Route path='/photos/:photoId' render={(props) => <Modal {...props} modalIsOpen={true} children={<Photo />} />} /> : null}
       </Fragment>
     );
   }

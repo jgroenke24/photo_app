@@ -6,14 +6,20 @@ import axios from 'axios';
 
 const MultipleColumnPhotos = ({ photos }) => (
   <Fragment>
-    {photos.map(photo => {
+    {photos.map(({ id, url, tags, userid }) => {
       return (
-        <div key={photo.id} className='photo'>
-          <Link to={`/photos/${photo.id}`} className='photo__link'>
-            <img src={photo.url} alt={photo.tags.replace(/,/g, ' ')} className='photo__img' />
+        <div key={id} className='photo'>
+          <Link
+            to={{
+              pathname: `/photos/${id}`,
+              state: { modal: true },
+            }}
+            className='photo__link'
+          >
+            <img src={url} alt={tags.replace(/,/g, ' ')} className='photo__img' />
             <div className='photo__overlay'>
               <button className='btn photo__btn'>Like</button>
-              <h2 className='photo__creator'>{photo.userid}</h2>
+              <h2 className='photo__creator'>{userid}</h2>
             </div>
           </Link>
         </div>
@@ -28,14 +34,14 @@ MultipleColumnPhotos.propTypes = {
 
 const OneColumnPhotos = ({ photos }) => (
   <Fragment>
-    {photos.map(photo => {
+    {photos.map(({ id, userid, url, tags }) => {
       return (
-        <div key={photo.id} className='photocard'>
+        <div key={id} className='photocard'>
           <div className='photocard__creator'>
-            <h2>{photo.userid}</h2>
+            <h2>{userid}</h2>
           </div>
-          <Link to={`/photos/${photo.id}`} className='photocard__link'>
-            <img src={photo.url} alt={photo.tags.replace(/,/g, ' ')} className='photocard__img' />
+          <Link to={`/photos/${id}`} className='photocard__link'>
+            <img src={url} alt={tags.replace(/,/g, ' ')} className='photocard__img' />
           </Link>
           <div className='photocard__likes'>
             <p>likes: 0</p>
