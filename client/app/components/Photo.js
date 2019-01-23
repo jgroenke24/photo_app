@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import axios from 'axios';
 
@@ -44,7 +44,7 @@ class Photo extends Component {
   
   render() {
     const { photo, showError, showSubmissionError } = this.state;
-    
+
     if (showError) {
       return (
         <section className='container'>
@@ -57,30 +57,27 @@ class Photo extends Component {
     }
     
     return (
-      <section className='container'>
+      <section className='photo'>
         {showSubmissionError &&
           <div className='alert alert-danger' role='alert'>
             Something went wrong with your request. Please try again.
           </div>
         }
         
-        <div className='row'>
-          {!photo && <p>Loading photo...</p>}
-          
-          {photo &&
-            <div className='col-6'>
-              <div className='card'>
-                <img className='card-img-top' src={photo.url} alt={photo.filename}/>
-                <div className='card-body'>
-                  <h5 className='card-title'>
-                    {photo.filename}
-                  </h5>
-                  <button className='btn btn-danger' onClick={this.handleDelete}>Delete</button>
-                </div>
-              </div>
+        {!photo && <p>Loading photo...</p>}
+        
+        {photo &&
+          <Fragment>
+            <div className='photo__top'>
+              <h2 className='photo__user'>{photo.userid}</h2>
+              <button className='btn photo__btn'>Like</button>
             </div>
-          }
-        </div>
+            <img className='photo__img' src={photo.url} alt={photo.tags.replace(/,/g, ' ')} />
+            <div className='photo__bottom'>
+              <button className='btn photo__btn--danger' onClick={this.handleDelete}>Delete</button>
+            </div>
+          </Fragment>
+        }
       </section>
     );
   }

@@ -8,18 +8,18 @@ const MultipleColumnPhotos = ({ photos }) => (
   <Fragment>
     {photos.map(({ id, url, tags, userid }) => {
       return (
-        <div key={id} className='photo'>
+        <div key={id} className='photoitem'>
           <Link
             to={{
               pathname: `/photos/${id}`,
               state: { modal: true },
             }}
-            className='photo__link'
+            className='photoitem__link'
           >
-            <img src={url} alt={tags.replace(/,/g, ' ')} className='photo__img' />
-            <div className='photo__overlay'>
-              <button className='btn photo__btn'>Like</button>
-              <h2 className='photo__creator'>{userid}</h2>
+            <img src={url} alt={tags.replace(/,/g, ' ')} className='photoitem__img' />
+            <div className='photoitem__overlay'>
+              <button className='btn photoitem__btn'>Like</button>
+              <h2 className='photoitem__creator'>{userid}</h2>
             </div>
           </Link>
         </div>
