@@ -21,7 +21,7 @@ const Photos = {
           auto_tagging: 0.85,
         }
       );
-      const text = `INSERT INTO
+      const createPhotoQuery = `INSERT INTO
       photos(id, filename, url, created, width, height, tags, userid)
       VALUES($1, $2, $3, $4, $5, $6, $7, $8)
       returning *`;
@@ -35,7 +35,7 @@ const Photos = {
         result.tags.join(','),
         1
       ];
-      const { rows } = await db.query(text, values);
+      const { rows } = await db.query(createPhotoQuery, values);
       return res.status(200).json(rows[0]);
     } catch (error) {
       return res.status(400).send(error);
@@ -45,20 +45,42 @@ const Photos = {
   // Get all photos
   async getAll(req, res) {
     const findAllQuery = 'SELECT * FROM photos';
+    const findAllPhotosWithUserAndLikesQuery = `
+      SELECT photos.*, users.username, count(likes.photoid) as likes 
+      FROM photos 
+      FULL OUTER JOIN users on photos.userid = users.id 
+      FULL OUTER JOIN likes on photos.id = likes.photoid 
+      GROUP BY photos.id, users.username 
+      ORDER BY photos.created DESC
+    `;
     
     try {
-      const { rows } = await db.query(findAllQuery);
+      const { rows: photos } = await db.query(findAllPhotosWithUserAndLikesQuery);
       
       // A user is signed in (from jwt authentication)
       if (req.user) {
+        
+        // Find all the photos the signed in user has liked
+        const findPhotosUserLikedQuery = 'SELECT photoid FROM likes WHERE userid = $1';
+        const { rows: likedPhotos } = await db.query(findPhotosUserLikedQuery, [ req.user.id ]);
+        
+        // Create array of just photoids of photos signed in user has liked
+        const photosLikedByUser = likedPhotos.map(row => row.photoid);
+        
+        // Map over all of the photos and add a boolean property likedByUser if the photo id is found in the array above
+        const newPhotos = photos.map(photo => {
+          photo.likedByUser = photosLikedByUser.includes(photo.id);
+          return photo;
+        });
+        
         return res.status(200).json({
           user: req.user,
-          photos: rows,
+          photos: newPhotos,
         });
       }
       
       // User is not signed is so just return the photos
-      return res.status(200).json({ photos: rows });
+      return res.status(200).json({ photos });
     } catch (error) {
       return res.status(400).send(error);
     }

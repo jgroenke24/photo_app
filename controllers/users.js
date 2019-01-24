@@ -60,7 +60,11 @@ const Users = {
         
         // If a user is authenticated, pass user data in req.user
         if (user) {
-          req.user = user.username;
+          const { id, username } = user;
+          req.user =  {
+            id,
+            username,
+          };
         }
         
         next();

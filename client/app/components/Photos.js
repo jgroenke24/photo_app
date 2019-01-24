@@ -6,7 +6,7 @@ import axios from 'axios';
 
 const MultipleColumnPhotos = ({ photos }) => (
   <Fragment>
-    {photos.map(({ id, url, tags, userid }) => {
+    {photos.map(({ id, url, tags, username, likes }) => {
       return (
         <div key={id} className='photoitem'>
           <Link
@@ -18,8 +18,8 @@ const MultipleColumnPhotos = ({ photos }) => (
           >
             <img src={url} alt={tags.replace(/,/g, ' ')} className='photoitem__img' />
             <div className='photoitem__overlay'>
-              <button className='btn photoitem__btn'>Like</button>
-              <h2 className='photoitem__creator'>{userid}</h2>
+              <button className='btn photoitem__btn'>Likes: {likes}</button>
+              <h2 className='photoitem__creator'>{username}</h2>
             </div>
           </Link>
         </div>
@@ -34,17 +34,17 @@ MultipleColumnPhotos.propTypes = {
 
 const OneColumnPhotos = ({ photos }) => (
   <Fragment>
-    {photos.map(({ id, userid, url, tags }) => {
+    {photos.map(({ id, username, url, tags, likes }) => {
       return (
         <div key={id} className='photocard'>
           <div className='photocard__creator'>
-            <h2>{userid}</h2>
+            <h2>{username}</h2>
           </div>
           <Link to={`/photos/${id}`} className='photocard__link'>
             <img src={url} alt={tags.replace(/,/g, ' ')} className='photocard__img' />
           </Link>
           <div className='photocard__likes'>
-            <p>likes: 0</p>
+            <p>Likes: {likes}</p>
           </div>
         </div>
       );
@@ -75,7 +75,7 @@ class Photos extends Component {
         );
         
       const { photos } = response.data;
-      
+
       // Update state with returned array of photos
       this.setState(() => {
         return {

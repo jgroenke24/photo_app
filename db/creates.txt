@@ -25,4 +25,4 @@ PRIMARY KEY(photoid, userid)
 );
 
 Get all photos with user and likes data
-select photos.*, users.username, count(likes.photoid) from photos full outer join users on photos.userid = users.id full outer join likes on photos.id = likes.photoid group by photos.id, users.username;
+select photos.*, users.username, count(likes.photoid) as likes from photos full outer join users on photos.userid = users.id full outer join likes on photos.id = likes.photoid group by photos.id, users.username;
