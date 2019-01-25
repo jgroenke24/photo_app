@@ -16,13 +16,14 @@ ReactModal.defaultStyles = {
   content: {
     minHeight: '100%',
     padding: '1.5rem 4rem 6rem',
-    borderRadius: '0.25rem'
+    borderRadius: '0.25rem',
+    pointerEvents: 'none',
   }
 };
 
 const Modal = (props) => {
   const { modalIsOpen, children } = props;
-  console.log(ReactModal.defaultStyles);
+
   return (
     <ReactModal
       isOpen={modalIsOpen}

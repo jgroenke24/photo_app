@@ -314,6 +314,9 @@ a {
 }
 
 .form {
+  background-color: $white;
+  border-radius: 0.25rem;
+  padding-bottom: 4rem;
   width: 75%;
   margin: 0 auto;
   display: flex;
@@ -327,6 +330,7 @@ a {
   
   &__logo {
     font-size: 2rem;
+    margin-top: 2rem;
   }
   
   &__header {
