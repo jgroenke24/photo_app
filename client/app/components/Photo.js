@@ -10,21 +10,44 @@ class Photo extends Component {
   };
   
   async componentDidMount() {
-    try {
-      const response = await axios(`https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos/${this.props.match.params.photoId}`);
-      const photo = response.data;
-
+    
+    if (this.props.location.state) {
+      const { id, url, tags, username, likes } = this.props.location.state;
       this.setState(() => {
         return {
-          photo,
+          photo: {
+            id,
+            url,
+            tags,
+            username,
+            likes,
+          }
         };
       });
-    } catch (error) {
-      this.setState(() => {
-        return {
-          showError: true,
-        };
-      });
+    } else {
+    
+      try {
+        const response = await axios
+          .get(
+            `https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos/${this.props.match.params.photoId}`,
+            {
+              withCredentials: true,
+            }
+          );
+        const { photo } = response.data;
+        this.setState(() => {
+          return {
+            photo,
+          };
+        });
+      } catch (error) {
+        console.log(error.response);
+        this.setState(() => {
+          return {
+            showError: true,
+          };
+        });
+      }
     }
   }
   
@@ -69,8 +92,8 @@ class Photo extends Component {
         {photo &&
           <Fragment>
             <div className='photo__top'>
-              <h2 className='photo__user'>{photo.userid}</h2>
-              <button className='btn photo__btn'>Like</button>
+              <h2 className='photo__user'>{photo.username}</h2>
+              <button className='btn photo__btn'>Likes: {photo.likes}</button>
             </div>
             <img className='photo__img' src={photo.url} alt={photo.tags.replace(/,/g, ' ')} />
             <div className='photo__bottom'>

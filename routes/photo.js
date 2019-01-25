@@ -27,7 +27,7 @@ router.get('/', Users.jwt(), Photos.getAll);
 router.post('/', upload.single('image'), Photos.create);
 
 // Show route - show one photo
-router.get('/:id', Photos.getOne);
+router.get('/:id', Users.jwt(), Photos.getOne);
 
 // Update route - update one photo
 router.put('/:id', Photos.update);

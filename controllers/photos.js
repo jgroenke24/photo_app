@@ -44,9 +44,8 @@ const Photos = {
   
   // Get all photos
   async getAll(req, res) {
-    const findAllQuery = 'SELECT * FROM photos';
     const findAllPhotosWithUserAndLikesQuery = `
-      SELECT photos.*, users.username, count(likes.photoid) as likes 
+      SELECT photos.*, users.username, count(likes.photoid) AS likes
       FROM photos 
       FULL OUTER JOIN users on photos.userid = users.id 
       FULL OUTER JOIN likes on photos.id = likes.photoid 
@@ -88,17 +87,54 @@ const Photos = {
   
   // Get a photo
   async getOne(req, res) {
-    const text = 'SELECT * FROM photos WHERE id = $1';
+    const findOnePhotoWithUserAndLikesQuery = `
+      SELECT photos.*, users.username, count(likes.photoid) AS likes
+      FROM photos
+      FULL OUTER JOIN users on photos.userid = users.id
+      FULL OUTER JOIN likes on photos.id = likes.photoid
+      WHERE photos.id = $1
+      GROUP BY photos.id, users.username
+    `;
     
     try {
-      const { rows } = await db.query(text, [ req.params.id ]);
+      const { rows } = await db.query(findOnePhotoWithUserAndLikesQuery, [ req.params.id ]);
+      const photo = rows[0];
       
       // If nothing comes back from the database, send 404 not found
-      if (!rows[0]) {
+      if (!photo) {
         return res.status(404).send({ message: 'Photo not found' });
       }
+
+      // A user is signed in (from jwt authentication)
+      if (req.user) {
+        console.log('in req.user', req.user);
+        // Find if the user has liked the photo
+        const findUserAndPhotoInLikesQuery = `
+          SELECT *
+          FROM likes
+          WHERE userid = $1
+          AND photoid = $2
+        `;
+        const { rows: likedPhotos } = await db.query(findUserAndPhotoInLikesQuery, [ req.user.id, req.params.id ]);
+
+        if (!likedPhotos[0]) {
+          
+          // Nothing came back from the database so the user has not liked the photo
+          photo.likedByUser = false;
+        } else {
+          
+          // There was a match so the user has liked the photo
+          photo.likedByUser = true;
+        }
+        
+        return res.status(200).json({
+          photo,
+          user: req.user,
+        });
+      }
       
-      return res.status(200).json(rows[0]);
+      // User is not signed in so just return the photo data
+      return res.status(200).json({ photo });
     } catch (error) {
       return res.status(400).send(error);
     }

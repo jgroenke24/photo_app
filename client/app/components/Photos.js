@@ -12,7 +12,14 @@ const MultipleColumnPhotos = ({ photos }) => (
           <Link
             to={{
               pathname: `/photos/${id}`,
-              state: { modal: true },
+              state: {
+                id,
+                url,
+                tags,
+                username,
+                likes,
+                modal: true,
+              },
             }}
             className='photoitem__link'
           >
@@ -40,7 +47,19 @@ const OneColumnPhotos = ({ photos }) => (
           <div className='photocard__creator'>
             <h2>{username}</h2>
           </div>
-          <Link to={`/photos/${id}`} className='photocard__link'>
+          <Link
+            to={{
+              pathname: `/photos/${id}`,
+              state: {
+                id,
+                url,
+                tags,
+                username,
+                likes,
+              },
+            }}
+            className='photocard__link'
+          >
             <img src={url} alt={tags.replace(/,/g, ' ')} className='photocard__img' />
           </Link>
           <div className='photocard__likes'>

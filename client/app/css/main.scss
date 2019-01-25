@@ -323,6 +323,7 @@ a {
   flex-direction: column;
   align-items: center;
   margin-bottom: 60px;
+  pointer-events: auto;
   
   @media (min-width: 768px) {
     width: 50%;
@@ -435,6 +436,7 @@ a {
   width: 100%;
   background: $white;
   border-radius: 0.25rem;
+  pointer-events: auto;
   
   &__top {
     padding: 0.5rem 1rem;
