@@ -18,12 +18,13 @@ class Navbar extends Component {
                       state: { modal: true },
                     }}
                     className='navbar__link'
+                    activeClassName='activelinks'
                   >
                     Upload
                   </NavLink>
                 </li>
                 <li className='navbar__item'>
-                  <NavLink to='/dashboard' className='navbar__link'>
+                  <NavLink to='/dashboard' className='navbar__link' activeClassName='activelinks'>
                     Dashboard
                   </NavLink>
                 </li>
@@ -31,7 +32,7 @@ class Navbar extends Component {
                 {isLoggedIn ? (
                   <Fragment>
                     <li className='navbar__item'>
-                      <NavLink to='/user' className='navbar__link'>
+                      <NavLink to='/user' className='navbar__link' activeClassName='activelinks'>
                         User Profile
                       </NavLink>
                     </li>
@@ -45,6 +46,7 @@ class Navbar extends Component {
                           state: { modal: true },
                         }}
                         className='navbar__link'
+                        activeClassName='activelinks'
                       >
                         Login
                       </NavLink>

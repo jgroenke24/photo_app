@@ -57,6 +57,10 @@ a {
   }
 }
 
+h1, h2, h3, h4, h5, h6 {
+  color: inherit;
+}
+
 .logo {
   color: $black;
   font-size: 1.5rem;
@@ -77,6 +81,20 @@ a {
   color: $gray-400;
   cursor: pointer;
   background-color: inherit;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  
+  &__icon {
+    display: inline-block;
+    margin-right: 0.5rem;
+    
+    &--heart {
+      fill: $pink;
+      stroke: $pink;
+      width: 1rem;
+      position: relative;
+      top: 1px;
+    }    
+  }
 }
 
 .header {
@@ -141,6 +159,10 @@ a {
       color: $white;
     }
   }
+}
+
+.activelinks {
+  color: $gray-900;
 }
 
 .authbar {
@@ -239,9 +261,11 @@ a {
 }
 
 .photocard {
+  margin-bottom: 3rem;
 
-  &__creator {
-    
+  &__top {
+    margin: 0 1rem 1rem;
+    color: $gray-900;
   }
   
   &__link {
@@ -255,8 +279,8 @@ a {
     height: auto;
   }
   
-  &__likes {
-    
+  &__bottom {
+    margin: 1rem 1rem 0;
   }
 }
 
@@ -440,6 +464,7 @@ a {
   
   &__top {
     padding: 0.5rem 1rem;
+    color: $gray-900;
     
     @media (min-width: 768px) {
       padding: 0.5rem 1.75rem;
@@ -457,6 +482,8 @@ a {
   
   &__btn {
     margin: 0.5rem 0;
+    color: $gray-400;
+    border-color: $gray-200;
     
     &:hover {
       border-color: $gray-900;

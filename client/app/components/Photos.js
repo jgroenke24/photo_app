@@ -25,7 +25,14 @@ const MultipleColumnPhotos = ({ photos }) => (
           >
             <img src={url} alt={tags.replace(/,/g, ' ')} className='photoitem__img' />
             <div className='photoitem__overlay'>
-              <button className='btn photoitem__btn'>Likes: {likes}</button>
+              <button className='btn photoitem__btn'>
+                <span className='btn__icon'>
+                  <svg className='btn__icon--heart' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'>
+                    <path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/>
+                  </svg>
+                </span>
+                {likes}
+              </button>
               <h2 className='photoitem__creator'>{username}</h2>
             </div>
           </Link>
@@ -44,7 +51,7 @@ const OneColumnPhotos = ({ photos }) => (
     {photos.map(({ id, username, url, tags, likes }) => {
       return (
         <div key={id} className='photocard'>
-          <div className='photocard__creator'>
+          <div className='photocard__top'>
             <h2>{username}</h2>
           </div>
           <Link
@@ -62,8 +69,15 @@ const OneColumnPhotos = ({ photos }) => (
           >
             <img src={url} alt={tags.replace(/,/g, ' ')} className='photocard__img' />
           </Link>
-          <div className='photocard__likes'>
-            <p>Likes: {likes}</p>
+          <div className='photocard__bottom'>
+            <button className='btn photo__btn'>
+              <span className='btn__icon'>
+                <svg className='btn__icon--heart' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'>
+                  <path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/>
+                </svg>
+              </span>
+              {likes}
+            </button>
           </div>
         </div>
       );
