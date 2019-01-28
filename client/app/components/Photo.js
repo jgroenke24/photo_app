@@ -5,6 +5,7 @@ import axios from 'axios';
 class Photo extends Component {
   state = {
     photo: null,
+    user: null,
     showError: false,
     showSubmissionError: false,
   };
@@ -12,15 +13,17 @@ class Photo extends Component {
   async componentDidMount() {
     
     if (this.props.location.state) {
-      const { id, url, tags, username, likes } = this.props.location.state;
+      const { id, url, tags, username, likes, likedByUser, user } = this.props.location.state;
       this.setState(() => {
         return {
+          user,
           photo: {
             id,
             url,
             tags,
             username,
             likes,
+            likedByUser,
           }
         };
       });
@@ -34,10 +37,11 @@ class Photo extends Component {
               withCredentials: true,
             }
           );
-        const { photo } = response.data;
+        const { photo, user } = response.data;
         this.setState(() => {
           return {
             photo,
+            user: user || null,
           };
         });
       } catch (error) {
@@ -49,6 +53,10 @@ class Photo extends Component {
         });
       }
     }
+  }
+  
+  componentWillUnmount() {
+    document.body.removeAttribute('style');
   }
   
   handleDelete = async () => {
@@ -66,7 +74,7 @@ class Photo extends Component {
   }
   
   render() {
-    const { photo, showError, showSubmissionError } = this.state;
+    const { photo, user, showError, showSubmissionError } = this.state;
 
     if (showError) {
       return (
@@ -93,14 +101,31 @@ class Photo extends Component {
           <Fragment>
             <div className='photo__top'>
               <h2 className='photo__user'>{photo.username}</h2>
-              <button className='btn photo__btn'>
-                <span className='btn__icon'>
-                  <svg className='btn__icon--heart' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'>
-                    <path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/>
-                  </svg>
-                </span>
-                {photo.likes}
-              </button>
+              
+              {user
+                ? (
+                  <button className={'btn photo__btn ' + (photo.likedByUser ? 'photo__btn--liked' : '')}>
+                    <span className='btn__icon'>
+                      <svg className='btn__icon--heart' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'>
+                        <path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/>
+                      </svg>
+                    </span>
+                    {photo.likes}
+                  </button>
+                ) : (
+                  <Link
+                    to='/login'
+                    className='btn photo__btn'
+                  >
+                    <span className='btn__icon'>
+                      <svg className='btn__icon--heart' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'>
+                        <path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/>
+                      </svg>
+                    </span>
+                    {photo.likes}
+                  </Link>
+                )
+              }
             </div>
             <img className='photo__img' src={photo.url} alt={photo.tags.replace(/,/g, ' ')} />
             <div className='photo__bottom'>
