@@ -149,6 +149,10 @@ class Signup extends Component {
     }
   }
   
+  componentWillUnmount() {
+    document.body.removeAttribute('style');
+  }
+  
   render() {
     
     const { errors, email, username, password, passwordCheck, emailIsValid, usernameIsValid, passwordIsValid, passwordCheckIsValid, signupError } = this.state;

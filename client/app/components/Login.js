@@ -117,6 +117,10 @@ class Login extends Component {
     }
   }
   
+  componentWillUnmount() {
+    document.body.removeAttribute('style');
+  }
+  
   render() {
     
     const { errors, email, password, emailIsValid, passwordIsValid, loginError } = this.state;
