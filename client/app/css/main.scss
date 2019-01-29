@@ -289,6 +289,11 @@ h1, h2, h3, h4, h5, h6 {
 
 .photoitem {
   margin-bottom: 1.5rem;
+  position: relative;
+  
+  &:hover &__overlay {
+    opacity: 1;
+  }
   
   &__link {
     display: block;
@@ -311,10 +316,7 @@ h1, h2, h3, h4, h5, h6 {
     background: rgba(0,0,0,0.4);
     opacity: 0;
     transition: opacity 0.2s ease;
-    
-    &:hover {
-      opacity: 1;
-    }
+    pointer-events: none;
   }
   
   &__btn {
@@ -326,6 +328,7 @@ h1, h2, h3, h4, h5, h6 {
     right: 2rem;
     cursor: pointer;
     color: $gray-700;
+    pointer-events: auto;
     
     &:hover {
       background: $white;
