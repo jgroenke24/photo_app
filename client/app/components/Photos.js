@@ -4,125 +4,175 @@ import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
 import axios from 'axios';
 
-const MultipleColumnPhotos = ({ photos, user }) => (
-  <Fragment>
-    {photos.map(({ id, url, tags, username, likes, likedByUser }) => {
-      return (
-        <div key={id} className='photoitem'>
-          <Link
-            to={{
-              pathname: `/photos/${id}`,
-              state: {
-                id,
-                url,
-                tags,
-                username,
-                likes,
-                likedByUser,
-                user: user || null,
-                modal: true,
-              },
-            }}
-            className='photoitem__link'
-          >
-            <img src={url} alt={tags.replace(/,/g, ' ')} className='photoitem__img' />
-          </Link>
-          <div className='photoitem__overlay'>
-            {user
-              ?  (
-                <button className={'btn photoitem__btn ' + (likedByUser ? 'photoitem__btn--liked' : '')}>
-                  <span className='btn__icon'>
-                    <svg className='btn__icon--heart' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'>
-                      <path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/>
-                    </svg>
-                  </span>
-                  {likes}
-                </button>
-              ) : (
-                <Link
-                  to='/login'
-                  className='btn photoitem__btn'
-                >
-                  <span className='btn__icon'>
-                    <svg className='btn__icon--heart' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'>
-                      <path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/>
-                    </svg>
-                  </span>
-                  {likes}
-                </Link>
-              )
-            }
-            <h2 className='photoitem__creator'>{username}</h2>
-          </div>
-        </div>
-      );
-    })}
-  </Fragment>
-);
+class PhotoItem extends Component {
+  state = {
+    likedByUser: this.props.photo.likedByUser,
+  }
 
-MultipleColumnPhotos.propTypes = {
-  photos: PropTypes.array.isRequired,
+  handleLike = async () => {
+    this.setState(() => {
+      return {
+        likedByUser: true,
+      };
+    });
+  }
+
+  handleUnlike = async () => {
+    this.setState(() => {
+      return {
+        likedByUser: false,
+      };
+    });
+  }
+
+  render() {
+    const { photo: { id, url, tags, username, likes }, user } = this.props;
+    const { likedByUser } = this.state;
+
+    return (
+      <div key={id} className='photoitem'>
+        <Link
+          to={{
+            pathname: `/photos/${id}`,
+            state: {
+              id,
+              url,
+              tags,
+              username,
+              likes,
+              likedByUser,
+              user: user || null,
+              modal: true,
+            },
+          }}
+          className='photoitem__link'
+        >
+          <img src={url} alt={tags.replace(/,/g, ' ')} className='photoitem__img' />
+        </Link>
+        <div className='photoitem__overlay'>
+          {user
+            ?  (
+              <button
+                className={'btn photoitem__btn ' + (likedByUser ? 'photoitem__btn--liked' : '')}
+                onClick={likedByUser ? this.handleUnlike : this.handleLike}
+              >
+                <span className='btn__icon'>
+                  <svg className='btn__icon--heart' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'>
+                    <path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/>
+                  </svg>
+                </span>
+                {likes}
+              </button>
+            ) : (
+              <Link
+                to='/login'
+                className='btn photoitem__btn'
+              >
+                <span className='btn__icon'>
+                  <svg className='btn__icon--heart' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'>
+                    <path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/>
+                  </svg>
+                </span>
+                {likes}
+              </Link>
+            )
+          }
+          <h2 className='photoitem__creator'>{username}</h2>
+        </div>
+      </div>
+    );
+  }
+}
+
+PhotoItem.propTypes = {
+  photo: PropTypes.object.isRequired,
+  user: PropTypes.object,
 };
 
-const OneColumnPhotos = ({ photos, user }) => (
-  <Fragment>
-    {photos.map(({ id, username, url, tags, likes, likedByUser }) => {
-      return (
-        <div key={id} className='photocard'>
-          <div className='photocard__top'>
-            <h2>{username}</h2>
-          </div>
-          <Link
-            to={{
-              pathname: `/photos/${id}`,
-              state: {
-                id,
-                url,
-                tags,
-                username,
-                likes,
-                likedByUser,
-                user: user || null,
-              },
-            }}
-            className='photocard__link'
-          >
-            <img src={url} alt={tags.replace(/,/g, ' ')} className='photocard__img' />
-          </Link>
-          <div className='photocard__bottom'>
-            {user
-              ? (
-                <button className={'btn photo__btn ' + (likedByUser ? 'photo__btn--liked' : '')}>
-                  <span className='btn__icon'>
-                    <svg className='btn__icon--heart' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'>
-                      <path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/>
-                    </svg>
-                  </span>
-                  {likes}
-                </button>
-              ) : (
-                <Link
-                  to='/login'
-                  className='btn photo__btn'
-                >
-                  <span className='btn__icon'>
-                    <svg className='btn__icon--heart' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'>
-                      <path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/>
-                    </svg>
-                  </span>
-                  {likes}
-                </Link>
-              )
-            }
-          </div>
-        </div>
-      );
-    })}
-  </Fragment>
-);
+class PhotoCard extends Component {
+  state= {
+    likedByUser: this.props.photo.likedByUser,
+  }
 
-OneColumnPhotos.propTypes = {
-  photos: PropTypes.array.isRequired,
+  handleLike = async () => {
+    this.setState(() => {
+      return {
+        likedByUser: true,
+      };
+    });
+  }
+
+  handleUnlike = async () => {
+    this.setState(() => {
+      return {
+        likedByUser: false,
+      };
+    });
+  }
+
+  render() {
+    const { photo: { id, url, tags, username, likes }, user } = this.props;
+    const { likedByUser } = this.state;
+
+    return (
+      <div key={id} className='photocard'>
+        <div className='photocard__top'>
+          <h2>{username}</h2>
+        </div>
+        <Link
+          to={{
+            pathname: `/photos/${id}`,
+            state: {
+              id,
+              url,
+              tags,
+              username,
+              likes,
+              likedByUser,
+              user: user || null,
+            },
+          }}
+          className='photocard__link'
+        >
+          <img src={url} alt={tags.replace(/,/g, ' ')} className='photocard__img' />
+        </Link>
+        <div className='photocard__bottom'>
+          {user
+            ? (
+              <button
+                className={'btn photo__btn ' + (likedByUser ? 'photo__btn--liked' : '')}
+                onClick={likedByUser ? this.handleUnlike : this.handleLike}
+              >
+                <span className='btn__icon'>
+                  <svg className='btn__icon--heart' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'>
+                    <path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/>
+                  </svg>
+                </span>
+                {likes}
+              </button>
+            ) : (
+              <Link
+                to='/login'
+                className='btn photo__btn'
+              >
+                <span className='btn__icon'>
+                  <svg className='btn__icon--heart' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'>
+                    <path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/>
+                  </svg>
+                </span>
+                {likes}
+              </Link>
+            )
+          }
+        </div>
+      </div>
+    );
+  }
+}
+
+PhotoCard.propTypes = {
+  photo: PropTypes.object.isRequired,
+  user: PropTypes.object,
 };
 
 class Photos extends Component {
@@ -174,9 +224,9 @@ class Photos extends Component {
             {matches => {
               return matches
               ?  (
-                <MultipleColumnPhotos photos={photos} user={user} />
+                photos.map(photo => <PhotoItem key={photo.id} photo={photo} user={user} />)
               ) : (
-                <OneColumnPhotos photos={photos} user={user} />
+                photos.map(photo => <PhotoCard key={photo.id} photo={photo} user={user} />)
               );
             }}
           </MediaQuery>
