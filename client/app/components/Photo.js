@@ -8,6 +8,8 @@ class Photo extends Component {
     user: null,
     showError: false,
     showSubmissionError: false,
+    likedByUser: null,
+    likes: null,
   };
   
   async componentDidMount() {
@@ -17,13 +19,13 @@ class Photo extends Component {
       this.setState(() => {
         return {
           user,
+          likedByUser,
+          likes,
           photo: {
             id,
             url,
             tags,
             username,
-            likes,
-            likedByUser,
           }
         };
       });
@@ -41,6 +43,8 @@ class Photo extends Component {
         this.setState(() => {
           return {
             photo,
+            likedByUser: photo.likedByUser,
+            likes: photo.likes,
             user: user || null,
           };
         });
@@ -59,6 +63,53 @@ class Photo extends Component {
     document.body.removeAttribute('style');
   }
   
+  handleLike = async () => {
+    const { id } = this.state.photo;
+    try {
+      
+      // Send like to server
+      const { data: { photo } } = await axios
+        .post(
+          `https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos/${id}/like`,
+          {},
+          {
+            withCredentials: true,
+          }
+        );
+      this.setState(() => {
+        return {
+          likedByUser: true,
+          likes: photo.likes,
+        };
+      });
+    } catch (error) {
+      return;
+    }
+  }
+  
+  handleUnlike = async () => {
+    const { id } = this.state.photo;
+    try {
+      
+      // Send delete like to server
+      const { data: { photo } } = await axios
+        .delete(
+          `https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos/${id}/like`,
+          {
+            withCredentials: true,
+          }
+        );
+      this.setState(() => {
+        return {
+          likedByUser: false,
+          likes: photo.likes,
+        };
+      });
+    } catch (error) {
+      return;
+    }
+  }
+  
   handleDelete = async () => {
     try {
       await axios.delete(`https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos/${this.props.match.params.photoId}`);
@@ -74,7 +125,7 @@ class Photo extends Component {
   }
   
   render() {
-    const { photo, user, showError, showSubmissionError } = this.state;
+    const { photo, user, showError, showSubmissionError, likedByUser, likes } = this.state;
 
     if (showError) {
       return (
@@ -104,13 +155,16 @@ class Photo extends Component {
               
               {user
                 ? (
-                  <button className={'btn photo__btn ' + (photo.likedByUser ? 'photo__btn--liked' : '')}>
+                  <button
+                    className={'btn photo__btn ' + (likedByUser ? 'photo__btn--liked' : '')}
+                    onClick={likedByUser ? this.handleUnlike : this.handleLike}
+                  >
                     <span className='btn__icon'>
                       <svg className='btn__icon--heart' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'>
                         <path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/>
                       </svg>
                     </span>
-                    {photo.likes}
+                    {likes}
                   </button>
                 ) : (
                   <Link
@@ -122,7 +176,7 @@ class Photo extends Component {
                         <path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/>
                       </svg>
                     </span>
-                    {photo.likes}
+                    {likes}
                   </Link>
                 )
               }
