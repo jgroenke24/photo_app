@@ -14,18 +14,20 @@ class App extends Component {
   static contextType = AppContext;
 
   async componentDidMount() {
-    const response = await axios
-      .get(
-        'https://webdevbootcamp-jorge-groenke.c9users.io:8081',
-        {
-          withCredentials: true,
-        }
-      );
-    
-    const { user } = response.data;
-    
-    if (user) {
-      this.context.changeToLoggedIn();
+    if (!this.context.isLoggedIn) {
+      const response = await axios
+        .get(
+          'https://webdevbootcamp-jorge-groenke.c9users.io:8081',
+          {
+            withCredentials: true,
+          }
+        );
+      
+      const { user } = response.data;
+      
+      if (user) {
+        this.context.changeToLoggedIn();
+      }
     }
   }
   render() {

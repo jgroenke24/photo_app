@@ -20,9 +20,10 @@ const validationChains = (action) => {
           .withMessage('Username can only contain letters, numbers and underscores'),
         check('password')
           .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/)
-          .withMessage('Min 8 char & 1 of each: uppercase, lowercase, number, symbol')
+          .withMessage('Min 8 char & 1 of each: uppercase, lowercase, number, symbol'),
+        check('passwordCheck')
           .custom((value, {req, loc, path}) => {
-            if (value !== req.body.passwordCheck) {
+            if (value !== req.body.password) {
               return false;
             }
             return value;
@@ -54,9 +55,10 @@ const validationChains = (action) => {
       return [
         check('password')
           .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/)
-          .withMessage('Min 8 char & 1 of each: uppercase, lowercase, number, symbol')
+          .withMessage('Min 8 char & 1 of each: uppercase, lowercase, number, symbol'),
+        check('passwordCheck')
           .custom((value, {req, loc, path}) => {
-            if (value !== req.body.passwordCheck) {
+            if (value !== req.body.password) {
               return false;
             }
             return value;

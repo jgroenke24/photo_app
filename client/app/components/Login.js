@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
+import { AppContext } from './AppContext';
 import axios from 'axios';
 
 // Add a response interceptor
@@ -26,6 +27,8 @@ class Login extends Component {
     passwordIsValid: false,
     loginError: null,
   };
+  
+  static contextType = AppContext;
   
   showValidationError(element, message) {
     this.setState((prevState) => ({
@@ -82,6 +85,8 @@ class Login extends Component {
   }
   
   handleSubmit = async (event) => {
+    event.preventDefault();
+    
     const { email, password } = this.state;
     try {
       const response = await axios.post(
@@ -94,6 +99,7 @@ class Login extends Component {
           withCredentials: true,
         }
       );
+      this.context.changeToLoggedIn();
       this.props.history.push('/');
     } catch (error) {
 
@@ -151,55 +157,56 @@ class Login extends Component {
           </div>
         }
         
-        <div className='form__group'>
-          <label className='form__label' htmlFor='email'>Email</label>
-          <input 
-            id='email' 
-            name='email' 
-            type='email' 
-            className='form__input'
-            value={email}
-            onFocus={this.handleFocus}
-            onChange={this.handleChange}
-            onBlur={this.handleBlur}
-            aria-describedby='emailHelpBlock'
-            autoFocus={true}
-          />
-          <small
-            id='emailHelpBlock'
-            className='form__text form__text--danger'
-          >
-            {emailError}
-          </small>
-        </div>
-        <div className='form__group'>
-          <label className='form__label' htmlFor='password'>Password</label>
-          <input 
-            id='password' 
-            name='password' 
-            type='password' 
-            className='form__input'
-            value={password}
-            onFocus={this.handleFocus}
-            onChange={this.handleChange}
-            onBlur={this.handleBlur}
-            aria-describedby='passwordHelpBlock'
-          />
-          <small
-            id='passwordHelpBlock'
-            className='form__text form__text--danger'
-          >
-            {passwordError}
-          </small>
-        </div>
-        <button 
-          type='submit' 
-          className='btn form__btn'
-          disabled={!emailIsValid || !passwordIsValid}
-          onClick={this.handleSubmit}
+        <form
+          className='form__form'
+          onSubmit={this.handleSubmit}
         >
-          Login
-        </button>
+          <div className='form__group'>
+            <label className='form__label' htmlFor='email'>Email</label>
+            <input 
+              id='email' 
+              name='email' 
+              type='email' 
+              className='form__input'
+              value={email}
+              onFocus={this.handleFocus}
+              onChange={this.handleChange}
+              onBlur={this.handleBlur}
+              aria-describedby='emailHelpBlock'
+            />
+            <small
+              id='emailHelpBlock'
+              className='form__text form__text--danger'
+            >
+              {emailError}
+            </small>
+          </div>
+          <div className='form__group'>
+            <label className='form__label' htmlFor='password'>Password</label>
+            <input 
+              id='password' 
+              name='password' 
+              type='password' 
+              className='form__input'
+              value={password}
+              onFocus={this.handleFocus}
+              onChange={this.handleChange}
+              onBlur={this.handleBlur}
+              aria-describedby='passwordHelpBlock'
+            />
+            <small
+              id='passwordHelpBlock'
+              className='form__text form__text--danger'
+            >
+              {passwordError}
+            </small>
+          </div>
+          <input 
+            type='submit' 
+            className='btn form__btn'
+            value='Login'
+          />
+        </form>
         <Link to='/forgotpassword' className='form__link'>
           Forgot Password?
         </Link>

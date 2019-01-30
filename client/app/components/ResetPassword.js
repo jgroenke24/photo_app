@@ -103,6 +103,7 @@ class ResetPassword extends Component {
   }
   
   handleSubmit = async (event) => {
+    event.preventDefault();
     const { password, passwordCheck } = this.state;
     try {
       await axios.post(
@@ -206,55 +207,56 @@ class ResetPassword extends Component {
       
         <h1 className='form__header'>Reset Password for {username}</h1>
         
-        <div className='form__group'>
-          <label htmlFor='password' className='form__label'>Password</label>
-          <input 
-            id='password' 
-            name='password' 
-            type='password' 
-            className='form__input'
-            value={password}
-            onFocus={this.handleFocus}
-            onChange={this.handleChange}
-            onBlur={this.handleBlur}
-            aria-describedby='passwordHelpBlock'
-            autoFocus={true}
-          />
-          <small
-            id='passwordHelpBlock'
-            className='form__text form__text--danger'
-          >
-            {passwordError}
-          </small>
-        </div>
-        <div className='form__group'>
-          <label htmlFor='passwordCheck' className='form__label'>Verify Password</label>
-          <input 
-            id='passwordCheck'
-            name='passwordCheck'
-            type='password'
-            className='form__input'
-            value={passwordCheck}
-            onFocus={this.handleFocus}
-            onChange={this.handleChange}
-            onBlur={this.handleBlur}
-            aria-describedby='passwordCheckHelpBlock'
-          />
-          <small
-            id='passwordCheckHelpBlock'
-            className='form__text form__text--danger'
-          >
-            {passwordCheckError}
-          </small>
-        </div>
-        <button 
-          type='submit' 
-          className='btn form__btn'
-          disabled={!passwordIsValid || !passwordCheckIsValid}
-          onClick={this.handleSubmit}
+        <form
+          className='form__form'
+          onSubmit={this.handleSubmit}
         >
-          Reset Password
-        </button>
+          <div className='form__group'>
+            <label htmlFor='password' className='form__label'>Password</label>
+            <input 
+              id='password' 
+              name='password' 
+              type='password' 
+              className='form__input'
+              value={password}
+              onFocus={this.handleFocus}
+              onChange={this.handleChange}
+              onBlur={this.handleBlur}
+              aria-describedby='passwordHelpBlock'
+            />
+            <small
+              id='passwordHelpBlock'
+              className='form__text form__text--danger'
+            >
+              {passwordError}
+            </small>
+          </div>
+          <div className='form__group'>
+            <label htmlFor='passwordCheck' className='form__label'>Verify Password</label>
+            <input 
+              id='passwordCheck'
+              name='passwordCheck'
+              type='password'
+              className='form__input'
+              value={passwordCheck}
+              onFocus={this.handleFocus}
+              onChange={this.handleChange}
+              onBlur={this.handleBlur}
+              aria-describedby='passwordCheckHelpBlock'
+            />
+            <small
+              id='passwordCheckHelpBlock'
+              className='form__text form__text--danger'
+            >
+              {passwordCheckError}
+            </small>
+          </div>
+          <input
+            type='submit'
+            className='btn form__btn'
+            value='Reset Password'
+          />
+        </form>
         <Link to='/' className='form__link'>
           Go to Homepage
         </Link>

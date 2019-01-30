@@ -112,6 +112,7 @@ class Signup extends Component {
   }
   
   handleSubmit = async (event) => {
+    event.preventDefault();
     const { email, username, password, passwordCheck } = this.state;
     try {
       const response = await axios.post(
@@ -194,95 +195,96 @@ class Signup extends Component {
           </div>
         }
         
-        <div className='form__group'>
-          <label htmlFor='email' className='form__label'>Email</label>
-          <input 
-            id='email' 
-            name='email' 
-            type='email' 
-            className='form__input'
-            value={email}
-            onFocus={this.handleFocus}
-            onChange={this.handleChange}
-            onBlur={this.handleBlur}
-            aria-describedby='emailHelpBlock'
-            autoFocus={true}
-          />
-          <small
-            id='emailHelpBlock'
-            className='form__text form__text--danger'
-          >
-            {emailError}
-          </small>
-        </div>
-        <div className='form__group'>
-          <label htmlFor='username' className='form__label'>Username</label>
-          <input 
-            id='username' 
-            name='username' 
-            type='text' 
-            className='form__input'
-            value={username}
-            onFocus={this.handleFocus}
-            onChange={this.handleChange}
-            onBlur={this.handleBlur}
-            aria-describedby='usernameHelpBlock'
-          />
-          <small
-            id='usernameHelpBlock'
-            className='form__text form__text--danger'
-          >
-            {usernameError}
-          </small>
-        </div>
-        <div className='form__group'>
-          <label htmlFor='password' className='form__label'>Password</label>
-          <input 
-            id='password' 
-            name='password' 
-            type='password' 
-            className='form__input'
-            value={password}
-            onFocus={this.handleFocus}
-            onChange={this.handleChange}
-            onBlur={this.handleBlur}
-            aria-describedby='passwordHelpBlock'
-          />
-          <small
-            id='passwordHelpBlock'
-            className='form__text form__text--danger'
-          >
-            {passwordError}
-          </small>
-        </div>
-        <div className='form__group'>
-          <label htmlFor='passwordCheck' className='form__label'>Verify Password</label>
-          <input 
-            id='passwordCheck' 
-            name='passwordCheck' 
-            type='password' 
-            className='form__input'
-            value={passwordCheck}
-            onFocus={this.handleFocus}
-            onChange={this.handleChange}
-            onBlur={this.handleBlur}
-            aria-describedby='passwordCheckHelpBlock'
-          />
-          <small
-            id='passwordCheckHelpBlock'
-            className='form__text form__text--danger'
-          >
-            {passwordCheckError}
-          </small>
-        </div>
-        <button 
-          type='submit' 
-          className='btn form__btn'
-          disabled={!emailIsValid || !usernameIsValid || !passwordIsValid || !passwordCheckIsValid}
-          onClick={this.handleSubmit}
+        <form
+          className='form__form'
+          onSubmit={this.handleSubmit}
         >
-          Signup
-        </button>
+          <div className='form__group'>
+            <label htmlFor='email' className='form__label'>Email</label>
+            <input 
+              id='email' 
+              name='email' 
+              type='email' 
+              className='form__input'
+              value={email}
+              onFocus={this.handleFocus}
+              onChange={this.handleChange}
+              onBlur={this.handleBlur}
+              aria-describedby='emailHelpBlock'
+            />
+            <small
+              id='emailHelpBlock'
+              className='form__text form__text--danger'
+            >
+              {emailError}
+            </small>
+          </div>
+          <div className='form__group'>
+            <label htmlFor='username' className='form__label'>Username</label>
+            <input 
+              id='username' 
+              name='username' 
+              type='text' 
+              className='form__input'
+              value={username}
+              onFocus={this.handleFocus}
+              onChange={this.handleChange}
+              onBlur={this.handleBlur}
+              aria-describedby='usernameHelpBlock'
+            />
+            <small
+              id='usernameHelpBlock'
+              className='form__text form__text--danger'
+            >
+              {usernameError}
+            </small>
+          </div>
+          <div className='form__group'>
+            <label htmlFor='password' className='form__label'>Password</label>
+            <input 
+              id='password' 
+              name='password' 
+              type='password' 
+              className='form__input'
+              value={password}
+              onFocus={this.handleFocus}
+              onChange={this.handleChange}
+              onBlur={this.handleBlur}
+              aria-describedby='passwordHelpBlock'
+            />
+            <small
+              id='passwordHelpBlock'
+              className='form__text form__text--danger'
+            >
+              {passwordError}
+            </small>
+          </div>
+          <div className='form__group'>
+            <label htmlFor='passwordCheck' className='form__label'>Verify Password</label>
+            <input 
+              id='passwordCheck' 
+              name='passwordCheck' 
+              type='password' 
+              className='form__input'
+              value={passwordCheck}
+              onFocus={this.handleFocus}
+              onChange={this.handleChange}
+              onBlur={this.handleBlur}
+              aria-describedby='passwordCheckHelpBlock'
+            />
+            <small
+              id='passwordCheckHelpBlock'
+              className='form__text form__text--danger'
+            >
+              {passwordCheckError}
+            </small>
+          </div>
+          <input 
+            type='submit' 
+            className='btn form__btn'
+            value='Signup'
+          />
+        </form>
       </section>
     );
   }

@@ -58,6 +58,7 @@ class ForgotPassword extends Component {
   handleBlur = (event) => this.inputIsValid();
   
   handleSubmit = async (event) => {
+    event.preventDefault();
     
     // Send reset password email
     const { email } = this.state;
@@ -122,35 +123,38 @@ class ForgotPassword extends Component {
           </div>
         )}
         
-        <div className='form__group'>
-          <label htmlFor='email' className='form__label'>Email:</label>
-          <input 
-            id='email' 
-            name='email' 
-            type='email' 
-            className='form__input'
-            value={email}
-            onFocus={this.handleFocus}
-            onChange={this.handleChange}
-            onBlur={this.handleBlur}
-            aria-describedby='emailHelpBlock'
-            autoFocus={true}
-          />
-          <small
-            id='emailHelpBlock'
-            className='form__text form__text--danger'
-          >
-            {formError}
-          </small>
-        </div>
-        <button 
-          type='submit' 
-          className='btn form__btn'
-          onClick={this.handleSubmit}
-          disabled={!emailIsValid}
+        <form
+          className='form__form'
+          onSubmit={this.handleSubmit}
         >
-          Reset Password
-        </button>
+          <div className='form__group'>
+            <label htmlFor='email' className='form__label'>Email:</label>
+            <input 
+              id='email' 
+              name='email' 
+              type='email' 
+              className='form__input'
+              value={email}
+              onFocus={this.handleFocus}
+              onChange={this.handleChange}
+              onBlur={this.handleBlur}
+              aria-describedby='emailHelpBlock'
+              autoFocus={true}
+            />
+            <small
+              id='emailHelpBlock'
+              className='form__text form__text--danger'
+            >
+              {formError}
+            </small>
+          </div>
+          <input
+            type='submit' 
+            className='btn form__btn'
+            disabled={!emailIsValid}
+            value='Reset Password'
+          />
+        </form>
         
         {showEmailError && (
           <p className='form__message'>
