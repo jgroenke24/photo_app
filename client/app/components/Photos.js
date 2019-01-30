@@ -124,27 +124,59 @@ PhotoItem.propTypes = {
 class PhotoCard extends Component {
   state= {
     likedByUser: this.props.photo.likedByUser,
+    likes: this.props.photo.likes,
   }
 
   handleLike = async () => {
-    this.setState(() => {
-      return {
-        likedByUser: true,
-      };
-    });
+    const { id } = this.props.photo;
+    try {
+      
+      // Send like to server
+      const { data: { photo } } = await axios
+        .post(
+          `https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos/${id}/like`,
+          {},
+          {
+            withCredentials: true,
+          }
+        );
+      this.setState(() => {
+        return {
+          likedByUser: true,
+          likes: photo.likes,
+        };
+      });
+    } catch (error) {
+      return;
+    }
   }
 
   handleUnlike = async () => {
-    this.setState(() => {
-      return {
-        likedByUser: false,
-      };
-    });
+    const { id } = this.props.photo;
+    try {
+      
+      // Send delete like to server
+      const { data: { photo } } = await axios
+        .delete(
+          `https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos/${id}/like`,
+          {
+            withCredentials: true,
+          }
+        );
+      this.setState(() => {
+        return {
+          likedByUser: false,
+          likes: photo.likes,
+        };
+      });
+    } catch (error) {
+      return;
+    }
   }
 
   render() {
-    const { photo: { id, url, tags, username, likes }, user } = this.props;
-    const { likedByUser } = this.state;
+    const { photo: { id, url, tags, username }, user } = this.props;
+    const { likedByUser, likes } = this.state;
 
     return (
       <div key={id} className='photocard'>
