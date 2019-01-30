@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import axios from 'axios';
 
 class Upload extends Component {
@@ -27,6 +27,8 @@ class Upload extends Component {
       // Create a form data object with the photo to be uploaded
       const data = new FormData();
       data.append('image', this.state.file, this.state.file.name);
+      
+      document.querySelector('.form__progress').style.visibility = 'visible';
       
       // Upload photo to cloudinary and save to database
       await axios
@@ -63,26 +65,43 @@ class Upload extends Component {
     }
   }
   
+  componentWillUnmount() {
+    document.body.removeAttribute('style');
+  }
+  
   render() {
     const { loaded, uploadError } = this.state;
     return (
-      <section className='container'>
-        <h1 className='text-center'>Upload a picture!</h1>
+      <section className='form'>
+      
+        <Link to='/' className='logo form__logo'>
+          PicShareApp
+        </Link>
+      
+        <h1 className='form__header'>Upload a picture!</h1>
         
         {uploadError &&
-          <div className='alert alert-danger' role='alert'>
+          <div className='form__alert form__alert--danger' role='alert'>
             {uploadError}
           </div>
         }
         
-        <form>
-          <div className='form-group'>
-            <label htmlFor='picFile'>
-              Upload a pic!
+        <form className='form__upload' onSubmit={this.handleUpload}>
+          <div className='form__cutout'>
+            <label className='form__uplabel'>
+              <img className='form__img' src='https://png.pngtree.com/svg/20160809/camera_add_149556.png' alt='add image' />
+              <div className='btn'>
+                Browse
+              </div>
+              <input type='file' name='image' accept='image/*' className='form-control-file' onChange={this.handleFile} />
             </label>
-            <input type='file' name='image' accept='image/*' className='form-control-file' id='picFile' onChange={this.handleFile} />
-            <input type='submit' onClick={this.handleUpload} />
-            <small> {loaded} %</small>
+          </div>
+          <div className='form__foot'>
+            <div className='form__progress'>
+              <div className='form__progressbar' style={{ flexBasis: `${loaded}%` }}>
+              </div>
+            </div>
+            <input type='submit' className='btn form__btn form__btn--upload' value='Upload Photo' />
           </div>
         </form>
       </section>

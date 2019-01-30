@@ -470,12 +470,77 @@ h1, h2, h3, h4, h5, h6 {
       color: $gray-100;
       cursor: default;
     }
+    
+    &--upload {
+      width: auto;
+      margin: 0;
+    }
   }
   
   &__message {
     color: $black;
     margin: 1rem;
     margin-bottom: 0.5rem;
+  }
+  
+  &__upload {
+    width: 100%;
+    padding: 1.5rem;
+    box-shadow: inset 0px 0px 2px 2px rgba(0, 0, 0, 0.3);
+    border-radius: 0.25rem;
+  }
+  
+  &__cutout {
+    border: 0.125rem dashed $gray-400;
+  }
+  
+  &__uplabel {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4rem 0;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background-color: $gray-100;
+    }
+    
+    & input {
+      display: none;
+    }
+    
+    & .btn {
+      background-color: $white;
+    }
+  }
+  
+  &__img {
+    width: 10rem;
+    height: 10rem;
+  }
+  
+  &__foot {
+    margin: 1rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  &__progress {
+    margin-right: 2rem;
+    width: 100%;
+    border-radius: 0.25rem;
+    background-color: $gray-200;
+    height: 1rem;
+    display: flex;
+    visibility: hidden;
+  }
+  
+  &__progressbar {
+    height: 100%;
+    background-color: $green;
+    border-radius: 0.25rem;
   }
 }
 
