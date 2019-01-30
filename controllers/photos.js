@@ -194,29 +194,129 @@ const Photos = {
   
   // Like a photo
   async like(req, res) {
-    const findLikeQuery = 'SELECT * FROM likes WHERE userid = $1';
+    console.log('in like route');
+    // User is not signed in or user doesn't exist in database
+    console.log(req.user);
+    if (!req.user) {
+      return res.status(401).send('Unauthorized');
+    }
+    
+    const { id: userID } = req.user;
+    const { id: photoID } = req.params;
+    console.log('going into try');
+    try {
+      
+      // Check if photo exists and if the user has liked the photo
+      const findPhotoAndUserInLikesQuery = `
+        SELECT photos.id, likes.userid
+        FROM photos
+        LEFT OUTER JOIN likes
+        ON photos.id = likes.photoid
+        AND likes.userid = $1
+        WHERE photos.id = $2
+      `;
+      const { rows } = await db.query(findPhotoAndUserInLikesQuery, [ userID, photoID ]);
+      console.log(rows);
+      console.log(rows[0]);
+      
+      // If an entry was not found, the photo doesn't exist so return
+      if (!rows[0]) {
+        console.log('photo not found');
+        return res.status(404).send('Photo not found');
+      }
+      
+      // If an entry was found, and user id is not null (the user has liked the photo) so return
+      if (rows[0].userid) {
+        console.log('request forbidden. liking an already liked photo');
+        return res.status(403).send('Cannot like an already liked photo');
+      }
+      
+      // Add the like
+      console.log('adding like');
+      const addLikeQuery = 'INSERT INTO likes(photoid, userid) VALUES($1, $2) returning *';
+      const { rows: likeResponse } = await db.query(addLikeQuery, [ photoID, userID ]);
+      console.log('like added', likeResponse);
+      
+      // Refresh data for photo
+      const findOnePhotoWithUserAndLikesQuery = `
+        SELECT photos.*, users.username, count(likes.photoid) AS likes
+        FROM photos
+        FULL OUTER JOIN users on photos.userid = users.id
+        FULL OUTER JOIN likes on photos.id = likes.photoid
+        WHERE photos.id = $1
+        GROUP BY photos.id, users.username
+      `;
+      const { rows: photoRows } = await db.query(findOnePhotoWithUserAndLikesQuery, [ photoID ]);
+      const photo = photoRows[0];
+      
+      return res.status(200).json({
+        photo,
+        user: req.user,
+      });
+    } catch (error) {
+      return res.status(400).send(error);
+    }
+  },
+  
+  // Remove like from photo
+  async removeLike(req, res) {
+    
+    // User is not signed in or user doesn't exist in database
+    if (!req.user) {
+      return res.status(401).send('Unauthorized');
+    }
+    
+    const { id: userID } = req.user;
+    const { id: photoID } = req.params;
     
     try {
       
-      // See if the user has already liked the photo
-      const { rows } = await db.query(findLikeQuery, [ 2 ]);
-      console.log(req.params.id);
+      // Check if photo exists and if the user has liked the photo
+      const findPhotoAndUserInLikesQuery = `
+        SELECT photos.id, likes.userid
+        FROM photos
+        LEFT OUTER JOIN likes
+        ON photos.id = likes.photoid
+        AND likes.userid = $1
+        WHERE photos.id = $2
+      `;
+      const { rows } = await db.query(findPhotoAndUserInLikesQuery, [ userID, photoID ]);
+      console.log(rows);
       console.log(rows[0]);
       
-      // If a user was returned, remove the like
-      if (rows[0]) {
-        const removeLikeQuery = 'DELETE FROM likes WHERE userid = $1 returning *';
-        const { rows: likeResponse } = await db.query(removeLikeQuery, [ 2 ]);
-        console.log('like removed', likeResponse);
-      } else {
-        
-        // No user was found so add a like
-        console.log('in else');
-        const addLikeQuery = 'INSERT INTO likes(photoid, userid) VALUES($1, $2) returning *';
-        const { rows: likeResponse } = await db.query(addLikeQuery, [ req.params.id, 2 ]);
-        console.log('like added', likeResponse);
+      // If an entry was not found, the photo doesn't exist so return
+      if (!rows[0]) {
+        console.log('photo not found');
+        return res.status(404).send('Photo not found');
       }
-      return res.send('done');
+      
+      // If an entry was found, and user id is null (the user has not liked the photo) so return
+      if (!rows[0].userid) {
+        console.log('request forbidden. user has not liked photo');
+        return res.status(403).send('Cannot unlike a photo that user has not liked');
+      }
+      
+      // Remove the like
+      const removeLikeQuery = 'DELETE FROM likes WHERE photoid= $1 AND userid = $2 returning *';
+      const { rows: likeResponse } = await db.query(removeLikeQuery, [ photoID, userID ]);
+      console.log('like removed', likeResponse);
+      
+      // Refresh data for photo
+      const findOnePhotoWithUserAndLikesQuery = `
+        SELECT photos.*, users.username, count(likes.photoid) AS likes
+        FROM photos
+        FULL OUTER JOIN users on photos.userid = users.id
+        FULL OUTER JOIN likes on photos.id = likes.photoid
+        WHERE photos.id = $1
+        GROUP BY photos.id, users.username
+      `;
+      const { rows: photoRows } = await db.query(findOnePhotoWithUserAndLikesQuery, [ photoID ]);
+      const photo = photoRows[0];
+      
+      return res.status(200).json({
+        photo,
+        user: req.user,
+      });
     } catch (error) {
       return res.status(400).send(error);
     }

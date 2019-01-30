@@ -35,7 +35,10 @@ router.put('/:id', Photos.update);
 // Destroy route - delete photo
 router.delete('/:id', Photos.delete);
 
-// Update likes
-router.put('/:id/like', Photos.like);
+// Create like route - like a photo
+router.post('/:id/like', Users.jwt(), Photos.like);
+
+// Destroy like route - remove like from photo
+router.delete('/:id/like', Users.jwt(), Photos.removeLike);
 
 export default router;
