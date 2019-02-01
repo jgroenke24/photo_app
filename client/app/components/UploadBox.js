@@ -1,8 +1,10 @@
 import React, { Component, Fragment } from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import { AppContext } from './AppContext';
 import axios from 'axios';
 
-class Upload extends Component {
+class UploadBox extends Component {
+  static contextType = AppContext;
+  
   state = {
     file: null,
     loaded: 0,
@@ -22,6 +24,10 @@ class Upload extends Component {
         file: null,
       };
     });
+  }
+  
+  handleClose = () => {
+    this.context.changeToBoxClosed();
   }
   
   handleUpload = async (event) => {
@@ -74,20 +80,16 @@ class Upload extends Component {
     }
   }
   
-  componentWillUnmount() {
-    document.body.removeAttribute('style');
-  }
-  
   render() {
     const { file, loaded, uploadError } = this.state;
     return (
-      <section className='form'>
+      <section className='upload'>
       
-        <Link to='/' className='logo form__logo'>
-          PicShareApp
-        </Link>
-      
-        <h1 className='form__header'>Upload a picture!</h1>
+        <div className='upload__top'>
+          <p>Upload a picture!</p>
+          <button className='upload__close' onClick={this.handleClose}>
+          </button>
+        </div>
         
         {uploadError &&
           <div className='form__alert form__alert--danger' role='alert'>
@@ -138,4 +140,4 @@ class Upload extends Component {
   }
 }
 
-export default withRouter(Upload);
+export default UploadBox;

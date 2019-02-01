@@ -61,6 +61,13 @@ h1, h2, h3, h4, h5, h6 {
   color: inherit;
 }
 
+button {
+  border: none;
+  background-color: inherit;
+  cursor: pointer;
+  padding: 0;
+}
+
 .logo {
   color: $black;
   font-size: 1.5rem;
@@ -147,6 +154,21 @@ h1, h2, h3, h4, h5, h6 {
     
     &:last-of-type {
       margin-right: 0;
+    }
+  }
+  
+  &__upload {
+    display: flex;
+    align-items: center;
+    color: $gray-400;
+    padding: 0;
+    
+    &:hover {
+      color: $gray-900;
+    }
+    
+    & svg {
+      margin-left: 0.25rem;
     }
   }
   
@@ -680,6 +702,43 @@ h1, h2, h3, h4, h5, h6 {
       display: flex;
       justify-content: space-between;
       align-items: center;
+    }
+  }
+}
+
+.upload {
+  position: fixed;
+  top: 4.5rem;
+  right: 3rem;
+  border-radius: 0.25rem;
+  background-color: $white;
+  z-index: 1;
+  box-shadow: 0 4px 16px rgba(0,0,0,.12), 0 0 4px rgba(0,0,0,.12);
+  
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+  }
+  
+  &__close {
+    width: 1.25rem;
+    height: 1.25rem;
+    position: relative;
+    
+    &:before {
+      @extend %remove-exes;
+      width: 100%;
+      transform: rotate(45deg);
+      background-color: $gray-400;
+    }
+    
+    &:after {
+      @extend %remove-exes;
+      width: 100%;
+      transform: rotate(135deg);
+      background-color: $gray-400;
     }
   }
 }

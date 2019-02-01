@@ -5,6 +5,7 @@ const AppContext = React.createContext();
 class AppProvider extends Component {
   state = {
     isLoggedIn: false,
+    uploadBoxIsOpen: false,
   }
   
   render() {
@@ -21,6 +22,17 @@ class AppProvider extends Component {
             isLoggedIn: false,
           };
         }),
+        uploadBoxIsOpen: this.state.uploadBoxIsOpen,
+        changeToBoxOpen: () => this.setState(() => {
+          return {
+            uploadBoxIsOpen: true,
+          };
+        }),
+        changeToBoxClosed: () => this.setState(() => {
+          return {
+            uploadBoxIsOpen: false,
+          };
+        })
       }}>
         {this.props.children}
       </AppContext.Provider>

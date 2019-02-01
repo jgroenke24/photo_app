@@ -7,9 +7,12 @@ import Photos from './Photos';
 import Photo from './Photo';
 import Dashboard from './Dashboard';
 import Hero from './Hero';
+import UploadBox from './UploadBox';
 import { AppContext } from './AppContext';
 
 class Home extends Component {
+  static contextType = AppContext;
+  
   render() {
     const { match } = this.props;
     return (
@@ -17,6 +20,8 @@ class Home extends Component {
         <Header>
           <Navbar />
         </Header>
+        
+        {this.context.uploadBoxIsOpen && <UploadBox />}
         
         <main>
           
