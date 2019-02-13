@@ -6,15 +6,11 @@ class Navbar extends Component {
   static contextType = AppContext;
   
   handleUploadBoxOpen = () => {
-    console.log(this.context);
     this.context.changeToBoxOpen();
-    console.log(this.context);
   }
   
   handleUploadBoxClose = () => {
-    console.log(this.context);
     this.context.changeToBoxClosed();
-    console.log(this.context);
   }
   
   render() {
