@@ -55,14 +55,17 @@ class UploadBox extends Component {
       
       // Upload photo to cloudinary and save to database
       await axios
-        .post('https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos', data, {
-          onUploadProgress: ProgressEvent => {
-            this.setState(() => {
-              return {
-                loaded: Math.floor((ProgressEvent.loaded / ProgressEvent.total * 100))
-              };
-            });
-          }
+        .post('https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos',
+          data,
+          {
+            withCredentials: true,
+            onUploadProgress: ProgressEvent => {
+              this.setState(() => {
+                return {
+                  loaded: Math.floor((ProgressEvent.loaded / ProgressEvent.total * 100))
+                };
+              });
+            },
         });
         
       this.props.history.push('/');

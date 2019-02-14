@@ -14,6 +14,12 @@ const Photos = {
   async create(req, res) {
     
     try {
+      
+      // If user is not signed in, return unauthorized
+      if (!req.user) {
+        return res.status(401).json({ error: 'You must be signed in to upload a photo.' });
+      }
+      
       const result = await cloudinary.v2.uploader.upload(
         req.file.path,
         { 
@@ -33,7 +39,7 @@ const Photos = {
         result.width,
         result.height,
         result.tags.join(','),
-        1
+        req.user.id
       ];
       const { rows } = await db.query(createPhotoQuery, values);
       return res.status(200).json(rows[0]);

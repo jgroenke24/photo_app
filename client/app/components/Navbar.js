@@ -23,33 +23,21 @@ class Navbar extends Component {
                 Dashboard
               </NavLink>
             </li>
-            <li className='navbar__item'>
-              <NavLink
-                to={{
-                  pathname: '/upload',
-                  state: { modal: true },
-                }}
-                className='navbar__link'
-                activeClassName='activelinks'
-              >
-                Upload
-              </NavLink>
-            </li>
-            <li className='navbar__item'>
-              <button
-                className='navbar__upload'
-                onClick={this.context.uploadBoxIsOpen ? this.handleUploadBoxClose : this.handleUploadBoxOpen}
-              >
-                Upload
-                <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' viewBox='0 0 24 24'>
-                  <rect width='18' height='18' x='3' y='3' rx='2' ry='2'/>
-                  <path d='M12 8v8M8 12h8'/>
-                </svg>
-              </button>
-            </li>
             
             {this.context.isLoggedIn ? (
               <Fragment>
+                <li className='navbar__item'>
+                  <button
+                    className='navbar__upload'
+                    onClick={this.context.uploadBoxIsOpen ? this.handleUploadBoxClose : this.handleUploadBoxOpen}
+                  >
+                    Upload
+                    <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' viewBox='0 0 24 24'>
+                      <rect width='18' height='18' x='3' y='3' rx='2' ry='2'/>
+                      <path d='M12 8v8M8 12h8'/>
+                    </svg>
+                  </button>
+                </li>
                 <li className='navbar__item'>
                   <NavLink to='/user' className='navbar__link' activeClassName='activelinks'>
                     User Profile
@@ -58,6 +46,22 @@ class Navbar extends Component {
               </Fragment>
             ) : (
               <Fragment>
+                <li className='navbar__item'>
+                  <NavLink
+                    to={{
+                      pathname: '/login',
+                      state: { modal: true },
+                    }}
+                    className='navbar__upload'
+                    activeClassName='activelinks'
+                  >
+                    Upload
+                    <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' viewBox='0 0 24 24'>
+                      <rect width='18' height='18' x='3' y='3' rx='2' ry='2'/>
+                      <path d='M12 8v8M8 12h8'/>
+                    </svg>
+                  </NavLink>
+                </li>
                 <li className='navbar__item'>
                   <NavLink
                     to={{

@@ -24,7 +24,7 @@ const upload = multer({ storage: storage, fileFilter: imageFilter});
 router.get('/', Users.jwt(), Photos.getAll);
 
 // Create route - add new photo
-router.post('/', upload.single('image'), Photos.create);
+router.post('/', Users.jwt(), upload.single('image'), Photos.create);
 
 // Show route - show one photo
 router.get('/:id', Users.jwt(), Photos.getOne);
