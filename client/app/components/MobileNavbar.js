@@ -1,10 +1,21 @@
-import React from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { AppConsumer } from './AppContext';
+import { AppContext } from './AppContext';
 
-const MobileNavbar = (props) => (
-  <AppConsumer>
-    {({ isLoggedIn }) => (
+class MobileNavbar extends Component {
+  static contextType = AppContext;
+  
+  handleUploadBoxOpen = () => {
+    document.body.style.cssText = 'overflow: hidden; position: fixed;';
+    this.context.changeToBoxOpen();
+  }
+  
+  handleUploadBoxClose = () => {
+    this.context.changeToBoxClosed();
+  }
+  
+  render() {
+    return (
       <nav className='mobilenav'>
         <ul className='mobilenav__links'>
           <li>
@@ -24,11 +35,14 @@ const MobileNavbar = (props) => (
             </NavLink>
           </li>
           <li>
-            <NavLink activeClassName='activelinks' to='/upload'>
+            <button
+              onClick={this.handleUploadBoxOpen}
+            >
               <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'>
-                <path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12'/>
+                <rect width='18' height='18' x='3' y='3' rx='2' ry='2'/>
+                <path d='M12 8v8M8 12h8'/>
               </svg>
-            </NavLink>
+            </button>
           </li>
           <li>
             <NavLink activeClassName='activelinks' to='/search'>
@@ -39,7 +53,7 @@ const MobileNavbar = (props) => (
             </NavLink>
           </li>
           
-          {isLoggedIn &&
+          {this.context.isLoggedIn &&
             <li>
               <NavLink activeClassName='activelinks' to='/profile'>
                 <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'>
@@ -51,8 +65,8 @@ const MobileNavbar = (props) => (
           }
         </ul>
       </nav>
-    )}
-  </AppConsumer>
-);
+    );
+  }
+}
 
 export default MobileNavbar;

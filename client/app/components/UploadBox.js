@@ -34,6 +34,7 @@ class UploadBox extends Component {
   }
   
   handleClose = () => {
+    document.body.removeAttribute('style');
     this.context.changeToBoxClosed();
   }
   
