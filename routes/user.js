@@ -90,7 +90,7 @@ const validateMiddleware = (req, res, next) => {
 // Register user route
 router.post('/signup', validationChains('signup'), validateMiddleware, Users.auth('register'));
 
-// Register user route
+// Login user route
 router.post('/login', validationChains('login'), validateMiddleware, Users.auth('login'));
 
 // test authorization route
@@ -102,13 +102,13 @@ router.get('/dashboard', Users.jwt(), (req, res) => {
   return res.json({ message: 'Unauthorized' });
 });
 
-// forgot password route
+// Forgot password route
 router.post('/forgotpassword', validationChains('forgotpassword'), validateMiddleware, ResetPassword.sendEmail);
 
-// reset password route
+// Reset password route
 router.get('/resetpassword/:token', ResetPassword.verifyToken);
 
-// reset password on server
+// Reset password on server
 router.post('/resetpassword/:token', validationChains('resetpassword'), validateMiddleware, ResetPassword.verifyToken, ResetPassword.reset);
 
 router.get('/', Users.jwt(), (req, res) => {
@@ -117,5 +117,8 @@ router.get('/', Users.jwt(), (req, res) => {
   }
   return res.status(200).send('welcome');
 });
+
+// Get a users profile
+router.get('/api/users/:username', Users.getOne);
 
 export default router;

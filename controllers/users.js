@@ -1,5 +1,6 @@
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
+import db from '../db';
 
 const Users = {
   
@@ -71,7 +72,32 @@ const Users = {
         next();
       })(req, res, next);
     };
-  }
+  },
+  
+  // Get one User's information
+  async getOne(req, res) {
+    const findOneUser = `
+      SELECT users.username, users.joined, photos.*
+      FROM users
+      RIGHT OUTER JOIN photos ON users.id = photos.userid
+      WHERE users.username = $1
+    `;
+    
+    try {
+      const { rows } = await db.query(findOneUser, [ req.params.username ]);
+      
+      // If user was not found in database
+      if (!rows[0]) {
+        return res.status(404).send('User not found');
+      }
+      console.log(rows);
+      return res.send(rows);
+    } catch (error) {
+      return res.status(400).send(error);
+    }
+  },
+  
+  
 };
 
 export default Users;
