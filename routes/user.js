@@ -119,6 +119,6 @@ router.get('/', Users.jwt(), (req, res) => {
 });
 
 // Get a users profile
-router.get('/api/users/:username', Users.getOne);
+router.get('/api/users/:username', Users.jwt(), Users.getOne);
 
 export default router;

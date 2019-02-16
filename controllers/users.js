@@ -86,12 +86,26 @@ const Users = {
     try {
       const { rows } = await db.query(findOneUser, [ req.params.username ]);
       
-      // If user was not found in database
+      // If profile user was not found in database
       if (!rows[0]) {
         return res.status(404).send('User not found');
       }
-      console.log(rows);
-      return res.send(rows);
+      
+      const profileUser = {
+        username: rows[0].username,
+        joined: rows[0].joined,
+      };
+      
+      // A user is signed in (from jwt authentication)
+      if (req.user) {
+        return res.status(200).json({
+          profileUser,
+          user: req.user,
+        });
+      }
+      
+      // No user is signed in so just return the profile user
+      return res.status(200).json({ profileUser });
     } catch (error) {
       return res.status(400).send(error);
     }

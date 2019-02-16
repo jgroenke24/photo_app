@@ -8,6 +8,7 @@ import Photo from './Photo';
 import Dashboard from './Dashboard';
 import Hero from './Hero';
 import UploadBox from './UploadBox';
+import Profile from './Profile';
 import { AppContext } from './AppContext';
 
 class Home extends Component {
@@ -37,6 +38,7 @@ class Home extends Component {
               )}
             />
             <Route path={`${match.path}photos/:photoId`} component={Photo} />
+            <Route path={`${match.path}users/:username`} component={Profile} />
             <Route path='/dashboard' component={Dashboard} />
             <Route render={() => <div>NOT FOUND</div>} />
           </Switch>
