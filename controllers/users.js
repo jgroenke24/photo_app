@@ -77,24 +77,24 @@ const Users = {
   // Get one User's information
   async getOne(req, res) {
     const findOneUser = `
-      SELECT users.username, users.joined, photos.*
-      FROM users
-      RIGHT OUTER JOIN photos ON users.id = photos.userid
-      WHERE users.username = $1
-    `;
+    SELECT users.id, users.username, users.joined, users.avatar, users.bio, users.firstname, users.lastname
+    FROM users
+    WHERE users.username = $1`;
+    // const findOneUser = `
+    //   SELECT users.username, users.joined, users.avatar, photos.*
+    //   FROM users
+    //   RIGHT OUTER JOIN photos ON users.id = photos.userid
+    //   WHERE users.username = $1
+    // `;
     
     try {
       const { rows } = await db.query(findOneUser, [ req.params.username ]);
+      const profileUser = rows[0];
       
       // If profile user was not found in database
-      if (!rows[0]) {
+      if (!profileUser) {
         return res.status(404).send('User not found');
       }
-      
-      const profileUser = {
-        username: rows[0].username,
-        joined: rows[0].joined,
-      };
       
       // A user is signed in (from jwt authentication)
       if (req.user) {

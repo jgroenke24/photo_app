@@ -889,3 +889,61 @@ button {
     border-radius: 0.25rem;
   }
 }
+
+.profile {
+  padding: 4rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  
+  @media (min-width: 768px) {
+    flex-direction: row;
+    justify-content: center;
+  }
+  
+  &__image {
+    display: block;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.15);
+  }
+  
+  &__info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 1rem;
+    color: $black;
+    
+    @media(min-width: 768px) {
+      margin-left: 3rem;
+      margin-top: 0;
+      width: 45%;
+    }
+  }
+  
+  &__name {
+    font-weight: 600;
+    font-size: 2.5rem;
+    line-height: 1;
+    padding-bottom: 0.5rem;
+    color: inherit;
+  }
+  
+  &__bio {
+    width: 100%;
+    padding-top: 1rem;
+    color: inherit;
+  }
+  
+  &__location {
+    margin-top: 1rem;
+    height: 2rem;
+    color: $gray-400;
+    display: flex;
+    align-items: center;
+    
+    & svg {
+      margin-right: 0.5rem;
+    }
+  }
+}
