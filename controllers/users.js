@@ -77,7 +77,7 @@ const Users = {
   // Get one User's information
   async getOne(req, res) {
     const findOneUser = `
-    SELECT users.id, users.username, users.joined, users.avatar, users.bio, users.firstname, users.lastname
+    SELECT users.id, users.username, users.joined, users.avatar, users.bio, users.firstname, users.lastname, users.location
     FROM users
     WHERE users.username = $1`;
     // const findOneUser = `
