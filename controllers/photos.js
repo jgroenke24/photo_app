@@ -94,12 +94,12 @@ const Photos = {
   // Get a photo
   async getOne(req, res) {
     const findOnePhotoWithUserAndLikesQuery = `
-      SELECT photos.*, users.username, count(likes.photoid) AS likes
+      SELECT photos.*, users.username, users.avatar, count(likes.photoid) AS likes
       FROM photos
       FULL OUTER JOIN users on photos.userid = users.id
       FULL OUTER JOIN likes on photos.id = likes.photoid
       WHERE photos.id = $1
-      GROUP BY photos.id, users.username
+      GROUP BY photos.id, users.username, users.avatar
     `;
     
     try {
