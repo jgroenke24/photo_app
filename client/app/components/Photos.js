@@ -249,25 +249,47 @@ class Photos extends Component {
   async componentDidMount() {
     try {
       
-      // Get all photos from server
-      const response = await axios
-        .get(
-          'https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos',
-          {
-            withCredentials: true,
-          }
-        );
+      // If photos were passed in as a prop
+      if (this.props.photos) {
         
-      const { photos, user } = response.data;
+        // If a user was also passed in as a prop
+        if (this.props.user) {
+          this.setState(() => {
+            return {
+              photos: this.props.photos,
+              user: this.props.user,
+            };
+          });
+        } else {
+          
+          // No user was passed in, so just update photos in state
+          this.setState(() => {
+            return {
+              photos: this.props.photos,
+            };
+          });
+        }
+      } else {
+        
+        // Get all photos from server
+        const response = await axios
+          .get(
+            'https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos',
+            {
+              withCredentials: true,
+            }
+          );
+          
+        const { photos, user } = response.data;
 
-
-      // Update state with returned array of photos
-      this.setState(() => {
-        return {
-          photos,
-          user: user || null,
-        };
-      });
+        // Update state with returned array of photos
+        this.setState(() => {
+          return {
+            photos,
+            user: user || null,
+          };
+        });
+      }
     } catch (error) {
       this.setState(() => {
         return {
@@ -305,5 +327,10 @@ class Photos extends Component {
     );
   }
 }
+
+Photos.propTypes = {
+  photos: PropTypes.array,
+  user: PropTypes.object,
+};
 
 export default Photos;

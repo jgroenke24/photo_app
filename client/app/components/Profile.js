@@ -6,6 +6,7 @@ class Profile extends Component {
   state = {
     profileUser: null,
     user: null,
+    photos: null,
   }
   
   async componentDidMount() {
@@ -20,12 +21,13 @@ class Profile extends Component {
           }
         );
       
-      const { profileUser, user } = response.data;
+      const { profileUser, user, photos } = response.data;
       
       // Update state with profile user and photos
       this.setState(() => {
         return {
           profileUser,
+          photos,
           user: user || null,
         };
       });
@@ -36,52 +38,55 @@ class Profile extends Component {
   
   render() {
     
-    const { profileUser } = this.state;
+    const { profileUser, photos, user } = this.state;
     
     return (
-      <section className='profile'>
-        {!profileUser && <div>Loading user...</div>}
-        
-        {profileUser &&
-          <Fragment>
-            <img
-              src={profileUser.avatar.replace('image/upload/', 'image/upload/c_scale,w_160/')}
-              alt={`${profileUser.username} avatar`}
-              className='profile__image'
-            />
-            <div className='profile__info'>
-              <h1 className='profile__name'>
-                {profileUser.firstName && profileUser.lastName
-                  ? `${profileUser.firstName} ${profileUser.lastName}`
-                  : profileUser.username
-                }
-              </h1>
-            
-              {profileUser.bio ? (
-                <p className='profile__bio'>{profileUser.bio}</p>
-              ) : (
-                <p className='profile__bio'>
-                  Check out photos posted by
+      <Fragment>
+        <section className='profile'>
+          {!profileUser && <div>Loading user...</div>}
+          
+          {profileUser &&
+            <Fragment>
+              <img
+                src={profileUser.avatar}
+                alt={`${profileUser.username} avatar`}
+                className='profile__image'
+              />
+              <div className='profile__info'>
+                <h1 className='profile__name'>
                   {profileUser.firstName && profileUser.lastName
-                    ? ` ${profileUser.firstName}`
-                    : ` ${profileUser.username}`
+                    ? `${profileUser.firstName} ${profileUser.lastName}`
+                    : profileUser.username
                   }
-                </p>
-              )}
+                </h1>
               
-              {profileUser.location &&
-                <div className='profile__location'>
-                  <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' viewBox='0 0 24 24'>
-                    <path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/>
-                    <circle cx='12' cy='10' r='3'/>
-                  </svg>
-                  {profileUser.location}
-                </div>
-              }
-            </div>
-          </Fragment>
-        }
-      </section>
+                {profileUser.bio ? (
+                  <p className='profile__bio'>{profileUser.bio}</p>
+                ) : (
+                  <p className='profile__bio'>
+                    Check out photos posted by
+                    {profileUser.firstName && profileUser.lastName
+                      ? ` ${profileUser.firstName}`
+                      : ` ${profileUser.username}`
+                    }
+                  </p>
+                )}
+                
+                {profileUser.location &&
+                  <div className='profile__location'>
+                    <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' viewBox='0 0 24 24'>
+                      <path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/>
+                      <circle cx='12' cy='10' r='3'/>
+                    </svg>
+                    {profileUser.location}
+                  </div>
+                }
+              </div>
+            </Fragment>
+          }
+        </section>
+        {photos && <Photos photos={photos} user={user} />}
+      </Fragment>
     );
   }
 }
