@@ -58,7 +58,7 @@ class PhotoItem extends Component {
   }
 
   render() {
-    const { photo: { id, url, tags, username }, user } = this.props;
+    const { photo: { id, url, tags, username, avatar }, user } = this.props;
     const { likedByUser, likes } = this.state;
 
     return (
@@ -109,7 +109,14 @@ class PhotoItem extends Component {
               </Link>
             )
           }
-          <h2 className='photoitem__creator'>{username}</h2>
+          <Link
+            to={`/users/${username}`}
+            className='photoitem__creator'
+          >
+            <img className='photoitem__avatar' src={avatar} alt={`${username} avatar`} />
+            <h2>{username}</h2>
+          </Link>
+          
         </div>
       </div>
     );
@@ -175,14 +182,18 @@ class PhotoCard extends Component {
   }
 
   render() {
-    const { photo: { id, url, tags, username }, user } = this.props;
+    const { photo: { id, url, tags, username, avatar }, user } = this.props;
     const { likedByUser, likes } = this.state;
 
     return (
       <div key={id} className='photocard'>
-        <div className='photocard__top'>
+        <Link
+          to={`/users/${username}`}
+          className='photocard__top'
+        >
+          <img className='photocard__avatar' src={avatar} alt={`${username} avatar`} />
           <h2>{username}</h2>
-        </div>
+        </Link>
         <Link
           to={{
             pathname: `/photos/${id}`,
