@@ -6,6 +6,7 @@ class AppProvider extends Component {
   state = {
     isLoggedIn: false,
     uploadBoxIsOpen: false,
+    user: null,
   }
   
   render() {
@@ -32,7 +33,13 @@ class AppProvider extends Component {
           return {
             uploadBoxIsOpen: false,
           };
-        })
+        }),
+        user: this.state.user,
+        addUser: (user) => this.setState(() => {
+          return {
+            user,
+          };
+        }),
       }}>
         {this.props.children}
       </AppContext.Provider>

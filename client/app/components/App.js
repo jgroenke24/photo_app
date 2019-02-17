@@ -27,6 +27,7 @@ class App extends Component {
       
       if (user) {
         this.context.changeToLoggedIn();
+        this.context.addUser(user);
       }
     }
   }
