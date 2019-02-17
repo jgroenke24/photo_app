@@ -15,7 +15,7 @@ class Photo extends Component {
   async componentDidMount() {
     
     if (this.props.location.state) {
-      const { id, url, tags, username, likes, likedByUser, user } = this.props.location.state;
+      const { id, url, tags, username, avatar, likes, likedByUser, user } = this.props.location.state;
       this.setState(() => {
         return {
           user,
@@ -26,6 +26,7 @@ class Photo extends Component {
             url,
             tags,
             username,
+            avatar,
           }
         };
       });
@@ -151,7 +152,14 @@ class Photo extends Component {
         {photo &&
           <Fragment>
             <div className='photo__top'>
-              <h2 className='photo__user'>{photo.username}</h2>
+              <Link
+                to={`/users/${photo.username}`}
+                className='photo__user'
+              >
+                <img className='photo__avatar' src={photo.avatar} alt={`${photo.username} avatar`} />
+                <h2>{photo.username}</h2>
+              </Link>
+              
               
               {user
                 ? (
