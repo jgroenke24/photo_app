@@ -38,11 +38,13 @@ class Navbar extends Component {
                     </svg>
                   </button>
                 </li>
-                <li className='navbar__item'>
-                  <NavLink to='/user' className='navbar__link' activeClassName='activelinks'>
-                    User Profile
-                  </NavLink>
-                </li>
+                {this.context.user &&
+                  <li className='navbar__item'>
+                    <NavLink to={`/users/${this.context.user.username}`} className='navbar__link' activeClassName='activelinks'>
+                      Profile
+                    </NavLink>
+                  </li>
+                }
               </Fragment>
             ) : (
               <Fragment>
