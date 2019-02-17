@@ -51,11 +51,11 @@ const Photos = {
   // Get all photos
   async getAll(req, res) {
     const findAllPhotosWithUserAndLikesQuery = `
-      SELECT photos.*, users.username, count(likes.photoid) AS likes
+      SELECT photos.*, users.username, users.avatar, count(likes.photoid) AS likes
       FROM photos
       FULL OUTER JOIN users on photos.userid = users.id
       FULL OUTER JOIN likes on photos.id = likes.photoid
-      GROUP BY photos.id, users.username
+      GROUP BY photos.id, users.username, users.avatar
       ORDER BY photos.created DESC
     `;
     
