@@ -80,12 +80,15 @@ const Users = {
     SELECT users.id, users.username, users.joined, users.avatar, users.bio, users.firstname, users.lastname, users.location
     FROM users
     WHERE users.username = $1`;
-    // const findOneUser = `
-    //   SELECT users.username, users.joined, users.avatar, photos.*
-    //   FROM users
-    //   RIGHT OUTER JOIN photos ON users.id = photos.userid
-    //   WHERE users.username = $1
-    // `;
+    
+    const findUsersPhotosWithLikesQuery = `
+      SELECT photos.*, count(likes.photoid) AS likes
+      FROM photos
+      FULL OUTER JOIN likes on photos.id = likes.photoid
+      WHERE photos.userid = $1
+      GROUP BY photos.id
+      ORDER BY photos.created DESC
+    `;
     
     try {
       const { rows } = await db.query(findOneUser, [ req.params.username ]);
@@ -96,16 +99,33 @@ const Users = {
         return res.status(404).send('User not found');
       }
       
+      const { rows: photos } = await db.query(findUsersPhotosWithLikesQuery, [ profileUser.id ]);
+
       // A user is signed in (from jwt authentication)
       if (req.user) {
+        
+        // Find all the photos the signed in user has liked
+        const findPhotosUserLikedQuery = 'SELECT photoid FROM likes WHERE userid = $1';
+        const { rows: likedPhotos } = await db.query(findPhotosUserLikedQuery, [ req.user.id ]);
+        
+        // Create array of just photoids of photos signed in user has liked
+        const photosLikedByUser = likedPhotos.map(row => row.photoid);
+        
+        // Map over all of the photos and add a boolean property likedByUser if the photo id is found in the array above
+        const newPhotos = photos.map(photo => {
+          photo.likedByUser = photosLikedByUser.includes(photo.id);
+          return photo;
+        });
+        
         return res.status(200).json({
           profileUser,
+          photos: newPhotos,
           user: req.user,
         });
       }
       
-      // No user is signed in so just return the profile user
-      return res.status(200).json({ profileUser });
+      // No user is signed in so just return the profile user and the photos
+      return res.status(200).json({ profileUser, photos });
     } catch (error) {
       return res.status(400).send(error);
     }
