@@ -82,11 +82,12 @@ const Users = {
     WHERE users.username = $1`;
     
     const findUsersPhotosWithLikesQuery = `
-      SELECT photos.*, count(likes.photoid) AS likes
+      SELECT photos.*, users.username, count(likes.photoid) AS likes
       FROM photos
+      FULL OUTER JOIN users on photos.userid = users.id
       FULL OUTER JOIN likes on photos.id = likes.photoid
       WHERE photos.userid = $1
-      GROUP BY photos.id
+      GROUP BY photos.id, users.username
       ORDER BY photos.created DESC
     `;
     
