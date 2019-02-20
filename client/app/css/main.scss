@@ -965,6 +965,12 @@ button {
     line-height: 1;
     padding-bottom: 0.5rem;
     color: inherit;
+    display: flex;
+    align-items: center;
+    
+    & .btn {
+      margin-left: 2rem;
+    }
   }
   
   &__bio {

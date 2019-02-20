@@ -1,8 +1,12 @@
 import React, { Component, Fragment } from 'react';
+import { Link } from 'react-router-dom';
+import { AppContext } from './AppContext';
 import axios from 'axios';
 import Photos from './Photos';
 
 class Profile extends Component {
+  static contextType = AppContext;
+  
   state = {
     profileUser: null,
     user: null,
@@ -54,12 +58,24 @@ class Profile extends Component {
                   className='profile__image'
                 />
                 <div className='profile__info'>
-                  <h1 className='profile__name'>
-                    {profileUser.firstName && profileUser.lastName
-                      ? `${profileUser.firstName} ${profileUser.lastName}`
-                      : profileUser.username
+                  <div className='profile__name'>
+                    <h1>
+                      {profileUser.firstName && profileUser.lastName
+                        ? `${profileUser.firstName} ${profileUser.lastName}`
+                        : profileUser.username
+                      }
+                    </h1>
+                    {this.context.user && this.context.user.username === profileUser.username 
+                      ? (
+                        <Link
+                          to={`/users/${profileUser.username}/edit`}
+                          className='btn photo__btn'
+                        >
+                          Edit Profile
+                        </Link>
+                      ) : null
                     }
-                  </h1>
+                  </div>
                 
                   {profileUser.bio ? (
                     <p className='profile__bio'>{profileUser.bio}</p>
