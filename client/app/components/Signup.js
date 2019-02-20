@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
+import { AppContext } from './AppContext';
 import axios from 'axios';
 
 // Add a response interceptor
@@ -30,6 +31,8 @@ class Signup extends Component {
     passwordCheckIsValid: false,
     signupError: null,
   };
+  
+  static contextType = AppContext;
   
   showValidationError(element, message) {
     this.setState((prevState) => ({
@@ -127,6 +130,9 @@ class Signup extends Component {
           withCredentials: true,
         }
       );
+      const { user } = response.data;
+      this.context.changeToLoggedIn();
+      this.context.addUser(user);
       this.props.history.push('/');
     } catch (error) {
       

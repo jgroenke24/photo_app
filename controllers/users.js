@@ -45,6 +45,10 @@ const Users = {
             .json({ 
               ...action === 'login' ? {message: 'Login successful'} : {message: 'Registered successfully! You are now logged in!'},
               success: true,
+              user: {
+                id: user.id,
+                username: user.username,
+              }
             });
         });
       })(req, res);

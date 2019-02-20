@@ -99,7 +99,9 @@ class Login extends Component {
           withCredentials: true,
         }
       );
+      const { user } = response.data;
       this.context.changeToLoggedIn();
+      this.context.addUser(user);
       this.props.history.push('/');
     } catch (error) {
 
