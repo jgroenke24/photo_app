@@ -9,6 +9,7 @@ import Dashboard from './Dashboard';
 import Hero from './Hero';
 import UploadBox from './UploadBox';
 import Profile from './Profile';
+import EditProfile from './EditProfile';
 import { AppContext } from './AppContext';
 
 class Home extends Component {
@@ -38,7 +39,8 @@ class Home extends Component {
               )}
             />
             <Route path={`${match.path}photos/:photoId`} component={Photo} />
-            <Route path={`${match.path}users/:username`} component={Profile} />
+            <Route exact path={`${match.path}users/:username`} component={Profile} />
+            <Route path={`${match.path}users/:username/edit`} component={EditProfile} />
             <Route path='/dashboard' component={Dashboard} />
             <Route render={() => <div>NOT FOUND</div>} />
           </Switch>
