@@ -1049,11 +1049,16 @@ button {
   
   &__infoform {
     width: 100%;
+    
+    & small {
+      display: block;
+      margin: 0.5rem 0;
+    }
   }
   
   &__infolabel {
     @extend %block-input;
-    padding: 1.5rem 0 0.5rem 0;
+    padding-bottom: 0.5rem;
   }
   
   &__infoinput {
