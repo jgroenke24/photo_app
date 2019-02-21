@@ -79,11 +79,11 @@ const Users = {
   },
   
   // Get one User's information
-  async getOne(req, res) {
+  async getUserAll(req, res) {
     const findOneUser = `
-    SELECT users.id, users.username, users.joined, users.avatar, users.bio, users.firstname, users.lastname, users.location
+    SELECT id, username, joined, avatar, bio, firstname, lastname, location
     FROM users
-    WHERE users.username = $1`;
+    WHERE username = $1`;
     
     const findUsersPhotosWithLikesQuery = `
       SELECT photos.*, users.username, users.avatar, count(likes.photoid) AS likes
@@ -131,6 +131,30 @@ const Users = {
       
       // No user is signed in so just return the profile user and the photos
       return res.status(200).json({ profileUser, photos });
+    } catch (error) {
+      return res.status(400).send(error);
+    }
+  },
+  
+  // Get one users profile info
+  async getUser (req, res) {
+    const findOneUser = `
+      SELECT avatar, firstname, lastname, email, username, location, bio
+      FROM users
+      WHERE username = $1
+    `;
+    
+    try {
+      
+      // If the user that is signed in does not match the user that is being requested, return unauthorized
+      if (req.user.username !== req.params.username) {
+        return res.status(403).send('You\'re not allowed to edit this profile');
+      }
+      
+      const { rows } = await db.query(findOneUser, [ req.params.username ]);
+      const profileUser = rows[0];
+      
+      return res.status(200).json({ profileUser });
     } catch (error) {
       return res.status(400).send(error);
     }

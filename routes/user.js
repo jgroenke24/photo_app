@@ -118,7 +118,10 @@ router.get('/', Users.jwt(), (req, res) => {
   return res.status(200).send('welcome');
 });
 
-// Get a users profile
-router.get('/api/users/:username', Users.jwt(), Users.getOne);
+// Show route - Get a users profile with all their photos
+router.get('/api/users/:username', Users.jwt(), Users.getUserAll);
+
+// Edit route - Get a users profile information
+router.get('/api/users/:username/edit', Users.jwt(), Users.getUser);
 
 export default router;
