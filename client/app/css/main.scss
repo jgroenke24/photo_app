@@ -997,3 +997,99 @@ button {
     color: $black;
   }
 }
+
+%block-input {
+  display: block;
+  width: 100%;
+}
+
+.edit {
+  padding: 3rem 1rem;
+  
+  &__header {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  
+  &__picform {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 1rem 0;
+  }
+  
+  &__piclabel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    color: $gray-400;
+    
+    &:hover {
+      color: $gray-900;
+    }
+    
+    & input {
+      display: none;
+    }
+    
+    & p {
+      color: inherit;
+      font-size: 0.875rem;
+      text-decoration: underline;
+      padding: 0.75rem 0;
+    }
+  }
+  
+  &__avatar {
+    width: 10rem;
+    height: 10rem;
+    border-radius: 50%;
+  }
+  
+  &__infoform {
+    width: 100%;
+  }
+  
+  &__infolabel {
+    @extend %block-input;
+    padding: 1.5rem 0 0.5rem 0;
+  }
+  
+  &__infoinput {
+    @extend %block-input;
+    border: 1px solid $gray-400;
+    border-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+    
+    &:focus {
+      border-color: $gray-900;
+    }
+  }
+  
+  &__infotext {
+    position: relative;
+    
+    & textarea {
+      display: block;
+      width: 100%;
+      border: 1px solid $gray-400;
+      border-radius: 0.25rem;
+      padding: 0.5rem 1rem;
+      resize: none;
+      line-height: 1.5;
+    }
+    
+    & span {
+      position: absolute;
+      right: 1rem;
+      bottom: 1rem;
+      color: $gray-400;
+    }
+  }
+  
+  & .btn {
+    margin-top: 2rem;
+    width: 100%;
+  }
+}
