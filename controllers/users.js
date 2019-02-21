@@ -138,7 +138,7 @@ const Users = {
   
   // Get one users profile info
   async getUser (req, res) {
-    const findOneUser = `
+    const findOneUserQuery = `
       SELECT avatar, firstname, lastname, email, username, location, bio
       FROM users
       WHERE username = $1
@@ -146,13 +146,19 @@ const Users = {
     
     try {
       
-      // If the user that is signed in does not match the user that is being requested, return unauthorized
-      if (req.user.username !== req.params.username) {
+      // A user must be signed in to see edit information
+      // Signed in user must also be requesting their own user data.
+      if (!req.user || req.user.username !== req.params.username) {
         return res.status(403).send('You\'re not allowed to edit this profile');
       }
       
-      const { rows } = await db.query(findOneUser, [ req.params.username ]);
+      const { rows } = await db.query(findOneUserQuery, [ req.params.username ]);
       const profileUser = rows[0];
+      
+      // If profile user was not found in database
+      if (!profileUser) {
+        return res.status(404).send('User not found');
+      }
       
       return res.status(200).json({ profileUser });
     } catch (error) {
@@ -160,7 +166,55 @@ const Users = {
     }
   },
   
-  
+  // Update a user
+  async updateUser (req, res) {
+    const findOneUserQuery = `
+      SELECT id, firstname, lastname, email, username, location, bio
+      FROM users
+      WHERE username = $1
+    `;
+    const updateUserQuery = `
+      UPDATE users
+      SET firstname = $1, lastname = $2, email = $3, username = $4, location = $5, bio = $6
+      WHERE id = $7
+      returning *
+    `;
+    
+    // A user must be signed in to edit information
+    // Signed in user must also be requesting their own user data.
+    if (!req.user || req.user.username !== req.params.username) {
+      return res.status(403).send('You\'re not allowed to edit this profile');
+    }
+    
+    try {
+      
+      // First, get the correct row to update from the database
+      const { rows: userRows } = await db.query(findOneUserQuery, [ req.params.username ]);
+      const user = userRows[0];
+      
+      // If nothing comes back from the database, send 404 not found
+      if (!user) {
+        return res.status(404).send({ message: 'User not found' });
+      }
+      
+      const values = [
+        req.body.firstname || user.firstname,
+        req.body.lastname || user.lastname,
+        req.body.email,
+        req.body.username,
+        req.body.location || user.location,
+        req.body.bio || user.bio,
+        user.id
+      ];
+      
+      // Update the row in the database with the new data in the values array
+      const response = await db.query(updateUserQuery, values);
+      
+      return res.status(200).json({ success: 'Profile updated!' });
+    } catch (error) {
+      return res.status(400).send(error);
+    }
+  }
 };
 
 export default Users;

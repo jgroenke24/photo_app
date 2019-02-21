@@ -124,4 +124,7 @@ router.get('/api/users/:username', Users.jwt(), Users.getUserAll);
 // Edit route - Get a users profile information
 router.get('/api/users/:username/edit', Users.jwt(), Users.getUser);
 
+// Update route - Update a user profile information
+router.put('/api/users/:username', Users.jwt(), Users.updateUser);
+
 export default router;
