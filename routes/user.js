@@ -66,6 +66,31 @@ const validationChains = (action) => {
           .withMessage('Passwords must match')
       ];
     }
+    
+    case 'updateprofile': {
+      return [
+        check('firstname')
+          .optional({ checkFalsy: true })
+          .trim(),
+        check('lastname')
+          .optional({ checkFalsy: true })
+          .trim(),
+        check('email')
+          .isEmail().withMessage('You must enter a proper email')
+          .normalizeEmail(),
+        check('username')
+          .matches(/^\w+$/)
+          .withMessage('Username can only contain letters, numbers and underscores'),
+        check('location')
+          .optional({ checkFalsy: true })
+          .trim(),
+        check('bio')
+          .optional({ checkFalsy: true })
+          .trim()
+          .isLength({ min: 0, max: 150 })
+          .withMessage('Bio cannot exceed 150 characters')
+      ];
+    }
   }
 };
 
@@ -125,6 +150,6 @@ router.get('/api/users/:username', Users.jwt(), Users.getUserAll);
 router.get('/api/users/:username/edit', Users.jwt(), Users.getUser);
 
 // Update route - Update a user profile information
-router.put('/api/users/:username', Users.jwt(), Users.updateUser);
+router.put('/api/users/:username', Users.jwt(), validationChains('updateprofile'), validateMiddleware, Users.updateUser);
 
 export default router;

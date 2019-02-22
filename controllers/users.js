@@ -183,7 +183,7 @@ const Users = {
     // A user must be signed in to edit information
     // Signed in user must also be requesting their own user data.
     if (!req.user || req.user.username !== req.params.username) {
-      return res.status(403).send('You\'re not allowed to edit this profile');
+      return res.status(403).send('You are not allowed to edit this profile');
     }
     
     try {

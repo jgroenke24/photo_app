@@ -107,12 +107,15 @@ class EditProfile extends Component {
       });
     } catch (error) {
       console.log(error.response);
-      const responseError = error.response.data;
-      this.setState(() => {
-        return {
-          responseError,
-        };
-      });
+      // If error response comes from the form validator
+      if (error.response.data.errors) {
+        const { errors } = error.response.data;
+        this.setState(() => {
+          return {
+            errors,
+          };
+        });
+      }
     }
   }
   
@@ -180,6 +183,9 @@ class EditProfile extends Component {
       }
       if (error.element === 'username') {
         usernameError = error.message;
+      }
+      if (error.element === 'bio') {
+        bioError = error.message;
       }
     });
     return (
@@ -306,6 +312,8 @@ class EditProfile extends Component {
                   rows='4'
                   value={bio ? bio : ''}
                   onChange={this.handleChange}
+                  onBlur={this.handleBlur}
+                  onFocus={this.handleFocus}
                   aria-describedby='bioHelpBlock'
                 ></textarea>
                 <span>150</span>
