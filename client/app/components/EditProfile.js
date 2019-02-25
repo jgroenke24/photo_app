@@ -2,6 +2,8 @@ import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 
+const TEXT_AREA_CHAR_LIMIT = 150;
+
 class EditProfile extends Component {
   state = {
     loading: true,
@@ -13,6 +15,7 @@ class EditProfile extends Component {
     username: null,
     location: null,
     bio: null,
+    bioCharLeft: TEXT_AREA_CHAR_LIMIT,
     errors: [],
     responseError: null,
     success: null,
@@ -56,6 +59,11 @@ class EditProfile extends Component {
         return;
       }
     }
+  }
+  
+  calcBioCharsLeft(text) {
+    const charCount = text.length;
+    return TEXT_AREA_CHAR_LIMIT - charCount;
   }
   
   handleFile = (event) => {
@@ -118,11 +126,21 @@ class EditProfile extends Component {
   
   handleChange = (event) => {
     const { name, value } = event.target;
-    this.setState(() => {
-      return {
-        [name]: value,
-      };
-    });
+    if (name === 'bio') {
+      const bioCharLeft = this.calcBioCharsLeft(value);
+      this.setState(() => {
+        return {
+          bioCharLeft,
+          [name]: value,
+        };
+      });
+    } else {
+      this.setState(() => {
+        return {
+          [name]: value,
+        };
+      });
+    }
   }
   
   handleBlur = (event) => this.inputIsValid(event.target.name);
@@ -201,6 +219,7 @@ class EditProfile extends Component {
           username,
           location,
           bio,
+          bioCharLeft: TEXT_AREA_CHAR_LIMIT - bio.length,
           loading: false,
         };
       });
@@ -223,6 +242,7 @@ class EditProfile extends Component {
       username,
       location,
       bio,
+      bioCharLeft,
       loading,
       errors,
       success,
@@ -383,7 +403,11 @@ class EditProfile extends Component {
                   onFocus={this.handleFocus}
                   aria-describedby='bioHelpBlock'
                 ></textarea>
-                <span>150</span>
+                <span
+                  className={bioCharLeft < 0 ? 'neg' : ''}
+                >
+                  {bioCharLeft}
+                </span>
               </div>
               <small
                 id='bioHelpBlock'

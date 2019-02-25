@@ -1116,6 +1116,10 @@ button {
       bottom: 1rem;
       color: $gray-400;
     }
+    
+    & span.neg {
+      color: $red;
+    }
   }
   
   & .btn {
