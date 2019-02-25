@@ -195,7 +195,7 @@ const Users = {
       
       // If nothing comes back from the database, send 404 not found
       if (!user) {
-        return res.status(404).send({ message: 'User not found' });
+        return res.status(404).send('User not found');
       }
       
       const values = [

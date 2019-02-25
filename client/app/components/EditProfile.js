@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 
 class EditProfile extends Component {
@@ -87,21 +88,28 @@ class EditProfile extends Component {
             withCredentials: true,
           }
         );
+        
+      this.setState(() => {
+        return {
+          success: 'Profile image uploaded!',
+        };
+      });
     } catch (error) {
-      console.log(error);
-      // If the error comes from the server, update the error in state
+
+      // If error is from server
       if (error.response) {
+        const responseError = error.response.data;
         this.setState(() => {
           return {
-            uploadError: error.response.data.error,
+            responseError,
           };
         });
       } else {
-        
-        // The error happened in submitting the form, so update the state with that error
+      
+        // Error is thrown
         this.setState(() => {
           return {
-            uploadError: error,
+            responseError: error,
           };
         });
       }
@@ -147,8 +155,9 @@ class EditProfile extends Component {
           success,
         };
       });
+      this.props.history.push(`/users/${this.props.match.params.username}`);
     } catch (error) {
-      console.log(error.response);
+
       // If error response comes from the form validator
       if (error.response.data.errors) {
         const { errors } = error.response.data;
@@ -158,6 +167,14 @@ class EditProfile extends Component {
           };
         });
       }
+      
+      // Error comes from server
+      const responseError = error.response.data;
+      this.setState(() => {
+        return {
+          responseError,
+        };
+      });
     }
   }
   
@@ -188,7 +205,6 @@ class EditProfile extends Component {
         };
       });
     } catch (error) {
-      console.log(error.response);
       const responseError = error.response.data;
       this.setState(() => {
         return {
@@ -210,6 +226,7 @@ class EditProfile extends Component {
       loading,
       errors,
       success,
+      responseError,
     } = this.state;
     
     let firstnameError = '';
@@ -233,12 +250,20 @@ class EditProfile extends Component {
     return (
       <section className='edit'>
         
-        {loading &&
-          <div>Loading...</div>
+        {success &&
+          <div className='form__alert form__alert--success' role='alert'>
+            {success}
+          </div>
         }
         
-        {success &&
-          <div>{success}</div>
+        {responseError &&
+          <div className='form__alert form__alert--danger' role='alert'>
+            {responseError}
+          </div>
+        }
+        
+        {loading &&
+          <div>Loading...</div>
         }
       
         {!loading &&
@@ -376,4 +401,4 @@ class EditProfile extends Component {
   }
 }
 
-export default EditProfile;
+export default withRouter(EditProfile);

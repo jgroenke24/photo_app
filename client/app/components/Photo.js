@@ -142,7 +142,7 @@ class Photo extends Component {
     return (
       <section className='photo'>
         {showSubmissionError &&
-          <div className='alert alert-danger' role='alert'>
+          <div className='form__alert form__alert--danger' role='alert'>
             Something went wrong with your request. Please try again.
           </div>
         }

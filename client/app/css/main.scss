@@ -470,6 +470,12 @@ button {
       color: $red;
       background-color: rgba($red, 0.2);
     }
+    
+    &--success {
+      border-color: $green;
+      color: $green;
+      background-color: rgba($green, 0.2);
+    }
   }
   
   &__form {
@@ -1014,6 +1020,10 @@ button {
   &__header {
     font-size: 1.25rem;
     font-weight: 600;
+  }
+  
+  & .form__alert {
+    width: 100%;
   }
   
   &__picform {
