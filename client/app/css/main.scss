@@ -309,6 +309,7 @@ button {
     height: 2rem;
     border-radius: 50%;
     margin-right: 0.75rem;
+    object-fit: cover;
   }
   
   &__link {
@@ -409,6 +410,7 @@ button {
     height: 2rem;
     border-radius: 50%;
     margin-right: 0.75rem;
+    object-fit: cover;
   }
 }
 
@@ -690,6 +692,7 @@ button {
     height: 2rem;
     border-radius: 50%;
     margin-right: 0.75rem;
+    object-fit: cover;
   }
   
   &__btn {
@@ -857,6 +860,7 @@ button {
     height: 100%;
     width: 100%;
     object-fit: cover;
+    min-height: 4rem;
   }
   
   &__remove {
@@ -943,6 +947,7 @@ button {
     border: 1px solid rgba(0,0,0,0.15);
     width: 10rem;
     height: 10rem;
+    object-fit: cover;
   }
   
   &__info {
@@ -1014,8 +1019,24 @@ button {
   &__picform {
     width: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     padding: 1rem 0;
+    
+    & input[type='submit'] {
+      background: inherit;
+      border: none;
+      color: inherit;
+      font-size: 0.875rem;
+      text-decoration: underline;
+      padding: 0.75rem 0;
+      cursor: pointer;
+      color: $gray-400;
+      
+      &:hover {
+        color: $gray-900;
+      }
+    }
   }
   
   &__piclabel {
@@ -1029,15 +1050,8 @@ button {
       color: $gray-900;
     }
     
-    & input {
+    & input[type='file'] {
       display: none;
-    }
-    
-    & p {
-      color: inherit;
-      font-size: 0.875rem;
-      text-decoration: underline;
-      padding: 0.75rem 0;
     }
   }
   
@@ -1045,6 +1059,7 @@ button {
     width: 10rem;
     height: 10rem;
     border-radius: 50%;
+    object-fit: cover;
   }
   
   &__infoform {
