@@ -1075,9 +1075,21 @@ button {
   &__infoform {
     width: 100%;
     
+    @media (min-width: 768px) {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+    }
+    
     & small {
       display: block;
       margin: 0.5rem 0;
+    }
+  }
+  
+  &__infofield {
+    @media (min-width: 768px) {
+      width: 40%;
     }
   }
   
