@@ -66,6 +66,48 @@ class EditProfile extends Component {
     });
   }
   
+  handleUpload = async (event) => {
+    event.preventDefault();
+    const { avatarFile } = this.state;
+    try {
+      
+      if (!avatarFile) {
+        throw 'You must choose a pic to upload!';
+      }
+      
+      // Create a form data object with the photo to be uploaded
+      const data = new FormData();
+      data.append('image', avatarFile, avatarFile.name);
+      
+      // Upload photo to cloudinary and save to database
+      await axios
+        .post(`https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/users/${this.props.match.params.username}/avatar`,
+          data,
+          {
+            withCredentials: true,
+          }
+        );
+    } catch (error) {
+      console.log(error);
+      // If the error comes from the server, update the error in state
+      if (error.response) {
+        this.setState(() => {
+          return {
+            uploadError: error.response.data.error,
+          };
+        });
+      } else {
+        
+        // The error happened in submitting the form, so update the state with that error
+        this.setState(() => {
+          return {
+            uploadError: error,
+          };
+        });
+      }
+    }
+  }
+  
   handleChange = (event) => {
     const { name, value } = event.target;
     this.setState(() => {
@@ -202,7 +244,7 @@ class EditProfile extends Component {
         {!loading &&
           <Fragment>
             <h1 className='edit__header'>Edit Profile</h1>
-            <form className='edit__picform'>
+            <form className='edit__picform' onSubmit={this.handleUpload}>
               <label className='edit__piclabel'>
                 <img
                   src={avatarFile ? URL.createObjectURL(avatarFile) : avatar}
@@ -210,8 +252,8 @@ class EditProfile extends Component {
                   className='edit__avatar'
                 />
                 <input type='file' name='image' accept='image/*' onChange={this.handleFile} />
-                <p>Change profile image</p>
               </label>
+              <input type='submit' value='Change profile image' />
             </form>
             
             <form className='edit__infoform' onSubmit={this.handleSubmit}>
