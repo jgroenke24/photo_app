@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 
-const TEXT_AREA_CHAR_LIMIT = 150;
+const BIO_CHAR_LIMIT = 150;
 
 class EditProfile extends Component {
   state = {
@@ -15,7 +15,7 @@ class EditProfile extends Component {
     username: null,
     location: null,
     bio: null,
-    bioCharLeft: TEXT_AREA_CHAR_LIMIT,
+    bioCharLeft: BIO_CHAR_LIMIT,
     errors: [],
     responseError: null,
     success: null,
@@ -37,7 +37,7 @@ class EditProfile extends Component {
   }
   
   inputIsValid(element) {
-    const { email, username } = this.state;
+    const { email, username, bioCharLeft } = this.state;
     
     if (element === 'email') {
       
@@ -58,12 +58,17 @@ class EditProfile extends Component {
         this.showValidationError('username', 'Username can only contain letters, numbers and underscores');
         return;
       }
+    } else if (element === 'bio') {
+      if (bioCharLeft < 0) {
+        this.showValidationError('bio', `Bio cannot exceed ${BIO_CHAR_LIMIT} characters`);
+        return;
+      }
     }
   }
   
   calcBioCharsLeft(text) {
     const charCount = text.length;
-    return TEXT_AREA_CHAR_LIMIT - charCount;
+    return BIO_CHAR_LIMIT - charCount;
   }
   
   handleFile = (event) => {
@@ -219,7 +224,7 @@ class EditProfile extends Component {
           username,
           location,
           bio,
-          bioCharLeft: TEXT_AREA_CHAR_LIMIT - bio.length,
+          bioCharLeft: BIO_CHAR_LIMIT - bio.length,
           loading: false,
         };
       });
