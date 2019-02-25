@@ -3,7 +3,24 @@ import passport from 'passport';
 import Users from '../controllers/users';
 import ResetPassword from '../controllers/resetPasswords';
 import { check, validationResult } from 'express-validator/check';
+import multer from 'multer';
 const router = new Router();
+
+// Configure multer
+const storage = multer.diskStorage({
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}_${file.originalname}`);
+  }
+});
+const imageFilter = (req, file, cb) => {
+  
+    // accept image files only
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+        return cb(new Error('Only image files are allowed!'), false);
+    }
+    cb(null, true);
+};
+const upload = multer({ storage: storage, fileFilter: imageFilter});
 
 // Return an array of validation depending on which action is taking place
 const validationChains = (action) => {
@@ -151,5 +168,8 @@ router.get('/api/users/:username/edit', Users.jwt(), Users.getUser);
 
 // Update route - Update a user profile information
 router.put('/api/users/:username', Users.jwt(), validationChains('updateprofile'), validateMiddleware, Users.updateUser);
+
+// Upload user avatar to cloudinary
+router.post('/api/users/:username/avatar', Users.jwt(), upload.single('image'), Users.uploadAvatar);
 
 export default router;

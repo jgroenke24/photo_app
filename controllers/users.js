@@ -1,6 +1,7 @@
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
 import db from '../db';
+import cloudinary from 'cloudinary';
 
 const Users = {
   
@@ -214,7 +215,36 @@ const Users = {
     } catch (error) {
       return res.status(400).send(error);
     }
-  }
+  },
+  
+  // Upload avatar for a user
+  async uploadAvatar(req, res) {
+    
+    try {
+      
+      // A user must be signed in to edit information
+      // Signed in user must also be requesting their own user data.
+      if (!req.user || req.user.username !== req.params.username) {
+        return res.status(403).send('You are not allowed to edit this profile');
+      }
+      
+      const result = await cloudinary.v2.uploader.upload(req.file.path);
+      const updateUserAvatarQuery = `UPDATE users
+        SET avatar = $1
+        WHERE id = $2
+        returning *
+      `;
+      
+      const values = [
+        result.secure_url,
+        req.user.id
+      ];
+      const { rows } = await db.query(updateUserAvatarQuery, values);
+      return res.status(200).json(rows[0]);
+    } catch (error) {
+      return res.status(400).send(error);
+    }
+  },
 };
 
 export default Users;
