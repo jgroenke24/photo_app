@@ -8,9 +8,11 @@ class Profile extends Component {
   static contextType = AppContext;
   
   state = {
+    loading: true,
     profileUser: null,
     user: null,
     photos: null,
+    responseError: null,
   }
   
   async componentDidMount() {
@@ -33,21 +35,30 @@ class Profile extends Component {
           profileUser,
           photos,
           user: user || null,
+          loading: false,
         };
       });
     } catch (error) {
-      console.log(error);
+      const responseError = error.response.data;
+      this.setState(() => {
+        return {
+          responseError,
+          loading: false,
+        };
+      });
     }
   }
   
   render() {
     
-    const { profileUser, photos, user } = this.state;
+    const { loading, profileUser, photos, user, responseError } = this.state;
     
     return (
       <Fragment>
         <section className='profile'>
-          {!profileUser && <div>Loading user...</div>}
+          {loading && <div>Loading user...</div>}
+          
+          {responseError && <div>{responseError}</div>}
           
           {profileUser &&
             <Fragment>
