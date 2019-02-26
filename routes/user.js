@@ -1,5 +1,4 @@
 import Router from 'express-promise-router';
-import passport from 'passport';
 import Users from '../controllers/users';
 import ResetPassword from '../controllers/resetPasswords';
 import { check, validationResult } from 'express-validator/check';

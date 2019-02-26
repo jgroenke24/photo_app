@@ -1,13 +1,7 @@
 import React, { Component, Fragment } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import axios from 'axios';
-import { AppProvider, AppContext } from './AppContext';
-import Home from './Home';
-import Upload from './Upload';
-import Login from './Login';
-import Signup from './Signup';
-import ForgotPassword from './ForgotPassword';
-import ResetPassword from './ResetPassword';
+import { AppContext } from './AppContext';
 import ModalSwitch from './ModalSwitch';
 
 class App extends Component {

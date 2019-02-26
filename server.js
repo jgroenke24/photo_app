@@ -53,9 +53,4 @@ app.use(passport.initialize());
 app.use('/api/photos', photosRouter);
 app.use('/', usersRouter);
 
-app.get('/', (req, res) => {
-//   return res.status(200).send({ message: 'The endpoint worked!' });
-  return res.render('index');
-});
-
 app.listen(8081, process.env.IP, () => console.log("photo app Server Started"));

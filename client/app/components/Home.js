@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import axios from 'axios';
 import Header from './Header';
 import Navbar from './Navbar';
 import Photos from './Photos';
