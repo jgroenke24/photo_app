@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import Home from './Home';
 import Upload from './Upload';
 import Login from './Login';
@@ -8,20 +8,23 @@ import ForgotPassword from './ForgotPassword';
 import ResetPassword from './ResetPassword';
 import Modal from './Modal';
 import Photo from './Photo';
+import { AppContext } from './AppContext';
 
 class ModalSwitch extends Component {
+  static contextType = AppContext;
+  
   // We can pass a location to <Switch/> that will tell it to
   // ignore the router's current location and use the location
   // prop instead.
   //
   // We can also use "location state" to tell the app the user
-  // wants to go to `/img/2` in a modal, rather than as the
+  // wants to go to `/photos/:photoid` in a modal, rather than as the
   // main page, keeping the gallery visible behind it.
   //
-  // Normally, `/img/2` wouldn't match the gallery at `/`.
+  // Normally, `/photos/:photoid` wouldn't match the gallery at `/`.
   // So, to get both screens to render, we can save the old
   // location and pass it to Switch, so it will think the location
-  // is still `/` even though its `/img/2`.
+  // is still `/` even though its ``/photos/:photoid``.
   previousLocation = this.props.location;
 
   componentWillUpdate(nextProps) {
@@ -49,8 +52,20 @@ class ModalSwitch extends Component {
       <Fragment>
         <Switch location={isModal ? this.previousLocation : location}>
           <Route path='/upload' component={Upload} />
-          <Route path='/signup' component={Signup} />
-          <Route path='/login' component={Login} />
+          <Route path='/signup' render={() => (
+            this.context.isLoggedIn ? (
+              <Redirect to='/' />
+            ) : (
+              <Signup />
+            )
+          )} />
+          <Route path='/login' render={() => (
+            this.context.isLoggedIn ? (
+              <Redirect to='/' />
+            ) : (
+              <Login />
+            )
+          )} />
           <Route path='/forgotpassword' component={ForgotPassword} />
           <Route path='/resetpassword/:token' component={ResetPassword} />
           <Route path='/' component={Home} />
