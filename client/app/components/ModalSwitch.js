@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import Home from './Home';
-import Upload from './Upload';
 import Login from './Login';
 import Signup from './Signup';
 import ForgotPassword from './ForgotPassword';
@@ -51,7 +50,6 @@ class ModalSwitch extends Component {
     return (
       <Fragment>
         <Switch location={isModal ? this.previousLocation : location}>
-          <Route path='/upload' component={Upload} />
           <Route path='/signup' render={() => (
             this.context.isLoggedIn ? (
               <Redirect to='/' />
@@ -70,7 +68,6 @@ class ModalSwitch extends Component {
           <Route path='/resetpassword/:token' component={ResetPassword} />
           <Route path='/' component={Home} />
         </Switch>
-        {isModal ? <Route path='/upload' render={(props) => <Modal {...props} modalIsOpen={true} children={<Upload />} />} /> : null}
         {isModal ? <Route path='/signup' render={(props) => <Modal {...props} modalIsOpen={true} children={<Signup />} />} /> : null}
         {isModal ? <Route path='/login' render={(props) => <Modal {...props} modalIsOpen={true} children={<Login />} />} /> : null}
         {isModal ? <Route path='/photos/:photoId' render={(props) => <Modal {...props} modalIsOpen={true} children={<Photo />} />} /> : null}
