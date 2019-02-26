@@ -1139,3 +1139,50 @@ button {
     width: 100%;
   }
 }
+
+.loading {
+  width: 100%;
+  display: flex;
+  min-height: calc(100vh - 60px);
+  align-items: center;
+
+  &__wave {
+    display: inline-block;
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    left: 50%; 
+    top: 50%; 
+    transform: translate(-50%, - 50%);
+    
+    &:before, &:after {
+      position: absolute;
+      content: '';
+      border: 4px solid $gray-300;
+      opacity: 1;
+      border-radius: 50%;
+      left: 50%; 
+      top: 50%; 
+      animation: wave 1.2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    }
+    
+    &:after {
+      animation-delay: -0.4s;
+    }
+  }
+}
+
+@keyframes wave {
+  0% {    
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+  }
+}
