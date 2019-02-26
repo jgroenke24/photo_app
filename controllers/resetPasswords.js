@@ -60,7 +60,6 @@ const ResetPassword = {
       };
       
       const mailerResponse = await transporter.sendMail(mailOptions);
-      console.log('response from mailer', mailerResponse);
       
       res.status(200).send('recovery email sent');
     } catch (error) {
@@ -134,7 +133,6 @@ const ResetPassword = {
         text: `This is a confimation that the password for your account (${user.email}) has just been changed.\n\n`,
       };
       const mailerResponse = await transporter.sendMail(mailOptions);
-      console.log('response from mailer', mailerResponse);
       
       res.status(200).json({ message: 'Password updated!' });
     } catch (error) {

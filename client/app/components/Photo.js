@@ -50,7 +50,6 @@ class Photo extends Component {
           };
         });
       } catch (error) {
-        console.log(error.response);
         this.setState(() => {
           return {
             showError: true,
@@ -116,7 +115,6 @@ class Photo extends Component {
       await axios.delete(`https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos/${this.props.match.params.photoId}`);
       this.props.history.push('/');
     } catch (error) {
-      console.log(error);
       this.setState(() => {
         return {
           showSubmissionError: true,

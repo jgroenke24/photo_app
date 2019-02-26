@@ -3,21 +3,6 @@ import { withRouter, Link } from 'react-router-dom';
 import { AppContext } from './AppContext';
 import axios from 'axios';
 
-// Add a response interceptor
-// axios.interceptors.response.use(
-
-//   // Do something with response data
-//   response => response,
-//   error => {
-
-//     // Do something with response error
-//     const { status } = error.response;
-//     if (status === 401) {
-//       console.log('inside interceptor', error.response);
-//     }
-//     return Promise.reject(error);
-//   });
-
 class Signup extends Component {
   state = {
     email: '',

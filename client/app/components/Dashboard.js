@@ -23,7 +23,6 @@ class Dashboard extends Component {
         };
       });
     } catch (err) {
-      console.log(err.response);
       this.setState(() => {
         return {
           message: 'Unauthorized',
