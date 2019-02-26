@@ -107,7 +107,7 @@ const Photos = {
       
       // If nothing comes back from the database, send 404 not found
       if (!photo) {
-        return res.status(404).send({ message: 'Photo not found' });
+        return res.status(404).send('Photo not found');
       }
 
       // A user is signed in (from jwt authentication)

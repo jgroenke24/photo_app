@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { AppContext } from './AppContext';
 import axios from 'axios';
 import Photos from './Photos';
+import Loading from './Loading';
 
 class Profile extends Component {
   static contextType = AppContext;
@@ -55,8 +56,9 @@ class Profile extends Component {
     
     return (
       <Fragment>
+        {loading && <Loading />}
+        
         <section className='profile'>
-          {loading && <div>Loading user...</div>}
           
           {responseError && <div>{responseError}</div>}
           

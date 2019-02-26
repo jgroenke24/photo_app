@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import Loading from './Loading';
 
 class ResetPassword extends Component {
   state = {
@@ -158,12 +159,7 @@ class ResetPassword extends Component {
     
     if (loading) {
       return (
-        <section className='form'>
-          <Link to='/' className='logo form__logo'>
-            PicShareApp
-          </Link>
-          <p className='form__message'>Loading...</p>
-        </section>
+        <Loading />
       );
     }
     

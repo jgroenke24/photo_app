@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
+import Loading from './Loading';
 
 const BIO_CHAR_LIMIT = 150;
 
@@ -273,171 +274,171 @@ class EditProfile extends Component {
       }
     });
     return (
-      <section className='edit'>
+      <Fragment>
+        {loading && <Loading />}
         
-        {success &&
-          <div className='form__alert form__alert--success' role='alert'>
-            {success}
-          </div>
-        }
-        
-        {responseError &&
-          <div className='form__alert form__alert--danger' role='alert'>
-            {responseError}
-          </div>
-        }
-        
-        {loading &&
-          <div>Loading...</div>
-        }
-      
-        {!loading &&
-          <Fragment>
-            <h1 className='edit__header'>Edit Profile</h1>
-            <form className='edit__picform' onSubmit={this.handleUpload}>
-              <label className='edit__piclabel'>
-                <img
-                  src={avatarFile ? URL.createObjectURL(avatarFile) : avatar}
-                  alt={`${username} avatar`}
-                  className='edit__avatar'
-                />
-                <input type='file' name='image' accept='image/*' onChange={this.handleFile} />
-              </label>
-              <input type='submit' value='Change profile image' />
-            </form>
-            
-            <form className='edit__infoform' onSubmit={this.handleSubmit}>
-              <div className='edit__infofield'>
-                <label className='edit__infolabel' htmlFor='firstname'>First name</label>
-                <input
-                  className='edit__infoinput'
-                  id='firstname'
-                  type='text'
-                  name='firstname'
-                  value={firstname ? firstname : ''}
-                  onChange={this.handleChange}
-                  aria-describedby='firstnameHelpBlock'
-                />
-                <small
-                  id='firstnameHelpBlock'
-                  className='form__text form__text--danger'
-                >
-                  {firstnameError}
-                </small>
-              </div>
+        <section className='edit'>
+          
+          {success &&
+            <div className='form__alert form__alert--success' role='alert'>
+              {success}
+            </div>
+          }
+          
+          {responseError &&
+            <div className='form__alert form__alert--danger' role='alert'>
+              {responseError}
+            </div>
+          }
+          
+          {!loading &&
+            <Fragment>
+              <h1 className='edit__header'>Edit Profile</h1>
+              <form className='edit__picform' onSubmit={this.handleUpload}>
+                <label className='edit__piclabel'>
+                  <img
+                    src={avatarFile ? URL.createObjectURL(avatarFile) : avatar}
+                    alt={`${username} avatar`}
+                    className='edit__avatar'
+                  />
+                  <input type='file' name='image' accept='image/*' onChange={this.handleFile} />
+                </label>
+                <input type='submit' value='Change profile image' />
+              </form>
               
-              <div className='edit__infofield'>
-                <label className='edit__infolabel' htmlFor='lastname'>Last name</label>
-                <input
-                  className='edit__infoinput'
-                  id='lastname'
-                  type='text'
-                  name='lastname'
-                  value={lastname ? lastname : ''}
-                  onChange={this.handleChange}
-                  aria-describedby='lastnameHelpBlock'
-                />
-                <small
-                  id='lastnameHelpBlock'
-                  className='form__text form__text--danger'
-                >
-                  {lastnameError}
-                </small>
-              </div>
-              
-              <div className='edit__infofield'>
-                <label className='edit__infolabel' htmlFor='email'>Email</label>
-                <input
-                  className='edit__infoinput'
-                  id='email'
-                  type='email'
-                  name='email'
-                  value={email ? email : ''}
-                  onChange={this.handleChange}
-                  onBlur={this.handleBlur}
-                  onFocus={this.handleFocus}
-                  aria-describedby='emailHelpBlock'
-                />
-                <small
-                  id='emailHelpBlock'
-                  className='form__text form__text--danger'
-                >
-                  {emailError}
-                </small>
-              </div>
-              
-              <div className='edit__infofield'>
-                <label className='edit__infolabel' htmlFor='username'>Username</label>
-                <input
-                  className='edit__infoinput'
-                  id='username'
-                  type='text'
-                  name='username'
-                  value={username ? username : ''}
-                  onChange={this.handleChange}
-                  onBlur={this.handleBlur}
-                  onFocus={this.handleFocus}
-                  aria-describedby='usernameHelpBlock'
-                />
-                <small
-                  id='usernameHelpBlock'
-                  className='form__text form__text--danger'
-                >
-                  {usernameError}
-                </small>
-              </div>
-              
-              <div className='edit__infofield'>
-                <label className='edit__infolabel' htmlFor='location'>Location</label>
-                <input
-                  className='edit__infoinput'
-                  id='location'
-                  type='text'
-                  name='location'
-                  value={location ? location : ''}
-                  onChange={this.handleChange}
-                  aria-describedby='locationHelpBlock'
-                />
-                <small
-                  id='locationHelpBlock'
-                  className='form__text form__text--danger'
-                >
-                  {locationError}
-                </small>
-              </div>
-              
-              <div className='edit__infofield'>
-                <label className='edit__infolabel' htmlFor='bio'>Bio</label>
-                <div className='edit__infotext'>
-                  <textarea
-                    id='bio'
-                    name='bio'
-                    rows='4'
-                    value={bio ? bio : ''}
+              <form className='edit__infoform' onSubmit={this.handleSubmit}>
+                <div className='edit__infofield'>
+                  <label className='edit__infolabel' htmlFor='firstname'>First name</label>
+                  <input
+                    className='edit__infoinput'
+                    id='firstname'
+                    type='text'
+                    name='firstname'
+                    value={firstname ? firstname : ''}
+                    onChange={this.handleChange}
+                    aria-describedby='firstnameHelpBlock'
+                  />
+                  <small
+                    id='firstnameHelpBlock'
+                    className='form__text form__text--danger'
+                  >
+                    {firstnameError}
+                  </small>
+                </div>
+                
+                <div className='edit__infofield'>
+                  <label className='edit__infolabel' htmlFor='lastname'>Last name</label>
+                  <input
+                    className='edit__infoinput'
+                    id='lastname'
+                    type='text'
+                    name='lastname'
+                    value={lastname ? lastname : ''}
+                    onChange={this.handleChange}
+                    aria-describedby='lastnameHelpBlock'
+                  />
+                  <small
+                    id='lastnameHelpBlock'
+                    className='form__text form__text--danger'
+                  >
+                    {lastnameError}
+                  </small>
+                </div>
+                
+                <div className='edit__infofield'>
+                  <label className='edit__infolabel' htmlFor='email'>Email</label>
+                  <input
+                    className='edit__infoinput'
+                    id='email'
+                    type='email'
+                    name='email'
+                    value={email ? email : ''}
                     onChange={this.handleChange}
                     onBlur={this.handleBlur}
                     onFocus={this.handleFocus}
-                    aria-describedby='bioHelpBlock'
-                  ></textarea>
-                  <span
-                    className={bioCharLeft < 0 ? 'neg' : ''}
+                    aria-describedby='emailHelpBlock'
+                  />
+                  <small
+                    id='emailHelpBlock'
+                    className='form__text form__text--danger'
                   >
-                    {bioCharLeft}
-                  </span>
+                    {emailError}
+                  </small>
                 </div>
-                <small
-                  id='bioHelpBlock'
-                  className='form__text form__text--danger'
-                >
-                  {bioError}
-                </small>
-              </div>
-              
-              <input className='btn form__btn' type='submit' value='Update profile' />
-            </form>
-          </Fragment>
-        }
-      </section>
+                
+                <div className='edit__infofield'>
+                  <label className='edit__infolabel' htmlFor='username'>Username</label>
+                  <input
+                    className='edit__infoinput'
+                    id='username'
+                    type='text'
+                    name='username'
+                    value={username ? username : ''}
+                    onChange={this.handleChange}
+                    onBlur={this.handleBlur}
+                    onFocus={this.handleFocus}
+                    aria-describedby='usernameHelpBlock'
+                  />
+                  <small
+                    id='usernameHelpBlock'
+                    className='form__text form__text--danger'
+                  >
+                    {usernameError}
+                  </small>
+                </div>
+                
+                <div className='edit__infofield'>
+                  <label className='edit__infolabel' htmlFor='location'>Location</label>
+                  <input
+                    className='edit__infoinput'
+                    id='location'
+                    type='text'
+                    name='location'
+                    value={location ? location : ''}
+                    onChange={this.handleChange}
+                    aria-describedby='locationHelpBlock'
+                  />
+                  <small
+                    id='locationHelpBlock'
+                    className='form__text form__text--danger'
+                  >
+                    {locationError}
+                  </small>
+                </div>
+                
+                <div className='edit__infofield'>
+                  <label className='edit__infolabel' htmlFor='bio'>Bio</label>
+                  <div className='edit__infotext'>
+                    <textarea
+                      id='bio'
+                      name='bio'
+                      rows='4'
+                      value={bio ? bio : ''}
+                      onChange={this.handleChange}
+                      onBlur={this.handleBlur}
+                      onFocus={this.handleFocus}
+                      aria-describedby='bioHelpBlock'
+                    ></textarea>
+                    <span
+                      className={bioCharLeft < 0 ? 'neg' : ''}
+                    >
+                      {bioCharLeft}
+                    </span>
+                  </div>
+                  <small
+                    id='bioHelpBlock'
+                    className='form__text form__text--danger'
+                  >
+                    {bioError}
+                  </small>
+                </div>
+                
+                <input className='btn form__btn' type='submit' value='Update profile' />
+              </form>
+            </Fragment>
+          }
+        </section>
+      </Fragment>
     );
   }
 }

@@ -315,28 +315,36 @@ class Photos extends Component {
   render() {
     const { photos, user, refreshError } = this.state;
     return (
-      <section className='photos'>
-        {!photos && <p className='text-center'>Loading photos...</p>}
-        
-        {photos &&
-          <MediaQuery minWidth={768}>
-            {matches => {
-              return matches
-              ?  (
-                photos.map(photo => <PhotoItem key={photo.id} photo={photo} user={user} />)
-              ) : (
-                photos.map(photo => <PhotoCard key={photo.id} photo={photo} user={user} />)
-              );
-            }}
-          </MediaQuery>
+      <Fragment>
+        {!photos &&
+          <p
+            style={{ textAlign: 'center' }}
+          >
+            Loading photos...
+          </p>
+          
         }
-        
-        {refreshError &&
-          <div className='alert alert-danger' role='alert'>
-            {refreshError}
-          </div>
-        }
-      </section>
+        <section className='photos'>
+          {photos &&
+            <MediaQuery minWidth={768}>
+              {matches => {
+                return matches
+                ?  (
+                  photos.map(photo => <PhotoItem key={photo.id} photo={photo} user={user} />)
+                ) : (
+                  photos.map(photo => <PhotoCard key={photo.id} photo={photo} user={user} />)
+                );
+              }}
+            </MediaQuery>
+          }
+          
+          {refreshError &&
+            <div className='alert alert-danger' role='alert'>
+              {refreshError}
+            </div>
+          }
+        </section>
+      </Fragment>
     );
   }
 }
