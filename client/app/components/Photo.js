@@ -1,9 +1,53 @@
 import React, { Component, Fragment } from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import axios from 'axios';
+import { AppContext } from './AppContext.js';
 import Loading from './Loading';
 
+const PhotoEdit = ({ location, description, handleChange, handleSubmit }) => (
+  <div className='photo__edit'>
+    <form className='photo__form' onSubmit={handleSubmit}>
+      <div className='photo__fields'>
+        <div className='photo__field'>
+          <input
+            type='text'
+            id='location'
+            name='location'
+            value={location ? location : ''}
+            placeholder='Location'
+            onChange={handleChange}
+          />
+          <label htmlFor='location'>Location</label>
+        </div>
+        <div className='photo__field'>
+          <input
+            type='text'
+            id='description'
+            name='description'
+            value={description ? description : ''}
+            placeholder='Description'
+            onChange={handleChange}
+          />
+          <label htmlFor='description'>Description</label>
+        </div>
+      </div>
+      <input className='btn photo__btn photo__btn--primary' type='submit' value='Submit edits' />
+    </form>
+    <button className='btn photo__btn photo__btn--danger'>Delete</button>
+  </div>
+);
+
+PhotoEdit.propTypes = {
+  location: PropTypes.string,
+  description: PropTypes.string,
+  handleChange: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+};
+
 class Photo extends Component {
+  static contextType = AppContext;
+  
   state = {
     loading: true,
     photo: null,
@@ -12,12 +56,15 @@ class Photo extends Component {
     showSubmissionError: false,
     likedByUser: null,
     likes: null,
+    editOpen: false,
+    location: null,
+    description: null,
   };
   
   async componentDidMount() {
     
     if (this.props.location.state) {
-      const { id, url, tags, username, avatar, likes, likedByUser, user } = this.props.location.state;
+      const { id, url, tags, username, avatar, likes, likedByUser, user, location, description } = this.props.location.state;
       this.setState(() => {
         return {
           user,
@@ -31,6 +78,8 @@ class Photo extends Component {
             avatar,
           },
           loading: false,
+          location: location || null,
+          description: description || null,
         };
       });
     } else {
@@ -51,6 +100,8 @@ class Photo extends Component {
             likes: photo.likes,
             user: user || null,
             loading: false,
+            location: photo.location || null,
+            description: photo.description || null,
           };
         });
       } catch (error) {
@@ -129,8 +180,30 @@ class Photo extends Component {
     }
   }
   
+  handleEditClick = () => {
+    this.setState((prevState) => {
+      return {
+        editOpen: !prevState.editOpen,
+      };
+    });
+  }
+  
+  handleChange = (event) => {
+    const { name, value } = event.target;
+    this.setState(() => {
+      return {
+        [name]: value,
+      };
+    });
+  }
+  
+  handleSubmit = async (event) => {
+    event.preventDefault();
+    console.log('form to be submitted');
+  }
+  
   render() {
-    const { loading, photo, user, responseError, showSubmissionError, likedByUser, likes } = this.state;
+    const { loading, photo, user, responseError, showSubmissionError, likedByUser, likes, editOpen, location, description } = this.state;
     
     if (loading) {
       return <Loading />;
@@ -189,7 +262,38 @@ class Photo extends Component {
               </div>
               <img className='photo__img' src={photo.url} alt={photo.tags.replace(/,/g, ' ')} />
               <div className='photo__bottom'>
-                <button className='btn photo__btn--danger' onClick={this.handleDelete}>Delete</button>
+                {editOpen &&
+                  <PhotoEdit
+                    location={location}
+                    description={description}
+                    handleChange={this.handleChange}
+                    handleSubmit={this.handleSubmit}
+                  />
+                }
+                
+                {this.context.user && this.context.user.username === photo.username
+                  ? (
+                    <button
+                      className='btn photo__btn'
+                      onClick={this.handleEditClick}
+                    >
+                      <span className='btn__icon'>
+                        {editOpen ? (
+                          <svg className='btn__icon--edit' xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' viewBox='0 0 24 24'>
+                            <rect width='18' height='18' x='3' y='3' rx='2' ry='2'/>
+                            <path d='M9 9l6 6M15 9l-6 6'/>
+                          </svg>
+                        ) : (
+                          <svg className='btn__icon--edit' xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' viewBox='0 0 24 24'>
+                            <path d='M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7'/>
+                            <path d='M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z'/>
+                          </svg>
+                        )}
+                      </span>
+                      Edit
+                    </button>
+                  ) : null
+                }
               </div>
             </Fragment>
           }
