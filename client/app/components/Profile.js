@@ -73,8 +73,8 @@ class Profile extends Component {
                 <div className='profile__info'>
                   <div className='profile__name'>
                     <h1>
-                      {profileUser.firstName && profileUser.lastName
-                        ? `${profileUser.firstName} ${profileUser.lastName}`
+                      {profileUser.firstname && profileUser.lastname
+                        ? `${profileUser.firstname} ${profileUser.lastname}`
                         : profileUser.username
                       }
                     </h1>
@@ -95,8 +95,8 @@ class Profile extends Component {
                   ) : (
                     <p className='profile__bio'>
                       Check out photos posted by
-                      {profileUser.firstName && profileUser.lastName
-                        ? ` ${profileUser.firstName}`
+                      {profileUser.firstname && profileUser.lastname
+                        ? ` ${profileUser.firstname}`
                         : ` ${profileUser.username}`
                       }
                     </p>
