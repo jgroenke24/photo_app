@@ -775,7 +775,7 @@ button {
       padding-left: 1.75rem;
       padding-right: 1.75rem;
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
     }
   }
   
@@ -798,8 +798,8 @@ button {
   
   &__field {
     margin: 0.5rem 0;
+    margin-left: 2.24rem;
     position: relative;
-    width: 100%;
     
     & label {
       position: absolute;
@@ -814,6 +814,31 @@ button {
       padding: 0.25rem 0.5rem;
       line-height: inherit;
       width: 100%;
+    }
+  }
+  
+  &__info {
+    
+    & p {
+      margin: 0.5rem 0;
+      padding: calc(0.25rem + 1px) calc(1rem + 1px);
+      color: $gray-400;
+      display: flex;
+      align-items: center;
+    }
+    
+    & p:hover {
+      color: $gray-900;
+    }
+    
+    & p:last-of-type {
+      padding-left: calc(1rem + 1px + 1.75rem);
+    }
+    
+    & svg {
+      width: 1rem;
+      height: 1rem;
+      margin-right: 0.75rem;
     }
   }
 }

@@ -262,14 +262,27 @@ class Photo extends Component {
               </div>
               <img className='photo__img' src={photo.url} alt={photo.tags.replace(/,/g, ' ')} />
               <div className='photo__bottom'>
-                {editOpen &&
+                {editOpen ? (
                   <PhotoEdit
                     location={location}
                     description={description}
                     handleChange={this.handleChange}
                     handleSubmit={this.handleSubmit}
                   />
-                }
+                ) : (
+                  <div className='photo__info'>
+                    {location &&
+                      <p className='photo__location'>
+                        <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' viewBox='0 0 24 24'>
+                          <path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/>
+                          <circle cx='12' cy='10' r='3'/>
+                        </svg>
+                        {location}
+                      </p>
+                    }
+                    {description && <p className='photo__description'>{description}</p>}
+                  </div>
+                )}
                 
                 {this.context.user && this.context.user.username === photo.username
                   ? (

@@ -72,7 +72,7 @@ class UploadBox extends Component {
       this.context.changeToBoxClosed();
       
     } catch (error) {
-
+      
       // If the error comes from the server, update the error in state
       if (error.response) {
         this.setState(() => {
