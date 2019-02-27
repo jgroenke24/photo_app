@@ -33,7 +33,7 @@ router.get('/:id', Users.jwt(), Photos.getOne);
 router.put('/:id', Users.jwt(), Photos.update);
 
 // Destroy route - delete photo
-router.delete('/:id', Photos.delete);
+router.delete('/:id', Users.jwt(), Photos.delete);
 
 // Create like route - like a photo
 router.post('/:id/like', Users.jwt(), Photos.like);

@@ -188,14 +188,31 @@ const Photos = {
   
   // Delete a photo
   async delete(req, res) {
+    const findOneQuery = 'SELECT * FROM photos WHERE id = $1';
     const deleteQuery = 'DELETE FROM photos WHERE id = $1 returning *';
     
     try {
-      await cloudinary.v2.uploader.destroy(req.params.id);
-      const { rows } = await db.query(deleteQuery, [ req.params.id ]);
+      
+      // First find photo in the database
+      const { rows } = await db.query(findOneQuery, [ req.params.id ]);
+      const foundPhoto = rows[0];
       
       // If nothing comes back from the database, send 404 not found
-      if (!rows[0]) {
+      if (!foundPhoto) {
+        return res.status(404).send('Photo not found');
+      }
+      
+      // A user must be signed in to edit information
+      // Signed in user must also be requesting their own photo data.
+      if (!req.user || req.user.id !== foundPhoto.userid) {
+        return res.status(403).send('You are not allowed to edit this photo');
+      }
+      
+      await cloudinary.v2.uploader.destroy(req.params.id);
+      const { rows: deletedRows } = await db.query(deleteQuery, [ req.params.id ]);
+      
+      // If nothing comes back from the database, send 404 not found
+      if (!deletedRows[0]) {
         return res.status(404).send('Photo not found');
       }
       
