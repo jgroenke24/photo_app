@@ -30,7 +30,7 @@ router.post('/', Users.jwt(), upload.single('image'), Photos.create);
 router.get('/:id', Users.jwt(), Photos.getOne);
 
 // Update route - update one photo
-router.put('/:id', Photos.update);
+router.put('/:id', Users.jwt(), Photos.update);
 
 // Destroy route - delete photo
 router.delete('/:id', Photos.delete);

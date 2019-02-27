@@ -149,30 +149,38 @@ const Photos = {
   async update(req, res) {
     const findOneQuery = 'SELECT * FROM photos WHERE id = $1';
     const updateOneQuery = `UPDATE photos
-      SET url = $1, likes = $2
+      SET location = $1, description = $2
       WHERE id = $3
       returning *`;
+    
+    // A user must be signed in to edit information
+    // Signed in user must also be requesting their own photo data.
+    if (!req.user || req.user.username !== req.body.creator) {
+      return res.status(403).send('You are not allowed to edit this photo');
+    }
       
     try {
       
       // First, get the correct row to update from the database
       const { rows } = await db.query(findOneQuery, [ req.params.id ]);
+      const photo = rows[0];
       
       // If nothing comes back from the database, send 404 not found
-      if (!rows[0]) {
-        return res.status(404).send({ message: 'Photo not found' });
+      if (!photo) {
+        return res.status(404).send('Photo not found');
       }
       
       const values = [
-        req.body.url || rows[0].url,
-        req.body.likes || rows[0].likes,
+        req.body.location || photo.location,
+        req.body.description || photo.description,
         req.params.id
       ];
       
       // Update the row in the database with the new data in the values array
-      const response = await db.query(updateOneQuery, values);
-      // return res.status(200).send(response.rows[0]);
-      return res.redirect('/photos/' + req.params.id);
+      const { rows: newRows } = await db.query(updateOneQuery, values);
+      const updatedPhoto = newRows[0];
+      const { location, description } = updatedPhoto;
+      return res.status(200).json({ location, description });
     } catch (error) {
       return res.status(400).send(error);
     }
