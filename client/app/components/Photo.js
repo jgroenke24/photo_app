@@ -64,12 +64,14 @@ class Photo extends Component {
   async componentDidMount() {
     
     if (this.props.location.state) {
-      const { id, url, tags, username, avatar, likes, likedByUser, user, location, description } = this.props.location.state;
+      const { id, url, tags, location, description, username, avatar, likes, likedByUser, user } = this.props.location.state;
       this.setState(() => {
         return {
           user,
           likedByUser,
           likes,
+          location,
+          description,
           photo: {
             id,
             url,
@@ -78,8 +80,6 @@ class Photo extends Component {
             avatar,
           },
           loading: false,
-          location: location || null,
-          description: description || null,
         };
       });
     } else {
@@ -100,18 +100,25 @@ class Photo extends Component {
             likes: photo.likes,
             user: user || null,
             loading: false,
-            location: photo.location || null,
-            description: photo.description || null,
+            location: photo.location,
+            description: photo.description,
           };
         });
       } catch (error) {
-        const responseError = error.response.data;
-        this.setState(() => {
-          return {
-            responseError,
-            loading: false,
-          };
-        });
+        if (error.response.status === 400) {
+          this.setState(() => {
+            return {
+              showSubmissionError: true,
+            };
+          });
+        } else {
+          this.setState(() => {
+            return {
+              responseError: error.response.data,
+            };
+          });
+        }
+        window.scrollTo(0,0);
       }
     }
   }
@@ -140,7 +147,20 @@ class Photo extends Component {
         };
       });
     } catch (error) {
-      return;
+      if (error.response.status === 400) {
+        this.setState(() => {
+          return {
+            showSubmissionError: true,
+          };
+        });
+      } else {
+        this.setState(() => {
+          return {
+            responseError: error.response.data,
+          };
+        });
+      }
+      window.scrollTo(0,0);
     }
   }
   
@@ -163,7 +183,20 @@ class Photo extends Component {
         };
       });
     } catch (error) {
-      return;
+      if (error.response.status === 400) {
+        this.setState(() => {
+          return {
+            showSubmissionError: true,
+          };
+        });
+      } else {
+        this.setState(() => {
+          return {
+            responseError: error.response.data,
+          };
+        });
+      }
+      window.scrollTo(0,0);
     }
   }
   
@@ -172,11 +205,20 @@ class Photo extends Component {
       await axios.delete(`https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos/${this.props.match.params.photoId}`);
       this.props.history.push('/');
     } catch (error) {
-      this.setState(() => {
-        return {
-          showSubmissionError: true,
-        };
-      });
+      if (error.response.status === 400) {
+        this.setState(() => {
+          return {
+            showSubmissionError: true,
+          };
+        });
+      } else {
+        this.setState(() => {
+          return {
+            responseError: error.response.data,
+          };
+        });
+      }
+      window.scrollTo(0,0);
     }
   }
   
@@ -199,7 +241,45 @@ class Photo extends Component {
   
   handleSubmit = async (event) => {
     event.preventDefault();
-    console.log('form to be submitted');
+    const { photo, location, description } = this.state;
+    try {
+      const response = await axios
+        .put(
+          `https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos/${this.props.match.params.photoId}`,
+          {
+            location,
+            description,
+            creator: photo.username,
+          },
+          {
+            withCredentials: true,
+          }
+        );
+      const { location: newLocation, description: newDescription } = response.data;
+      
+      this.setState(() => {
+        return {
+          location: newLocation,
+          description: newDescription,
+          editOpen: false,
+        };
+      });
+    } catch (error) {
+      if (error.response.status === 400) {
+        this.setState(() => {
+          return {
+            showSubmissionError: true,
+          };
+        });
+      } else {
+        this.setState(() => {
+          return {
+            responseError: error.response.data,
+          };
+        });
+      }
+      window.scrollTo(0,0);
+    }
   }
   
   render() {
@@ -217,7 +297,7 @@ class Photo extends Component {
           }
           
           {responseError &&
-            <div>{responseError}</div>
+            <div className='form__alert form__alert--danger' role='alert'>{responseError}</div>
           }
           
           {photo &&
