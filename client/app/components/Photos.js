@@ -5,6 +5,11 @@ import MediaQuery from 'react-responsive';
 import axios from 'axios';
 
 class PhotoItem extends Component {
+  static propTypes = {
+    photo: PropTypes.object.isRequired,
+    user: PropTypes.object,
+  };
+  
   state = {
     likedByUser: this.props.photo.likedByUser,
     likes: this.props.photo.likes,
@@ -58,7 +63,7 @@ class PhotoItem extends Component {
   }
 
   render() {
-    const { photo: { id, url, tags, username, avatar }, user } = this.props;
+    const { photo: { id, url, tags, location, description, username, avatar }, user } = this.props;
     const { likedByUser, likes } = this.state;
 
     return (
@@ -70,6 +75,8 @@ class PhotoItem extends Component {
               id,
               url,
               tags,
+              location,
+              description,
               username,
               avatar,
               likes,
@@ -124,12 +131,12 @@ class PhotoItem extends Component {
   }
 }
 
-PhotoItem.propTypes = {
-  photo: PropTypes.object.isRequired,
-  user: PropTypes.object,
-};
-
 class PhotoCard extends Component {
+  static propTypes = {
+    photo: PropTypes.object.isRequired,
+    user: PropTypes.object,
+  };
+  
   state= {
     likedByUser: this.props.photo.likedByUser,
     likes: this.props.photo.likes,
@@ -183,7 +190,7 @@ class PhotoCard extends Component {
   }
 
   render() {
-    const { photo: { id, url, tags, username, avatar }, user } = this.props;
+    const { photo: { id, url, tags, location, description, username, avatar }, user } = this.props;
     const { likedByUser, likes } = this.state;
 
     return (
@@ -202,6 +209,8 @@ class PhotoCard extends Component {
               id,
               url,
               tags,
+              location,
+              description,
               username,
               avatar,
               likes,
@@ -247,12 +256,12 @@ class PhotoCard extends Component {
   }
 }
 
-PhotoCard.propTypes = {
-  photo: PropTypes.object.isRequired,
-  user: PropTypes.object,
-};
-
 class Photos extends Component {
+  static propTypes = {
+    photos: PropTypes.array,
+    user: PropTypes.object,
+  }
+  
   state = {
     photos: null,
     user: null,
@@ -348,10 +357,5 @@ class Photos extends Component {
     );
   }
 }
-
-Photos.propTypes = {
-  photos: PropTypes.array,
-  user: PropTypes.object,
-};
 
 export default Photos;
