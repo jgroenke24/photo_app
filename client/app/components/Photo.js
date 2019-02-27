@@ -5,7 +5,7 @@ import axios from 'axios';
 import { AppContext } from './AppContext.js';
 import Loading from './Loading';
 
-const PhotoEdit = ({ location, description, handleChange, handleSubmit }) => (
+const PhotoEdit = ({ location, description, handleChange, handleSubmit, handleDelete }) => (
   <div className='photo__edit'>
     <form className='photo__form' onSubmit={handleSubmit}>
       <div className='photo__fields'>
@@ -34,7 +34,12 @@ const PhotoEdit = ({ location, description, handleChange, handleSubmit }) => (
       </div>
       <input className='btn photo__btn photo__btn--primary' type='submit' value='Submit edits' />
     </form>
-    <button className='btn photo__btn photo__btn--danger'>Delete</button>
+    <button
+      className='btn photo__btn photo__btn--danger'
+      onClick={handleDelete}
+    >
+      Delete
+    </button>
   </div>
 );
 
@@ -43,6 +48,7 @@ PhotoEdit.propTypes = {
   description: PropTypes.string,
   handleChange: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
 };
 
 class Photo extends Component {
@@ -202,7 +208,11 @@ class Photo extends Component {
   
   handleDelete = async () => {
     try {
-      await axios.delete(`https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos/${this.props.match.params.photoId}`);
+      await axios
+        .delete(
+          `https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos/${this.props.match.params.photoId}`,
+          { withCredentials: true }
+        );
       this.props.history.push('/');
     } catch (error) {
       if (error.response.status === 400) {
@@ -348,6 +358,7 @@ class Photo extends Component {
                     description={description}
                     handleChange={this.handleChange}
                     handleSubmit={this.handleSubmit}
+                    handleDelete={this.handleDelete}
                   />
                 ) : (
                   <div className='photo__info'>
