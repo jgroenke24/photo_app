@@ -16,6 +16,7 @@ import usersRouter from './routes/user';
 dotenv.config();
 
 const app = express();
+const API_PORT = 3000;
 
 require('./config/passport');
 
@@ -29,12 +30,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
 // Allow CORS requests
-app.use(cors(
-  {
-    credentials: true,
-    origin: 'https://webdevbootcamp-jorge-groenke.c9users.io'
-  }
-));
+// app.use(cors(
+//   {
+//     credentials: true,
+//     origin: 'https://webdevbootcamp-jorge-groenke.c9users.io'
+//   }
+// ));
 
 // Log HTTP requests
 app.use(morgan('combined'));
@@ -47,6 +48,11 @@ app.use(passport.initialize());
 
 // Route handlers
 app.use('/api/photos', photosRouter);
-app.use('/', usersRouter);
+app.use('/api', usersRouter);
 
-app.listen(8081, process.env.IP, () => console.log("photo app Server Started"));
+// Express only serves static assets in production
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/dist"));
+}
+
+app.listen(API_PORT, process.env.IP, () => console.log("photo app Server Started"));

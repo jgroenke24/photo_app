@@ -12,7 +12,7 @@ const storage = multer.diskStorage({
   }
 });
 const imageFilter = (req, file, cb) => {
-  
+
     // accept image files only
     if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
         return cb(new Error('Only image files are allowed!'), false);
@@ -23,9 +23,9 @@ const upload = multer({ storage: storage, fileFilter: imageFilter});
 
 // Return an array of validation depending on which action is taking place
 const validationChains = (action) => {
-  
+
   switch (action) {
-    
+
     case 'signup': {
       return [
         check('email')
@@ -47,7 +47,7 @@ const validationChains = (action) => {
           .withMessage('Passwords must match')
       ];
     }
-    
+
     case 'login': {
       return [
         check('email')
@@ -58,7 +58,7 @@ const validationChains = (action) => {
           .withMessage('Invalid password')
       ];
     }
-    
+
     case 'forgotpassword': {
       return [
         check('email')
@@ -66,7 +66,7 @@ const validationChains = (action) => {
           .normalizeEmail()
       ];
     }
-    
+
     case 'resetpassword': {
       return [
         check('password')
@@ -82,7 +82,7 @@ const validationChains = (action) => {
           .withMessage('Passwords must match')
       ];
     }
-    
+
     case 'updateprofile': {
       return [
         check('firstname')
@@ -113,14 +113,14 @@ const validationChains = (action) => {
 // Middleware to check validation results from validation chain before any authentication or db calls
 const validateMiddleware = (req, res, next) => {
   const errorFormatter = ({ location, msg, param, value, nestedErrors }) => {
-    
+
     // Return just the message part of the error
     return {
       element: param,
       message: msg,
     };
   };
-  
+
   const errors = validationResult(req).formatWith(errorFormatter);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -144,16 +144,16 @@ router.get('/resetpassword/:token', ResetPassword.verifyToken);
 router.post('/resetpassword/:token', validationChains('resetpassword'), validateMiddleware, ResetPassword.verifyToken, ResetPassword.reset);
 
 // Show route - Get a users profile with all their photos
-router.get('/api/users/:username', Users.jwt(), Users.getUserAll);
+router.get('/users/:username', Users.jwt(), Users.getUserAll);
 
 // Edit route - Get a users profile information
-router.get('/api/users/:username/edit', Users.jwt(), Users.getUser);
+router.get('/users/:username/edit', Users.jwt(), Users.getUser);
 
 // Update route - Update a user profile information
-router.put('/api/users/:username', Users.jwt(), validationChains('updateprofile'), validateMiddleware, Users.updateUser);
+router.put('/users/:username', Users.jwt(), validationChains('updateprofile'), validateMiddleware, Users.updateUser);
 
 // Upload user avatar to cloudinary
-router.post('/api/users/:username/avatar', Users.jwt(), upload.single('image'), Users.uploadAvatar);
+router.post('/users/:username/avatar', Users.jwt(), upload.single('image'), Users.uploadAvatar);
 
 router.get('/', Users.jwt(), (req, res) => {
   if (req.user) {
