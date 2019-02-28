@@ -5,21 +5,21 @@ class Dashboard extends Component {
   state = {
     message: 'Loading...',
   };
-  
+
   async componentDidMount() {
     try {
-      
+
       // Get message from server
       const response = await axios(
-        'https://webdevbootcamp-jorge-groenke.c9users.io:8081/dashboard',
+        '/dashboard',
         {
           withCredentials: true,
         }
       );
       const { message } = response.data;
-      this.setState(() => { 
+      this.setState(() => {
         return {
-          message 
+          message
         };
       });
     } catch (err) {
@@ -30,7 +30,7 @@ class Dashboard extends Component {
       });
     }
   }
-    
+
   render() {
     return (
       <section className='container'>

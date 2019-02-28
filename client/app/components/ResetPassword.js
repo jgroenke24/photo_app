@@ -15,13 +15,13 @@ class ResetPassword extends Component {
     resetError: false,
     success: false,
   };
-  
+
   showValidationError(element, message) {
     this.setState((prevState) => ({
       errors: [...prevState.errors, { element, message }]
     }));
   }
-  
+
   clearValidationError(element) {
     const { errors } = this.state;
     this.setState(() => {
@@ -30,15 +30,15 @@ class ResetPassword extends Component {
       };
     });
   }
-  
+
   inputIsValid(element) {
     const { password, passwordCheck } = this.state;
-    
+
     if (this.state[element] === '') {
       this.showValidationError(element, `${element} can't be empty`);
       return;
     } else if (element === 'password') {
-      
+
       /*
         Check if password meets criteria: 8 or more characters, at least 1 uppercase, lowercase, number and symbol.
         from https://stackoverflow.com/a/21456918
@@ -49,7 +49,7 @@ class ResetPassword extends Component {
         return;
       }
     } else if (element === 'passwordCheck') {
-      
+
       // Check if both passwords match
       if (passwordCheck !== password) {
         this.showValidationError('passwordCheck', 'Passwords must match.');
@@ -61,18 +61,18 @@ class ResetPassword extends Component {
         return;
       }
     }
-    
+
     this.setState(() => {
       return {
         [element + 'IsValid']: true,
       };
     });
   }
-  
+
   handleBlur = (event) => this.inputIsValid(event.target.id);
-  
+
   handleFocus = (event) => this.clearValidationError(event.target.id);
-  
+
   handleChange = (event) => {
     const { id, value } = event.target;
     this.setState(() => {
@@ -81,12 +81,12 @@ class ResetPassword extends Component {
       };
     });
   }
-  
+
   async componentDidMount() {
     try {
       const response = await axios
-        .get(`https://webdevbootcamp-jorge-groenke.c9users.io:8081/resetpassword/${this.props.match.params.token}`);
-        
+        .get(`/api/resetpassword/${this.props.match.params.token}`);
+
       this.setState(() => {
         return {
           username: response.data.user,
@@ -102,13 +102,13 @@ class ResetPassword extends Component {
       });
     }
   }
-  
+
   handleSubmit = async (event) => {
     event.preventDefault();
     const { password, passwordCheck } = this.state;
     try {
       await axios.post(
-        `https://webdevbootcamp-jorge-groenke.c9users.io:8081/resetpassword/${this.props.match.params.token}`,
+        `/api/resetpassword/${this.props.match.params.token}`,
         {
           password: password,
           passwordCheck: passwordCheck,
@@ -120,7 +120,7 @@ class ResetPassword extends Component {
         };
       });
     } catch (error) {
-      
+
       // If the err response comes from the form validator on the server
       if (error.response.data.errors) {
         const { errors } = error.response.data;
@@ -130,7 +130,7 @@ class ResetPassword extends Component {
           };
         });
       } else {
-        
+
         // The error comes from server, db or other
         this.setState(() => {
           return {
@@ -140,29 +140,29 @@ class ResetPassword extends Component {
       }
     }
   }
-  
+
   render() {
-    
+
     const { loading, success, errors, username, password, passwordCheck, passwordIsValid, passwordCheckIsValid, resetError } = this.state;
     let passwordError = '';
     let passwordCheckError = '';
-    
+
     errors.forEach(error => {
       if (error.element === 'password') {
         passwordError = error.message;
       }
-      
+
       if (error.element === 'passwordCheck') {
         passwordCheckError = error.message;
       }
     });
-    
+
     if (loading) {
       return (
         <Loading />
       );
     }
-    
+
     if (resetError) {
       return (
         <section className='form'>
@@ -179,7 +179,7 @@ class ResetPassword extends Component {
         </section>
       );
     }
-    
+
     if (success) {
       return (
         <section className='form'>
@@ -193,26 +193,26 @@ class ResetPassword extends Component {
         </section>
       );
     }
-    
+
     return (
       <section className='form'>
-      
+
         <Link to='/' className='logo form__logo'>
             PicShareApp
         </Link>
-      
+
         <h1 className='form__header'>Reset Password for {username}</h1>
-        
+
         <form
           className='form__form'
           onSubmit={this.handleSubmit}
         >
           <div className='form__group'>
             <label htmlFor='password' className='form__label'>Password</label>
-            <input 
-              id='password' 
-              name='password' 
-              type='password' 
+            <input
+              id='password'
+              name='password'
+              type='password'
               className='form__input'
               value={password}
               onFocus={this.handleFocus}
@@ -229,7 +229,7 @@ class ResetPassword extends Component {
           </div>
           <div className='form__group'>
             <label htmlFor='passwordCheck' className='form__label'>Verify Password</label>
-            <input 
+            <input
               id='passwordCheck'
               name='passwordCheck'
               type='password'

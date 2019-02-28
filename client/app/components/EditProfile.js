@@ -21,13 +21,13 @@ class EditProfile extends Component {
     responseError: null,
     success: null,
   }
-  
+
   showValidationError(element, message) {
     this.setState((prevState) => ({
       errors: [...prevState.errors, { element, message }]
     }));
   }
-  
+
   clearValidationError(element) {
     const { errors } = this.state;
     this.setState(() => {
@@ -36,12 +36,12 @@ class EditProfile extends Component {
       };
     });
   }
-  
+
   inputIsValid(element) {
     const { email, username, bioCharLeft } = this.state;
-    
+
     if (element === 'email') {
-      
+
       /*
         Check if the email is an accepted form of email.
         from https://emailregex.com/
@@ -52,7 +52,7 @@ class EditProfile extends Component {
         return;
       }
     } else if (element === 'username') {
-      
+
       // Check if username is only letters, numbers or underscores
       const re = /^\w+$/;
       if (!re.test(username)) {
@@ -66,12 +66,12 @@ class EditProfile extends Component {
       }
     }
   }
-  
+
   calcBioCharsLeft(text) {
     const charCount = text.length;
     return BIO_CHAR_LIMIT - charCount;
   }
-  
+
   handleFile = (event) => {
     const avatarFile = event.target.files[0];
     this.setState(() => {
@@ -80,29 +80,29 @@ class EditProfile extends Component {
       };
     });
   }
-  
+
   handleUpload = async (event) => {
     event.preventDefault();
     const { avatarFile } = this.state;
     try {
-      
+
       if (!avatarFile) {
         throw 'You must choose a pic to upload!';
       }
-      
+
       // Create a form data object with the photo to be uploaded
       const data = new FormData();
       data.append('image', avatarFile, avatarFile.name);
-      
+
       // Upload photo to cloudinary and save to database
       await axios
-        .post(`https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/users/${this.props.match.params.username}/avatar`,
+        .post(`/api/users/${this.props.match.params.username}/avatar`,
           data,
           {
             withCredentials: true,
           }
         );
-        
+
       this.setState(() => {
         return {
           success: 'Profile image uploaded!',
@@ -119,7 +119,7 @@ class EditProfile extends Component {
           };
         });
       } else {
-      
+
         // Error is thrown
         this.setState(() => {
           return {
@@ -129,7 +129,7 @@ class EditProfile extends Component {
       }
     }
   }
-  
+
   handleChange = (event) => {
     const { name, value } = event.target;
     if (name === 'bio') {
@@ -148,19 +148,19 @@ class EditProfile extends Component {
       });
     }
   }
-  
+
   handleBlur = (event) => this.inputIsValid(event.target.name);
-  
+
   handleFocus = (event) => this.clearValidationError(event.target.name);
-  
+
   handleSubmit = async (event) => {
     event.preventDefault();
     const { firstname, lastname, email, username, location, bio } = this.state;
-    
+
     try {
       const response = await axios
         .put(
-          `https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/users/${this.props.match.params.username}`,
+          `/api/users/${this.props.match.params.username}`,
           {
             firstname,
             lastname,
@@ -191,7 +191,7 @@ class EditProfile extends Component {
           };
         });
       }
-      
+
       // Error comes from server
       const responseError = error.response.data;
       this.setState(() => {
@@ -201,21 +201,21 @@ class EditProfile extends Component {
       });
     }
   }
-  
+
   async componentDidMount() {
     try {
-      
+
       // Get user info from server
       const response = await axios
         .get(
-          `https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/users/${this.props.match.params.username}/edit`,
+          `/api/users/${this.props.match.params.username}/edit`,
           {
             withCredentials: true,
           }
         );
-      
+
       const { avatar, firstname, lastname, email, username, location, bio } = response.data.profileUser;
-      
+
       this.setState(() => {
         return {
           avatar,
@@ -254,14 +254,14 @@ class EditProfile extends Component {
       success,
       responseError,
     } = this.state;
-    
+
     let firstnameError = '';
     let lastnameError = '';
     let emailError = '';
     let usernameError = '';
     let locationError = '';
     let bioError = '';
-    
+
     errors.forEach(error => {
       if (error.element === 'email') {
         emailError = error.message;
@@ -276,21 +276,21 @@ class EditProfile extends Component {
     return (
       <Fragment>
         {loading && <Loading />}
-        
+
         <section className='edit'>
-          
+
           {success &&
             <div className='form__alert form__alert--success' role='alert'>
               {success}
             </div>
           }
-          
+
           {responseError &&
             <div className='form__alert form__alert--danger' role='alert'>
               {responseError}
             </div>
           }
-          
+
           {!loading &&
             <Fragment>
               <h1 className='edit__header'>Edit Profile</h1>
@@ -305,7 +305,7 @@ class EditProfile extends Component {
                 </label>
                 <input type='submit' value='Change profile image' />
               </form>
-              
+
               <form className='edit__infoform' onSubmit={this.handleSubmit}>
                 <div className='edit__infofield'>
                   <label className='edit__infolabel' htmlFor='firstname'>First name</label>
@@ -325,7 +325,7 @@ class EditProfile extends Component {
                     {firstnameError}
                   </small>
                 </div>
-                
+
                 <div className='edit__infofield'>
                   <label className='edit__infolabel' htmlFor='lastname'>Last name</label>
                   <input
@@ -344,7 +344,7 @@ class EditProfile extends Component {
                     {lastnameError}
                   </small>
                 </div>
-                
+
                 <div className='edit__infofield'>
                   <label className='edit__infolabel' htmlFor='email'>Email</label>
                   <input
@@ -365,7 +365,7 @@ class EditProfile extends Component {
                     {emailError}
                   </small>
                 </div>
-                
+
                 <div className='edit__infofield'>
                   <label className='edit__infolabel' htmlFor='username'>Username</label>
                   <input
@@ -386,7 +386,7 @@ class EditProfile extends Component {
                     {usernameError}
                   </small>
                 </div>
-                
+
                 <div className='edit__infofield'>
                   <label className='edit__infolabel' htmlFor='location'>Location</label>
                   <input
@@ -405,7 +405,7 @@ class EditProfile extends Component {
                     {locationError}
                   </small>
                 </div>
-                
+
                 <div className='edit__infofield'>
                   <label className='edit__infolabel' htmlFor='bio'>Bio</label>
                   <div className='edit__infotext'>
@@ -432,7 +432,7 @@ class EditProfile extends Component {
                     {bioError}
                   </small>
                 </div>
-                
+
                 <input className='btn form__btn' type='submit' value='Update profile' />
               </form>
             </Fragment>

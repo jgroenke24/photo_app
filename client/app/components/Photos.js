@@ -9,7 +9,7 @@ class PhotoItem extends Component {
     photo: PropTypes.object.isRequired,
     user: PropTypes.object,
   };
-  
+
   state = {
     likedByUser: this.props.photo.likedByUser,
     likes: this.props.photo.likes,
@@ -18,11 +18,11 @@ class PhotoItem extends Component {
   handleLike = async () => {
     const { id } = this.props.photo;
     try {
-      
+
       // Send like to server
       const { data: { photo } } = await axios
         .post(
-          `https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos/${id}/like`,
+          `/api/photos/${id}/like`,
           {},
           {
             withCredentials: true,
@@ -42,11 +42,11 @@ class PhotoItem extends Component {
   handleUnlike = async () => {
     const { id } = this.props.photo;
     try {
-      
+
       // Send delete like to server
       const { data: { photo } } = await axios
         .delete(
-          `https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos/${id}/like`,
+          `/api/photos/${id}/like`,
           {
             withCredentials: true,
           }
@@ -124,7 +124,7 @@ class PhotoItem extends Component {
             <img className='photoitem__avatar' src={avatar} alt={`${username} avatar`} />
             <h2>{username}</h2>
           </Link>
-          
+
         </div>
       </div>
     );
@@ -136,7 +136,7 @@ class PhotoCard extends Component {
     photo: PropTypes.object.isRequired,
     user: PropTypes.object,
   };
-  
+
   state= {
     likedByUser: this.props.photo.likedByUser,
     likes: this.props.photo.likes,
@@ -145,11 +145,11 @@ class PhotoCard extends Component {
   handleLike = async () => {
     const { id } = this.props.photo;
     try {
-      
+
       // Send like to server
       const { data: { photo } } = await axios
         .post(
-          `https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos/${id}/like`,
+          `/api/photos/${id}/like`,
           {},
           {
             withCredentials: true,
@@ -169,11 +169,11 @@ class PhotoCard extends Component {
   handleUnlike = async () => {
     const { id } = this.props.photo;
     try {
-      
+
       // Send delete like to server
       const { data: { photo } } = await axios
         .delete(
-          `https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos/${id}/like`,
+          `/api/photos/${id}/like`,
           {
             withCredentials: true,
           }
@@ -261,7 +261,7 @@ class Photos extends Component {
     photos: PropTypes.array,
     user: PropTypes.object,
   }
-  
+
   state = {
     photos: null,
     user: null,
@@ -270,10 +270,10 @@ class Photos extends Component {
 
   async componentDidMount() {
     try {
-      
+
       // If photos were passed in as a prop
       if (this.props.photos) {
-        
+
         // If a user was also passed in as a prop
         if (this.props.user) {
           this.setState(() => {
@@ -283,7 +283,7 @@ class Photos extends Component {
             };
           });
         } else {
-          
+
           // No user was passed in, so just update photos in state
           this.setState(() => {
             return {
@@ -292,16 +292,16 @@ class Photos extends Component {
           });
         }
       } else {
-        
+
         // Get all photos from server
         const response = await axios
           .get(
-            'https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos',
+            '/api/photos',
             {
               withCredentials: true,
             }
           );
-          
+
         const { photos, user } = response.data;
 
         // Update state with returned array of photos
@@ -320,7 +320,7 @@ class Photos extends Component {
       });
     }
   }
-  
+
   render() {
     const { photos, user, refreshError } = this.state;
     return (
@@ -331,7 +331,7 @@ class Photos extends Component {
           >
             Loading photos...
           </p>
-          
+
         }
         <section className='photos'>
           {photos &&
@@ -346,7 +346,7 @@ class Photos extends Component {
               }}
             </MediaQuery>
           }
-          
+
           {refreshError &&
             <div className='alert alert-danger' role='alert'>
               {refreshError}

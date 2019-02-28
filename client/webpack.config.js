@@ -33,6 +33,10 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
     compress: true,
-    public: 'webdevbootcamp-jorge-groenke.c9users.io' // That solved it
+    proxy: {
+      '/api/*': {
+        target: 'http://localhost:3000'
+      }
+    }
   }
 };

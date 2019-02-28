@@ -16,15 +16,15 @@ class Signup extends Component {
     passwordCheckIsValid: false,
     signupError: null,
   };
-  
+
   static contextType = AppContext;
-  
+
   showValidationError(element, message) {
     this.setState((prevState) => ({
       errors: [...prevState.errors, { element, message }]
     }));
   }
-  
+
   clearValidationError(element) {
     const { errors } = this.state;
     this.setState(() => {
@@ -33,15 +33,15 @@ class Signup extends Component {
       };
     });
   }
-  
+
   inputIsValid(element) {
     const { email, username, password, passwordCheck } = this.state;
-    
+
     if (this.state[element] === '') {
       this.showValidationError(element, `${element} can't be empty`);
       return;
     } else if (element === 'email') {
-      
+
       /*
         Check if the email is an accepted form of email.
         from https://emailregex.com/
@@ -52,7 +52,7 @@ class Signup extends Component {
         return;
       }
     } else if (element === 'username') {
-      
+
       // Check if username is only letters, numbers or underscores
       const re = /^\w+$/;
       if (!re.test(username)) {
@@ -60,7 +60,7 @@ class Signup extends Component {
         return;
       }
     } else if (element === 'password') {
-      
+
       /*
         Check if password meets criteria: 8 or more characters, at least 1 uppercase, lowercase, number and symbol.
         from https://stackoverflow.com/a/21456918
@@ -71,25 +71,25 @@ class Signup extends Component {
         return;
       }
     } else if (element === 'passwordCheck') {
-      
+
       // Check if both passwords match
       if (passwordCheck !== password) {
         this.showValidationError('passwordCheck', 'Passwords must match.');
         return;
       }
     }
-    
+
     this.setState(() => {
       return {
         [element + 'IsValid']: true,
       };
     });
   }
-  
+
   handleBlur = (event) => this.inputIsValid(event.target.id);
-  
+
   handleFocus = (event) => this.clearValidationError(event.target.id);
-  
+
   handleChange = (event) => {
     const { id, value } = event.target;
     this.setState(() => {
@@ -98,13 +98,13 @@ class Signup extends Component {
       };
     });
   }
-  
+
   handleSubmit = async (event) => {
     event.preventDefault();
     const { email, username, password, passwordCheck } = this.state;
     try {
       const response = await axios.post(
-        'https://webdevbootcamp-jorge-groenke.c9users.io:8081/signup',
+        '/api/signup',
         {
           email,
           username,
@@ -120,7 +120,7 @@ class Signup extends Component {
       this.context.addUser(user);
       this.props.history.push('/');
     } catch (error) {
-      
+
       // If the err response comes from the form validator on the server
       if (error.response.status === 400) {
         const { errors } = error.response.data;
@@ -130,7 +130,7 @@ class Signup extends Component {
           };
         });
       } else {
-        
+
         // The error comes from failed authentication
         this.setState(() => {
           return {
@@ -140,19 +140,19 @@ class Signup extends Component {
       }
     }
   }
-  
+
   componentWillUnmount() {
     document.body.removeAttribute('style');
   }
-  
+
   render() {
-    
+
     const { errors, email, username, password, passwordCheck, emailIsValid, usernameIsValid, passwordIsValid, passwordCheckIsValid, signupError } = this.state;
     let emailError = '';
     let usernameError = '';
     let passwordError = '';
     let passwordCheckError = '';
-    
+
     errors.forEach(error => {
       if (error.element === 'email') {
         emailError = error.message;
@@ -167,35 +167,35 @@ class Signup extends Component {
         passwordCheckError = error.message;
       }
     });
-    
+
     return (
       <section className='form'>
-      
+
         <Link to='/' className='logo form__logo'>
           PicShareApp
         </Link>
-      
+
         <h1 className='form__header'>Signup</h1>
         <Link to='/login' className='form__link form__link--center'>
           Already have an account? Login
         </Link>
-        
+
         {signupError &&
           <div className='form__alert form__alert--danger' role='alert'>
             {signupError}
           </div>
         }
-        
+
         <form
           className='form__form'
           onSubmit={this.handleSubmit}
         >
           <div className='form__group'>
             <label htmlFor='email' className='form__label'>Email</label>
-            <input 
-              id='email' 
-              name='email' 
-              type='email' 
+            <input
+              id='email'
+              name='email'
+              type='email'
               className='form__input'
               value={email}
               onFocus={this.handleFocus}
@@ -212,10 +212,10 @@ class Signup extends Component {
           </div>
           <div className='form__group'>
             <label htmlFor='username' className='form__label'>Username</label>
-            <input 
-              id='username' 
-              name='username' 
-              type='text' 
+            <input
+              id='username'
+              name='username'
+              type='text'
               className='form__input'
               value={username}
               onFocus={this.handleFocus}
@@ -232,10 +232,10 @@ class Signup extends Component {
           </div>
           <div className='form__group'>
             <label htmlFor='password' className='form__label'>Password</label>
-            <input 
-              id='password' 
-              name='password' 
-              type='password' 
+            <input
+              id='password'
+              name='password'
+              type='password'
               className='form__input'
               value={password}
               onFocus={this.handleFocus}
@@ -252,10 +252,10 @@ class Signup extends Component {
           </div>
           <div className='form__group'>
             <label htmlFor='passwordCheck' className='form__label'>Verify Password</label>
-            <input 
-              id='passwordCheck' 
-              name='passwordCheck' 
-              type='password' 
+            <input
+              id='passwordCheck'
+              name='passwordCheck'
+              type='password'
               className='form__input'
               value={passwordCheck}
               onFocus={this.handleFocus}
@@ -270,8 +270,8 @@ class Signup extends Component {
               {passwordCheckError}
             </small>
           </div>
-          <input 
-            type='submit' 
+          <input
+            type='submit'
             className='btn form__btn'
             value='Signup'
           />

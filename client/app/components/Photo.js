@@ -53,7 +53,7 @@ PhotoEdit.propTypes = {
 
 class Photo extends Component {
   static contextType = AppContext;
-  
+
   state = {
     loading: true,
     photo: null,
@@ -66,9 +66,9 @@ class Photo extends Component {
     location: null,
     description: null,
   };
-  
+
   async componentDidMount() {
-    
+
     if (this.props.location.state) {
       const { id, url, tags, location, description, username, avatar, likes, likedByUser, user } = this.props.location.state;
       this.setState(() => {
@@ -89,11 +89,11 @@ class Photo extends Component {
         };
       });
     } else {
-    
+
       try {
         const response = await axios
           .get(
-            `https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos/${this.props.match.params.photoId}`,
+            `/api/photos/${this.props.match.params.photoId}`,
             {
               withCredentials: true,
             }
@@ -128,19 +128,19 @@ class Photo extends Component {
       }
     }
   }
-  
+
   componentWillUnmount() {
     document.body.removeAttribute('style');
   }
-  
+
   handleLike = async () => {
     const { id } = this.state.photo;
     try {
-      
+
       // Send like to server
       const { data: { photo } } = await axios
         .post(
-          `https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos/${id}/like`,
+          `/api/photos/${id}/like`,
           {},
           {
             withCredentials: true,
@@ -169,15 +169,15 @@ class Photo extends Component {
       window.scrollTo(0,0);
     }
   }
-  
+
   handleUnlike = async () => {
     const { id } = this.state.photo;
     try {
-      
+
       // Send delete like to server
       const { data: { photo } } = await axios
         .delete(
-          `https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos/${id}/like`,
+          `/api/photos/${id}/like`,
           {
             withCredentials: true,
           }
@@ -205,12 +205,12 @@ class Photo extends Component {
       window.scrollTo(0,0);
     }
   }
-  
+
   handleDelete = async () => {
     try {
       await axios
         .delete(
-          `https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos/${this.props.match.params.photoId}`,
+          `/api/photos/${this.props.match.params.photoId}`,
           { withCredentials: true }
         );
       this.props.history.push('/');
@@ -231,7 +231,7 @@ class Photo extends Component {
       window.scrollTo(0,0);
     }
   }
-  
+
   handleEditClick = () => {
     this.setState((prevState) => {
       return {
@@ -239,7 +239,7 @@ class Photo extends Component {
       };
     });
   }
-  
+
   handleChange = (event) => {
     const { name, value } = event.target;
     this.setState(() => {
@@ -248,14 +248,14 @@ class Photo extends Component {
       };
     });
   }
-  
+
   handleSubmit = async (event) => {
     event.preventDefault();
     const { photo, location, description } = this.state;
     try {
       const response = await axios
         .put(
-          `https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos/${this.props.match.params.photoId}`,
+          `/api/photos/${this.props.match.params.photoId}`,
           {
             location,
             description,
@@ -266,7 +266,7 @@ class Photo extends Component {
           }
         );
       const { location: newLocation, description: newDescription } = response.data;
-      
+
       this.setState(() => {
         return {
           location: newLocation,
@@ -291,10 +291,10 @@ class Photo extends Component {
       window.scrollTo(0,0);
     }
   }
-  
+
   render() {
     const { loading, photo, user, responseError, showSubmissionError, likedByUser, likes, editOpen, location, description } = this.state;
-    
+
     if (loading) {
       return <Loading />;
     } else {
@@ -305,11 +305,11 @@ class Photo extends Component {
               Something went wrong with your request. Please try again.
             </div>
           }
-          
+
           {responseError &&
             <div className='form__alert form__alert--danger' role='alert'>{responseError}</div>
           }
-          
+
           {photo &&
             <Fragment>
               <div className='photo__top'>
@@ -320,8 +320,8 @@ class Photo extends Component {
                   <img className='photo__avatar' src={photo.avatar} alt={`${photo.username} avatar`} />
                   <h2>{photo.username}</h2>
                 </Link>
-                
-                
+
+
                 {user
                   ? (
                     <button
@@ -374,7 +374,7 @@ class Photo extends Component {
                     {description && <p className='photo__description'>{description}</p>}
                   </div>
                 )}
-                
+
                 {this.context.user && this.context.user.username === photo.username
                   ? (
                     <button

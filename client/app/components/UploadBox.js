@@ -5,25 +5,25 @@ import axios from 'axios';
 
 class UploadBox extends Component {
   static contextType = AppContext;
-  
+
   state = {
     file: null,
     loaded: 0,
     uploadError: null,
   };
-  
+
   handleClick = (event) => {
     this.setState({
       uploadError: null,
     });
   }
-  
+
   handleFile = (event) => {
     this.setState({
       file: event.target.files[0],
     });
   }
-  
+
   handleRemoveFile = (event) => {
     event.preventDefault();
     this.setState(() => {
@@ -32,30 +32,30 @@ class UploadBox extends Component {
       };
     });
   }
-  
+
   handleClose = () => {
     document.body.removeAttribute('style');
     this.context.changeToBoxClosed();
   }
-  
+
   handleUpload = async (event) => {
-    
+
     try {
       event.preventDefault();
-      
+
       if (!this.state.file) {
         throw 'You must choose a pic to upload!';
       }
-    
+
       // Create a form data object with the photo to be uploaded
       const data = new FormData();
       data.append('image', this.state.file, this.state.file.name);
-      
+
       document.querySelector('.upload__progress').style.cssText = 'visibility: visible; opacity: 1;';
-      
+
       // Upload photo to cloudinary and save to database
       await axios
-        .post('https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos',
+        .post('/api/photos',
           data,
           {
             withCredentials: true,
@@ -67,12 +67,12 @@ class UploadBox extends Component {
               });
             },
         });
-        
+
       this.props.history.push('/');
       this.context.changeToBoxClosed();
-      
+
     } catch (error) {
-      
+
       // If the error comes from the server, update the error in state
       if (error.response) {
         this.setState(() => {
@@ -81,7 +81,7 @@ class UploadBox extends Component {
           };
         });
       } else {
-        
+
         // The error happened in submitting the form, so update the state with that error
         this.setState(() => {
           return {
@@ -91,28 +91,28 @@ class UploadBox extends Component {
       }
     }
   }
-  
+
   render() {
     const { file, loaded, uploadError } = this.state;
     return (
       <section className='upload'>
-      
+
         <div className='upload__top'>
           <p>Upload a picture!</p>
           <button className='upload__close' onClick={this.handleClose}>
           </button>
         </div>
-        
+
         {uploadError &&
           <div className='form__alert form__alert--danger' role='alert'>
             {uploadError}
           </div>
         }
-        
+
         <form className='upload__form' onSubmit={this.handleUpload}>
           <div className='upload__well'>
             <div className='upload__cutout'>
-            
+
               {file ? (
                 <Fragment>
                   <img

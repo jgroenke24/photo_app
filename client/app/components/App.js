@@ -11,14 +11,14 @@ class App extends Component {
     if (!this.context.isLoggedIn) {
       const response = await axios
         .get(
-          'https://webdevbootcamp-jorge-groenke.c9users.io:8081',
+          '/api/',
           {
             withCredentials: true,
           }
         );
-      
+
       const { user } = response.data;
-      
+
       if (user) {
         this.context.changeToLoggedIn();
         this.context.addUser(user);

@@ -4,7 +4,8 @@
   "description": "Front end of photoapp built with React",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --port $PORT --host $IP --content-base build/"
+    "start": "webpack-dev-server",
+    "build": "NODE_ENV='production' webpack"
   },
   "author": "Jorge Groenke",
   "license": "ISC",

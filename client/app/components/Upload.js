@@ -8,13 +8,13 @@ class Upload extends Component {
     loaded: 0,
     uploadError: null,
   };
-  
+
   handleFile = (event) => {
     this.setState({
       file: event.target.files[0],
     });
   }
-  
+
   handleRemoveFile = (event) => {
     event.preventDefault();
     this.setState(() => {
@@ -23,25 +23,25 @@ class Upload extends Component {
       };
     });
   }
-  
+
   handleUpload = async (event) => {
-    
+
     try {
       event.preventDefault();
-      
+
       if (!this.state.file) {
         throw 'You must choose a pic to upload!';
       }
-    
+
       // Create a form data object with the photo to be uploaded
       const data = new FormData();
       data.append('image', this.state.file, this.state.file.name);
-      
+
       document.querySelector('.form__progress').style.cssText = 'visibility: visible; opacity: 1;';
-      
+
       // Upload photo to cloudinary and save to database
       await axios
-        .post('https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/photos', data, {
+        .post('/api/photos', data, {
           onUploadProgress: ProgressEvent => {
             this.setState(() => {
               return {
@@ -50,9 +50,9 @@ class Upload extends Component {
             });
           }
         });
-        
+
       this.props.history.push('/');
-      
+
     } catch (error) {
 
       // If the error comes from the server, update the error in state
@@ -63,7 +63,7 @@ class Upload extends Component {
           };
         });
       } else {
-        
+
         // The error happened in submitting the form, so update the state with that error
         this.setState(() => {
           return {
@@ -73,31 +73,31 @@ class Upload extends Component {
       }
     }
   }
-  
+
   componentWillUnmount() {
     document.body.removeAttribute('style');
   }
-  
+
   render() {
     const { file, loaded, uploadError } = this.state;
     return (
       <section className='form'>
-      
+
         <Link to='/' className='logo form__logo'>
           PicShareApp
         </Link>
-      
+
         <h1 className='form__header'>Upload a picture!</h1>
-        
+
         {uploadError &&
           <div className='form__alert form__alert--danger' role='alert'>
             {uploadError}
           </div>
         }
-        
+
         <form className='form__upload' onSubmit={this.handleUpload}>
           <div className='form__cutout'>
-          
+
             {file ? (
               <Fragment>
                 <img

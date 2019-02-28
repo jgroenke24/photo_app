@@ -7,7 +7,7 @@ import Loading from './Loading';
 
 class Profile extends Component {
   static contextType = AppContext;
-  
+
   state = {
     loading: true,
     profileUser: null,
@@ -15,21 +15,21 @@ class Profile extends Component {
     photos: null,
     responseError: null,
   }
-  
+
   async componentDidMount() {
     try {
-      
+
       // Get user and user photos from server
       const response = await axios
         .get(
-          `https://webdevbootcamp-jorge-groenke.c9users.io:8081/api/users/${this.props.match.params.username}`,
+          `/api/users/${this.props.match.params.username}`,
           {
             withCredentials: true,
           }
         );
-      
+
       const { profileUser, user, photos } = response.data;
-      
+
       // Update state with profile user and photos
       this.setState(() => {
         return {
@@ -49,19 +49,19 @@ class Profile extends Component {
       });
     }
   }
-  
+
   render() {
-    
+
     const { loading, profileUser, photos, user, responseError } = this.state;
-    
+
     return (
       <Fragment>
         {loading && <Loading />}
-        
+
         <section className='profile'>
-          
+
           {responseError && <div>{responseError}</div>}
-          
+
           {profileUser &&
             <Fragment>
               <div className='profile__body'>
@@ -78,7 +78,7 @@ class Profile extends Component {
                         : profileUser.username
                       }
                     </h1>
-                    {this.context.user && this.context.user.username === profileUser.username 
+                    {this.context.user && this.context.user.username === profileUser.username
                       ? (
                         <Link
                           to={`/users/${profileUser.username}/edit`}
@@ -89,7 +89,7 @@ class Profile extends Component {
                       ) : null
                     }
                   </div>
-                
+
                   {profileUser.bio ? (
                     <p className='profile__bio'>{profileUser.bio}</p>
                   ) : (
@@ -101,7 +101,7 @@ class Profile extends Component {
                       }
                     </p>
                   )}
-                  
+
                   {profileUser.location &&
                     <div className='profile__location'>
                       <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' viewBox='0 0 24 24'>

@@ -12,15 +12,15 @@ class Login extends Component {
     passwordIsValid: false,
     loginError: null,
   };
-  
+
   static contextType = AppContext;
-  
+
   showValidationError(element, message) {
     this.setState((prevState) => ({
       errors: [...prevState.errors, { element, message }]
     }));
   }
-  
+
   clearValidationError(element) {
     const { errors } = this.state;
     this.setState(() => {
@@ -29,15 +29,15 @@ class Login extends Component {
       };
     });
   }
-  
+
   inputIsValid(element) {
     const { email } = this.state;
-    
+
     if (this.state[element] === '') {
       this.showValidationError(element, `${element} can't be empty`);
       return;
     } else if (element === 'email') {
-      
+
       /*
         Check if the email is an accepted form of email.
         from https://emailregex.com/
@@ -48,18 +48,18 @@ class Login extends Component {
         return;
       }
     }
-    
+
     this.setState(() => {
       return {
         [element + 'IsValid']: true,
       };
     });
   }
-  
+
   handleBlur = (event) => this.inputIsValid(event.target.id);
-  
+
   handleFocus = (event) => this.clearValidationError(event.target.id);
-  
+
   handleChange = (event) => {
     const { id, value } = event.target;
     this.setState(() => {
@@ -68,14 +68,14 @@ class Login extends Component {
       };
     });
   }
-  
+
   handleSubmit = async (event) => {
     event.preventDefault();
-    
+
     const { email, password } = this.state;
     try {
       const response = await axios.post(
-        'https://webdevbootcamp-jorge-groenke.c9users.io:8081/login',
+        '/api/login',
         {
           email: email,
           password: password,
@@ -99,7 +99,7 @@ class Login extends Component {
           };
         });
       } else {
-        
+
         // The error comes from failed authentication
         this.setState(() => {
           return {
@@ -109,17 +109,17 @@ class Login extends Component {
       }
     }
   }
-  
+
   componentWillUnmount() {
     document.body.removeAttribute('style');
   }
-  
+
   render() {
-    
+
     const { errors, email, password, emailIsValid, passwordIsValid, loginError } = this.state;
     let emailError = '';
     let passwordError = '';
-    
+
     errors.forEach(error => {
       if (error.element === 'email') {
         emailError = error.message;
@@ -128,32 +128,32 @@ class Login extends Component {
         passwordError = error.message;
       }
     });
-    
+
     return (
       <section className='form'>
-      
+
         <Link to='/' className='logo form__logo'>
           PicShareApp
         </Link>
-        
+
         <h1 className='form__header'>Login</h1>
-        
+
         {loginError &&
           <div className='form__alert form__alert--danger' role='alert'>
             {loginError}
           </div>
         }
-        
+
         <form
           className='form__form'
           onSubmit={this.handleSubmit}
         >
           <div className='form__group'>
             <label className='form__label' htmlFor='email'>Email</label>
-            <input 
-              id='email' 
-              name='email' 
-              type='email' 
+            <input
+              id='email'
+              name='email'
+              type='email'
               className='form__input'
               value={email}
               onFocus={this.handleFocus}
@@ -170,10 +170,10 @@ class Login extends Component {
           </div>
           <div className='form__group'>
             <label className='form__label' htmlFor='password'>Password</label>
-            <input 
-              id='password' 
-              name='password' 
-              type='password' 
+            <input
+              id='password'
+              name='password'
+              type='password'
               className='form__input'
               value={password}
               onFocus={this.handleFocus}
@@ -188,8 +188,8 @@ class Login extends Component {
               {passwordError}
             </small>
           </div>
-          <input 
-            type='submit' 
+          <input
+            type='submit'
             className='btn form__btn'
             value='Login'
           />

@@ -11,10 +11,10 @@ class ForgotPassword extends Component {
     responseError: null,
     showSuccess: false,
   };
-  
+
   inputIsValid() {
     const { email } = this.state;
-    
+
     /*
       Check if the email is an accepted form of email.
       from https://emailregex.com/
@@ -36,7 +36,7 @@ class ForgotPassword extends Component {
       });
     }
   }
-  
+
   handleChange = (event) => {
     const { id, value } = event.target;
     this.setState(() => {
@@ -46,7 +46,7 @@ class ForgotPassword extends Component {
     });
     this.inputIsValid();
   }
-  
+
   handleFocus = (event) => {
     this.setState(() => {
       return {
@@ -54,17 +54,17 @@ class ForgotPassword extends Component {
       };
     });
   }
-  
+
   handleBlur = (event) => this.inputIsValid();
-  
+
   handleSubmit = async (event) => {
     event.preventDefault();
-    
+
     // Send reset password email
     const { email } = this.state;
     try {
       await axios.post(
-        'https://webdevbootcamp-jorge-groenke.c9users.io:8081/forgotpassword',
+        '/api/forgotpassword',
         {
           email: email,
         }
@@ -86,7 +86,7 @@ class ForgotPassword extends Component {
           };
         });
       } else if (error.response.data.error === 'Email not found') {
-        
+
         // Email was not found in the database
         this.setState(() => {
           return {
@@ -94,7 +94,7 @@ class ForgotPassword extends Component {
           };
         });
       } else {
-        
+
         // The error comes from nodemailer or other
         this.setState(() => {
           return {
@@ -104,35 +104,35 @@ class ForgotPassword extends Component {
       }
     }
   }
-  
+
   render() {
     const { email, formError, emailIsValid, showEmailError, showSuccess, responseError } = this.state;
-    
+
     return (
       <section className='form'>
-        
+
         <Link to='/' className='logo form__logo'>
           PicShareApp
         </Link>
-          
+
         <h1 className='form__header'>Forgot Password?</h1>
-        
+
         {responseError && (
           <div className='form__alert form__alert--danger' role='alert'>
             {responseError}
           </div>
         )}
-        
+
         <form
           className='form__form'
           onSubmit={this.handleSubmit}
         >
           <div className='form__group'>
             <label htmlFor='email' className='form__label'>Email:</label>
-            <input 
-              id='email' 
-              name='email' 
-              type='email' 
+            <input
+              id='email'
+              name='email'
+              type='email'
               className='form__input'
               value={email}
               onFocus={this.handleFocus}
@@ -149,19 +149,19 @@ class ForgotPassword extends Component {
             </small>
           </div>
           <input
-            type='submit' 
+            type='submit'
             className='btn form__btn'
             disabled={!emailIsValid}
             value='Reset Password'
           />
         </form>
-        
+
         {showEmailError && (
           <p className='form__message'>
             Email address not found.  Please try again or <Link to='/signup'>signup</Link> a new account.
           </p>
         )}
-        
+
         {showSuccess && (
           <Fragment>
             <p className='form__message'>
