@@ -134,15 +134,6 @@ router.post('/signup', validationChains('signup'), validateMiddleware, Users.aut
 // Login user route
 router.post('/login', validationChains('login'), validateMiddleware, Users.auth('login'));
 
-// test authorization route
-router.get('/dashboard', Users.jwt(), (req, res) => {
-  if (req.user) {
-    return res.json({ message: 'A user is signed in' });
-  }
-  
-  return res.json({ message: 'Unauthorized' });
-});
-
 // Forgot password route
 router.post('/forgotpassword', validationChains('forgotpassword'), validateMiddleware, ResetPassword.sendEmail);
 
@@ -151,13 +142,6 @@ router.get('/resetpassword/:token', ResetPassword.verifyToken);
 
 // Reset password on server
 router.post('/resetpassword/:token', validationChains('resetpassword'), validateMiddleware, ResetPassword.verifyToken, ResetPassword.reset);
-
-router.get('/', Users.jwt(), (req, res) => {
-  if (req.user) {
-    return res.status(200).json({ user: req.user });
-  }
-  return res.status(200).send('welcome');
-});
 
 // Show route - Get a users profile with all their photos
 router.get('/api/users/:username', Users.jwt(), Users.getUserAll);
@@ -170,5 +154,12 @@ router.put('/api/users/:username', Users.jwt(), validationChains('updateprofile'
 
 // Upload user avatar to cloudinary
 router.post('/api/users/:username/avatar', Users.jwt(), upload.single('image'), Users.uploadAvatar);
+
+router.get('/', Users.jwt(), (req, res) => {
+  if (req.user) {
+    return res.status(200).json({ user: req.user });
+  }
+  return res.status(200).send('welcome');
+});
 
 export default router;

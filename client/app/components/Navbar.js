@@ -18,11 +18,6 @@ class Navbar extends Component {
       <Fragment>
         <nav className='navbar' >
           <ul className='navbar__links'>
-            <li className='navbar__item'>
-              <NavLink to='/dashboard' className='navbar__link' activeClassName='activelinks'>
-                Dashboard
-              </NavLink>
-            </li>
             
             {this.context.isLoggedIn ? (
               <Fragment>
