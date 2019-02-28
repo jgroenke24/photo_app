@@ -770,12 +770,30 @@ button {
   
   &__bottom {
     padding: 0.5rem 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
     
     @media (min-width: 768px) {
       padding-left: 1.75rem;
       padding-right: 1.75rem;
-      display: flex;
-      justify-content: space-between;
+    }
+    
+    & .btn {
+      font-size: 0.75rem;
+      height: 1.75rem;
+      
+      @media (min-width: 768px) {
+        font-size: 1rem;
+        height: 2rem;
+      }
+    }
+    
+    & svg {
+      width: 0.75rem;
+      
+      @media (min-width: 768px) {
+        width: 1rem;
+      }
     }
   }
   
@@ -783,23 +801,40 @@ button {
     width: 100%;
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+    
+    @media (min-width: 768px) {
+      flex-wrap: nowrap;
+    }
   }
   
   &__form {
     width: 100%;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
+    
+    @media (min-width: 768px) {
+      flex-wrap: nowrap;
+    }
   }
   
   &__fields {
     width: 100%;
-    margin-right: 2rem;
+    margin-right: 1rem;
+    
+    @media (min-width: 768px) {
+      margin-right: 2rem;
+    }
   }
   
   &__field {
     margin: 0.5rem 0;
-    margin-left: 2.24rem;
     position: relative;
+    
+    @media (min-width: 768px) {
+      margin-left: 2.25rem;
+    }
     
     & label {
       position: absolute;
@@ -814,6 +849,11 @@ button {
       padding: 0.25rem 0.5rem;
       line-height: inherit;
       width: 100%;
+      font-size: 0.75rem;
+      
+      @media (min-width: 768px) {
+        font-size: 1rem;
+      }
     }
   }
   
@@ -821,10 +861,16 @@ button {
     
     & p {
       margin: 0.5rem 0;
-      padding: calc(0.25rem + 1px) calc(1rem + 1px);
       color: $gray-400;
       display: flex;
       align-items: center;
+      font-size: 0.75rem;
+      padding: calc(0.25rem + 1px) 0;
+      
+      @media (min-width: 768px) {
+        padding: calc(0.25rem + 1px) calc(1rem + 1px);
+        font-size: 1rem;
+      }
     }
     
     & p:hover {
@@ -832,13 +878,20 @@ button {
     }
     
     & p:last-of-type {
-      padding-left: calc(1rem + 1px + 1.75rem);
+      
+      @media (min-width: 768px) {
+        padding-left: calc(1rem + 1px + 1.75rem);
+      }
     }
     
     & svg {
       width: 1rem;
       height: 1rem;
-      margin-right: 0.75rem;
+      margin-right: 0.25rem;
+      
+      @media (min-width: 768px) {
+        margin-right: 0.75rem;
+      }
     }
   }
 }
@@ -1062,6 +1115,7 @@ button {
     
     & .btn {
       margin-left: 2rem;
+      white-space: nowrap;
     }
   }
   
