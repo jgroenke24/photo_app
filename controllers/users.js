@@ -146,7 +146,7 @@ const Users = {
     `;
 
     try {
-      console.log(req.user);
+
       // A user must be signed in to see edit information
       // Signed in user must also be requesting their own user data.
       if (!req.user || req.user.username !== req.params.username) {
