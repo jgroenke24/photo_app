@@ -12,7 +12,7 @@ const Header = (props) => (
         ? (
             <Fragment>
               <Link to='/' className='logo'>
-                PicShareApp
+                PicShare
               </Link>
                 {props.children}
             </Fragment>

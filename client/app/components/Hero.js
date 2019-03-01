@@ -7,7 +7,7 @@ const Hero = (props) => (
       <img className='hero__img' src='https://res.cloudinary.com/dnsi1pnmo/image/upload/v1547666819/1923F555-A1C9-4CDE-8203-7FE4622A038C.jpg' alt='Iceland plane wreck' />
     </picture>
     <div className='hero__header'>
-      <h1>PicShareApp</h1>
+      <h1>PicShare</h1>
       <p>Check out some cool photography.</p>
       <p>Share your own photos too!</p>
     </div>
