@@ -51,15 +51,15 @@ app.use('/api/photos', photosRouter);
 app.use('/api', usersRouter);
 
 // Express only serves static assets in production
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/dist"));
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/dist'));
   app.get('/*', function(req, res) {
-    res.sendFile('./client/dist/index.html', function(err) {
+    res.sendFile(path.join(__dirname, '../client/dist/index.html'), function(err) {
       if (err) {
         res.status(500).send(err)
       }
     })
-  });
+  })
 }
 
 app.listen(API_PORT, process.env.IP, () => console.log("photo app Server Started"));
