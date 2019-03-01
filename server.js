@@ -54,7 +54,7 @@ app.use('/api', usersRouter);
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/dist"));
   app.get('/*', function(req, res) {
-    res.sendFile('/client/dist/index.html', function(err) {
+    res.sendFile('./client/dist/index.html', function(err) {
       if (err) {
         res.status(500).send(err)
       }
