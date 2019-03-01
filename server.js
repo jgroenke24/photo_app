@@ -16,7 +16,7 @@ import usersRouter from './routes/user';
 dotenv.config();
 
 const app = express();
-const API_PORT = 3000;
+const API_PORT = process.env.PORT || 3000;
 
 require('./config/passport');
 
