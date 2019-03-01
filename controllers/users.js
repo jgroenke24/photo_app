@@ -41,7 +41,7 @@ const Users = {
           return res.status(200)
             .cookie('jwt', token, {
               httpOnly: true,
-              // secure: true,
+              secure: true,
             })
             .json({
               ...action === 'login' ? {message: 'Login successful'} : {message: 'Registered successfully! You are now logged in!'},
