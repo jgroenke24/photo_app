@@ -225,7 +225,7 @@ class EditProfile extends Component {
           username,
           location,
           bio,
-          bioCharLeft: BIO_CHAR_LIMIT - bio.length,
+          ...bio ? { bioCharLeft: BIO_CHAR_LIMIT - bio.length } : { bioCharLeft: BIO_CHAR_LIMIT },
           loading: false,
         };
       });
