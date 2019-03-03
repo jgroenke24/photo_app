@@ -20,20 +20,22 @@ passport.use(
     },
     async (req, username, password, done) => {
       try {
-        
+
         // Search database for a user with the username (email) or username provided
         const { rows: dbUserRows } = await db.query(findOneQueryText2, [ username, req.body.username ]);
         const user = dbUserRows[0];
-        if (user.email === username) {
-          return done(null, false, { message: 'That email has been used to register an account already!' });
+        if (user) {
+          if (user.email === username) {
+            return done(null, false, { message: 'That email has been used to register an account already!' });
+          }
+          if (user.username === req.body.username) {
+            return done(null, false, { message: 'That username is being used already!' });
+          }
         }
-        if (user.username === req.body.username) {
-          return done(null, false, { message: 'That username is being used already!' });
-        }
-        
+
         // Use bcrypt to hash the password for the new user
         const hashedPassword = await bcrypt.hash(password, ROUNDS);
-        
+
         // Add the user to the database
         const { rows: dbNewUserRows } = await db.query(createUserQueryText, [ username, req.body.username, hashedPassword ]);
         const newUser = dbNewUserRows[0];
@@ -59,15 +61,15 @@ passport.use(
         // Search database for a user with the username (email) provided
         const { rows } = await db.query(findOneQueryText, [ username ]);
         const user = rows[0];
-        
+
         // If a user is not found, return the message that no user was found
         if (!user) {
           return done(null, false, { message: 'User not found' });
         }
-        
+
         // Use bcrypt to check if password matches hashed password
         const passwordsMatch = await bcrypt.compare(password, user.password);
-        
+
         if (passwordsMatch) {
           return done(null, user);
         } else {
@@ -97,11 +99,11 @@ passport.use(
     },
     async (jwt_payload, done) => {
       try {
-        
+
         // Search database for a user with the username (email) in the jwt
         const { rows: dbUser } = await db.query(findOneQueryText, [ jwt_payload.id ]);
         const user = dbUser[0];
-        
+
         if (!user) {
           return done(null, false);
         }
