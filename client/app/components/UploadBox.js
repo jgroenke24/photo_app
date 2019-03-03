@@ -69,7 +69,7 @@ class UploadBox extends Component {
         });
 
       this.props.history.push('/');
-      this.context.changeToBoxClosed();
+      this.handleClose();
 
     } catch (error) {
 
